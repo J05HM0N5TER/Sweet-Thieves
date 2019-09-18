@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using XboxCtrlrInput;
 
+
 public class PlayerControllerXbox : MonoBehaviour
 {
-    float xAxis = XCI.GetAxis(XboxAxis.LeftStickX, XboxController.First);
-    float yAxis  = XCI.GetAxis(XboxAxis.LeftStickY, XboxController.First);
 
-    
     //max move speeds
     public float maxMoveSpeed;
     public XboxController controller;
@@ -27,6 +25,10 @@ public class PlayerControllerXbox : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        float xAxis = XCI.GetAxis(XboxAxis.LeftStickX, XboxController.First);
+        float yAxis = XCI.GetAxis(XboxAxis.LeftStickY, XboxController.First);
+
         //switch (controller)
         //{
         //    case XboxController.First: GetComponent<Renderer>().material = matRed; break;
