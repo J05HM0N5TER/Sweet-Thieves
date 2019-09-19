@@ -2717,6 +2717,31 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2119481282}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1014672469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1014672468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeb63548b8feac94da84a8b0c0efd76a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  environmentLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  collectableLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  tongueHit: {x: 0, y: 0, z: 0}
+  timeToGrappleCompletion: 1
+  acceptanceRange: 0.5
+  sphereCastRadus: 5
+  tongueHitCollectible: 0
+  heldCollectables: 0
+  hitCollectable: {fileID: 0}
 --- !u!54 &1014672470
 Rigidbody:
   m_ObjectHideFlags: 0
