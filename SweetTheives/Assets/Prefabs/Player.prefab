@@ -2525,7 +2525,7 @@ MonoBehaviour:
   collectableLayer:
     serializedVersion: 2
     m_Bits: 1024
-  grappleAcceleration: 20
+  grappleAcceleration: 100
   acceptanceRange: 3
   sphereCastRadus: 1
   heldCollectables: 0

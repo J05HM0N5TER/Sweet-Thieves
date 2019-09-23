@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4508740146268957154}
   - component: {fileID: 6890280184444801536}
   - component: {fileID: 6960912056515816746}
-  - component: {fileID: 3452089321106747869}
+  - component: {fileID: 3225450070064340100}
   m_Layer: 10
   m_Name: DemoCollectable
   m_TagString: Untagged
@@ -93,7 +93,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!114 &3452089321106747869
+--- !u!114 &3225450070064340100
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -102,7 +102,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3491059977982518338}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17d597bf5082bb3479f55269ee54ba36, type: 3}
+  m_Script: {fileID: 11500000, guid: 86db59bd96688fe4c94fef84f60e9d9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 1
+  stackSize: 1
