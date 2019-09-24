@@ -2525,7 +2525,10 @@ MonoBehaviour:
   collectableLayer:
     serializedVersion: 2
     m_Bits: 1024
+  collectable: {fileID: 3491059977982518338, guid: 1288e3b9f0d5ab142b655e2fbe6d8928,
+    type: 3}
   grappleAcceleration: 100
+  tongueOffset: {x: 0, y: 1.3, z: 0.5}
   acceptanceRange: 3
   sphereCastRadus: 1
   heldCollectables: 0

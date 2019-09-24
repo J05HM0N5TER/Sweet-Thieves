@@ -8,12 +8,12 @@ public class PlayerControllerXbox : MonoBehaviour
 {
 
     //max move speeds
-    public float maxMoveSpeed = 20;
-    public XboxController controller;
-    public float dashSpeed = 20;
+    [SerializeField] float maxMoveSpeed = 20;
+    [SerializeField] XboxController controller;
+    [SerializeField] float dashSpeed = 20;
     private Vector3 newPosition;
-    public XboxButton dashButton = XboxButton.A;
-    public XboxButton tongueButton = XboxButton.B;
+    [SerializeField] XboxButton dashButton = XboxButton.A;
+    [SerializeField] XboxButton tongueButton = XboxButton.B;
 
     //public Material matRed;
     //public Material matGreen;
@@ -23,34 +23,32 @@ public class PlayerControllerXbox : MonoBehaviour
     private static bool didQueryNumOfCtrlrs = false;
 
     // The layer that the walls and other environment are in
-    public LayerMask environmentLayer;
+    [SerializeField] LayerMask environmentLayer;
     // The layer that the collectabels are in
-    public LayerMask collectableLayer;
+    [SerializeField] LayerMask collectableLayer;
+    [SerializeField] GameObject collectable;
+
+
     // The amount that the grapple accelerates object every second
-    public float grappleAcceleration = 20;
+    [SerializeField] float grappleAcceleration = 20;
+    // The start draw position for the tongue offset from the player
+    [SerializeField] Vector3 tongueOffset = new Vector3(0, 4.5f, 0);
     // How close to the collision position for the tongue it has to be for it to release
-    public float acceptanceRange = 0.5f;
+    [SerializeField] float acceptanceRange = 0.5f;
     // The radus for the sphere cast
-    public float sphereCastRadus = 5f;
+    [SerializeField] float sphereCastRadus = 5f;
     // How many collectables id the player holding
     public int heldCollectables = 0;
-
-    // The amount that the player is moving by the tongue every frame
-    private Vector3 tongueGrappleMovement;
-    // The amout of time that it has to retract in frames
-    private float timeLeftToRetract;
-
     // If the tongue is currently retracting
     private bool tongueHitEnvionment = false;
 
+
+
     // Variables needed by the collectableController
-    [HideInInspector]
-    public bool tongueHitCollectible = false;
-    [HideInInspector]
-    public GameObject objectHit;
+    [HideInInspector] public bool tongueHitCollectible = false;
+    [HideInInspector] public GameObject objectHit;
     // The postion for the hit on the tongue on a wall
-    [HideInInspector]
-    public Vector3 hitPoint;
+    [HideInInspector] public Vector3 hitPoint;
 
     private Rigidbody rb;
     private LineRenderer line;
@@ -66,9 +64,7 @@ public class PlayerControllerXbox : MonoBehaviour
         // Only draws tongue if there is a line renderer on the game object
         line = GetComponent<LineRenderer>();
         rb = this.gameObject.GetComponent<Rigidbody>();
-
-        float xAxis = XCI.GetAxis(XboxAxis.LeftStickX, XboxController.First);
-        float yAxis = XCI.GetAxis(XboxAxis.LeftStickY, XboxController.First);
+        
 
         //switch (controller)
         //{
@@ -148,10 +144,29 @@ public class PlayerControllerXbox : MonoBehaviour
                 // If the wall has hit a collectable
                 else if (collectableLayer.value == (1 << objectHit.layer))
                 {
+                    CollectableController script = objectHit.GetComponent<CollectableController>();
+                    if (script.stackSize > 1)
+                    {
+                        script.stackSize--;
+                        objectHit = Instantiate(collectable, objectHit.transform.position, objectHit.transform.rotation);
+                    }
                     hitPoint = hit.point;
                     tongueHitEnvionment = false;
                     tongueHitCollectible = true;
                 }
+                // If you hit another player
+                //else if (objectHit.tag == "Player")
+                //{
+                //    PlayerControllerXbox script = objectHit.GetComponent<PlayerControllerXbox>();
+                //    if (script.heldCollectables > 0)
+                //    {
+                //        script.heldCollectables--;
+                //        objectHit = Instantiate(collectable, objectHit.transform.position, objectHit.transform.rotation);
+                //    }
+                //    hitPoint = hit.point;
+                //    tongueHitEnvionment = false;
+                //    tongueHitCollectible = true;
+                //}
             }
             else
             {
@@ -164,6 +179,9 @@ public class PlayerControllerXbox : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Where the start of the tongue is drawn
+        Vector3 tongueStartPosition = transform.TransformPoint(tongueOffset);
+
         // If the tongue has hit a wall or other environment
         if (tongueHitEnvionment)
         {
@@ -173,7 +191,7 @@ public class PlayerControllerXbox : MonoBehaviour
                 line.enabled = true;
                 line.SetPositions(new Vector3[]
                     {
-                    transform.position,
+                    tongueStartPosition,
                     hitPoint
                 });
             }
@@ -203,7 +221,7 @@ public class PlayerControllerXbox : MonoBehaviour
                 line.enabled = true;
                 line.SetPositions(new Vector3[]
                     {
-                    transform.position,
+                    tongueStartPosition,
                     objectHit.transform.position
                 });
             }
