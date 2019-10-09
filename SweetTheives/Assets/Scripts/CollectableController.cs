@@ -5,27 +5,38 @@ using UnityEngine;
 public class CollectableController : MonoBehaviour
 {
     public int stackSize = 1;
+    private GameObject playerSpawnedFrom = null;
     private void Start()
     {
-        
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
-            PlayerControllerXbox script = other.gameObject.GetComponent<PlayerControllerXbox>();
-            if (script == null)
+            PlayerControllerXbox player = other.gameObject.GetComponent<PlayerControllerXbox>();
+            if (player == null)
             {
                 Debug.Log("No script");
             }
-            script.heldCollectables += stackSize;
-            if (script.objectHit == this.gameObject)
+            if (player.stolenCollectable == gameObject || player.heldCollectables >= player.maxHeldCollectables)
             {
-                script.objectHit = null;
-                script.tongueHitCollectible = false;
+                //script.stolenCollectable = null;
+                return;
             }
-            Destroy(this.gameObject);
+            else
+            {
+                player.heldCollectables += stackSize;
+                if (player.objectHit == gameObject)
+                {
+                    player.objectHit = null;
+                    player.tongueHitCollectible = false;
+                    player.currentCooldown = player.tongueCooldown;
+                }
+                Destroy(gameObject);
+            }
+
         }
     }
 }
