@@ -1,15 +1,16 @@
 fileFormatVersion: 2
-guid: 6aab8a85b26efef45a8869796efcc657
+guid: e9c7b4e5e03fa1d40997e7f532a70bc7
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: lambert3
-    2100002: LogEnd_Material
+    2100000: lambert12
+    2100002: lambert10
+    2100004: lambert13
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Log_01
+    4300000: Chameleon
   externalObjects: {}
   materials:
     importMaterials: 1

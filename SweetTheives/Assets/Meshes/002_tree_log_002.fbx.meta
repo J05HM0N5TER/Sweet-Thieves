@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 6aab8a85b26efef45a8869796efcc657
+guid: b14b4143f5a551748a64ad81ed060214
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: lambert3
+    2100000: lambert16
     2100002: LogEnd_Material
     2300000: //RootNode
     3300000: //RootNode
