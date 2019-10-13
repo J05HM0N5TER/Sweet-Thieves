@@ -378,6 +378,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: small_rock1 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.448265
@@ -830,6 +834,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
       propertyPath: m_Name
       value: small_rock2 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2374,6 +2382,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 001_Tree_PalmTree_004 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: f42b62dce3b040d4b95ea9268459bf14, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f42b62dce3b040d4b95ea9268459bf14, type: 3}
       propertyPath: m_LocalPosition.x
       value: 32.78859
@@ -3730,6 +3742,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: small_rock1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.178997
@@ -3829,7 +3845,7 @@ GameObject:
   - component: {fileID: 138747122}
   - component: {fileID: 138747121}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Timer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3847,7 +3863,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a7fe71ddad77f42b176eb8f21b1fd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timer: 5
+  timer: 300
   xpos: 1
   ypos: 1
   xsize: 1
@@ -4510,6 +4526,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
       propertyPath: m_Name
       value: 001_Tree_PalmTree_001 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5384,6 +5404,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: small_rock1 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.1356468
@@ -5725,7 +5749,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17636
+  m_Name: pb_Mesh13086
   serializedVersion: 9
   m_SubMeshes:
   - serializedVersion: 2
@@ -7600,6 +7624,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: small_rock2
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.350712
@@ -8025,6 +8053,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
       propertyPath: m_Name
       value: small_rock1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8887,6 +8919,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 001_Base_001
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: dc5a5bc965208fe45b5756ed16c386ce, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: dc5a5bc965208fe45b5756ed16c386ce, type: 3}
       propertyPath: m_LocalPosition.x
       value: 70.08
@@ -9107,6 +9143,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
       propertyPath: m_Name
       value: small_rock2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9565,6 +9605,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: f42b62dce3b040d4b95ea9268459bf14, type: 3}
       propertyPath: m_Name
       value: 001_Tree_PalmTree_004
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: f42b62dce3b040d4b95ea9268459bf14, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f42b62dce3b040d4b95ea9268459bf14, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10105,6 +10149,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: 001_Tree_PalmTree_004 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7337927064982036949, guid: 5d90e8588f6616b45b901c043639ca1f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 7337927064982207989, guid: 5d90e8588f6616b45b901c043639ca1f,
         type: 3}
@@ -11223,6 +11272,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: small_rock1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.6814995
@@ -11878,6 +11931,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: small_rock1 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.94244
@@ -12501,6 +12558,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 001_Tree_PalmTree_004 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: f42b62dce3b040d4b95ea9268459bf14, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f42b62dce3b040d4b95ea9268459bf14, type: 3}
       propertyPath: m_LocalPosition.x
       value: 34.90959
@@ -12897,6 +12958,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: 001_Tree_PalmTree_004 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7337927064982036949, guid: 5d90e8588f6616b45b901c043639ca1f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 7337927064982207989, guid: 5d90e8588f6616b45b901c043639ca1f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -13199,6 +13265,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
       propertyPath: m_Name
       value: 001_Tree_PalmTree_001 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13679,6 +13749,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
       propertyPath: m_Name
       value: small_rock2 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15315,6 +15389,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 79a898c4e3e04fe4699892c62b46303c, type: 3}
       propertyPath: m_Name
       value: Large_rock1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 79a898c4e3e04fe4699892c62b46303c, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 79a898c4e3e04fe4699892c62b46303c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -17874,6 +17952,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 001_Tree_PalmTree_001 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.65
@@ -18758,6 +18840,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: small_rock1 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.6301994
@@ -18856,6 +18942,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
       propertyPath: m_Name
       value: small_rock1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20593,6 +20683,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: 001_Tree_PalmTree_004 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7337927064982036949, guid: 5d90e8588f6616b45b901c043639ca1f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 7337927064982207989, guid: 5d90e8588f6616b45b901c043639ca1f,
         type: 3}
@@ -23690,6 +23785,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: small_rock2
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.2488747
@@ -24257,6 +24356,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 001_Tree_PalmTree_004 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: f42b62dce3b040d4b95ea9268459bf14, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f42b62dce3b040d4b95ea9268459bf14, type: 3}
       propertyPath: m_LocalPosition.x
       value: 28.76616
@@ -24676,6 +24779,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: small_rock1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.345768
@@ -24774,6 +24881,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
       propertyPath: m_Name
       value: small_rock2 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -25100,6 +25211,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: 001_Tree_PalmTree_004 (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7337927064982036949, guid: 5d90e8588f6616b45b901c043639ca1f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 7337927064982207989, guid: 5d90e8588f6616b45b901c043639ca1f,
         type: 3}
@@ -27101,6 +27217,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 001_Tree_PalmTree_004 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: f42b62dce3b040d4b95ea9268459bf14, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f42b62dce3b040d4b95ea9268459bf14, type: 3}
       propertyPath: m_LocalPosition.x
       value: 36.489594
@@ -27885,6 +28005,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 001_Tree_PalmTree_001
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.6976471
@@ -28507,6 +28631,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 001_Tree_PalmTree_001 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -35.45235
@@ -28745,6 +28873,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
       propertyPath: m_Name
       value: small_rock1 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
       propertyPath: m_LocalPosition.x
@@ -29999,9 +30131,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 1313137276}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80e4f86d34213e84cb24ba588b628d1c, type: 3}
+  m_Script: {fileID: 11500000, guid: 814b8a19727f66a4f872f6000d10d6ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controller: 0
+  maxMoveSpeed: 10
+  dashSpeed: 0
+  dashButton: 0
+  tongueButton: 1
+  environmentLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  collectableLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  collectablePrefab: {fileID: 0}
+  maxHeldCollectables: 3
+  grappleAcceleration: 75
+  tongueCooldown: 0
+  tongueOffset: {x: 0, y: 0.25, z: 0}
+  acceptanceRange: 1.5
+  sphereCastRadus: 5
+  heldCollectables: 0
+  tongueHitCollectible: 0
+  objectHit: {fileID: 0}
+  hitPoint: {x: 0, y: 0, z: 0}
+  stolenCollectable: {fileID: 0}
+  currentCooldown: 0
 --- !u!136 &1313137280
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -31005,6 +31161,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 001_Tree_PalmTree_002
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 64343d4667fd54a4380730e2e73a55f4, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 64343d4667fd54a4380730e2e73a55f4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.7353983
@@ -31365,6 +31525,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 001_Tree_PalmTree_001
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.5493622
@@ -31451,6 +31615,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
       propertyPath: m_Name
       value: small_rock2 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -33706,6 +33874,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: small_rock2 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.09
@@ -34594,6 +34766,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 001_Tree_PalmTree_001 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.579361
@@ -34994,6 +35170,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
       propertyPath: m_Name
       value: small_rock2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36435,6 +36615,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 001_Tree_PalmTree_001 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.6578217
@@ -37217,6 +37401,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
       propertyPath: m_Name
       value: 001_Tree_PalmTree_001 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -38961,6 +39149,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: small_rock2 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6ac15f5ebd4215b4497a73031b0c4d4e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -14.48082
@@ -39515,6 +39707,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
       propertyPath: m_Name
       value: 001_Tree_PalmTree_001
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 91886dea1f4ee2a488aa247dddbe5e7f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -40094,6 +40290,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
       propertyPath: m_Name
       value: small_rock1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
       propertyPath: m_LocalPosition.x
@@ -41975,6 +42175,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
       propertyPath: m_Name
       value: small_rock1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: dee57b01fa840054a9d34683c13b8a92, type: 3}
       propertyPath: m_LocalPosition.x
@@ -45298,6 +45502,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: 001_Tree_PalmTree_004
+      objectReference: {fileID: 0}
+    - target: {fileID: 7337927064982036949, guid: 5d90e8588f6616b45b901c043639ca1f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 7337927064982207989, guid: 5d90e8588f6616b45b901c043639ca1f,
         type: 3}
