@@ -4,23 +4,79 @@ ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Eye_l2
-    100004: Head1
-    100006: Head2
-    100008: transform1
-    100010: transform2
+    100002: group1
+    100004: polySurface13
+    100006: polySurface14
+    100008: polySurface15
+    100010: polySurface15 1
+    100012: polySurface16
+    100014: polySurface17
+    100016: polySurface18
+    100018: polySurface19
+    100020: polySurface2
+    100022: polySurface20
+    100024: polySurface21
+    100026: polySurface22
+    100028: polySurface22 1
+    100030: polySurface23
+    100032: polySurface24
+    100034: polySurface7
+    100036: transform1
+    100038: transform10
+    100040: transform11
+    100042: transform12
+    100044: transform13
+    100046: transform14
+    100048: transform15
+    100050: transform2
+    100052: transform3
+    100054: transform4
+    100056: transform5
+    100058: transform6
+    100060: transform7
+    100062: transform8
+    100064: transform9
     400000: //RootNode
-    400002: Eye_l2
-    400004: Head1
-    400006: Head2
-    400008: transform1
-    400010: transform2
+    400002: group1
+    400004: polySurface13
+    400006: polySurface14
+    400008: polySurface15
+    400010: polySurface15 1
+    400012: polySurface16
+    400014: polySurface17
+    400016: polySurface18
+    400018: polySurface19
+    400020: polySurface2
+    400022: polySurface20
+    400024: polySurface21
+    400026: polySurface22
+    400028: polySurface22 1
+    400030: polySurface23
+    400032: polySurface24
+    400034: polySurface7
+    400036: transform1
+    400038: transform10
+    400040: transform11
+    400042: transform12
+    400044: transform13
+    400046: transform14
+    400048: transform15
+    400050: transform2
+    400052: transform3
+    400054: transform4
+    400056: transform5
+    400058: transform6
+    400060: transform7
+    400062: transform8
+    400064: transform9
     2100000: lambert12
-    2100002: lambert13
-    2100004: lambert10
-    2300000: Head2
-    3300000: Head2
-    4300000: Head2
+    2100002: lambert10
+    2100004: lambert13
+    2300000: polySurface15
+    3300000: polySurface15
+    4300000: polySurface15
+    7400000: Take 001
+    9500000: //RootNode
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -73,8 +129,8 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 0
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -101,7 +157,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
