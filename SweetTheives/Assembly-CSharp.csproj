@@ -64,11 +64,12 @@
     <Compile Include="Assets\Scripts\BaseStash.cs" />
     <Compile Include="Assets\Scripts\CollectableController.cs" />
     <Compile Include="Assets\Scripts\Meshdisabler.cs" />
-    <Compile Include="Assets\Scripts\PlayerControllerXbox.cs" />
     <Compile Include="Assets\Scripts\rotatingObstacle.cs" />
     <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
     <Compile Include="Assets\Scripts\Spawner.cs" />
+    <Compile Include="Assets\Scripts\TimerRestartGame.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
+    <Compile Include="Assets\XInput\PlayerControllerXbox.cs" />
     <Compile Include="Assets\XInput\Plugins\XboxCtrlrInput.cs" />
     <Compile Include="Assets\XInput\Plugins\XboxCtrlrInput_Helpers\XciAxisDeadzoneData.cs" />
     <Compile Include="Assets\XInput\Plugins\XboxCtrlrInput_Helpers\XciInputManagerClone.cs" />
