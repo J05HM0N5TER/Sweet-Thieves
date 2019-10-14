@@ -104,7 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e57ac75c0cd960549bb3d6061cd5d40d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stash: {fileID: 3432999364836448473}
+  stash: {fileID: 0}
 --- !u!1 &7358250120835949689
 GameObject:
   m_ObjectHideFlags: 0
@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 7358250121014665338}
   - component: {fileID: 7358250121014665339}
   - component: {fileID: 7358250121014665340}
-  - component: {fileID: 3432999364836448473}
+  - component: {fileID: 3291220546178375239}
   m_Layer: 0
   m_Name: BaseCollision
   m_TagString: Untagged
@@ -304,7 +304,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3432999364836448473
+--- !u!114 &3291220546178375239
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -313,13 +313,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7358250121014665342}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3cf62ed3bd7cfdb438024fe7a9584fe5, type: 3}
+  m_Script: {fileID: 11500000, guid: 94ad0150ffeb3a6449a9911ba64f4f12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   stashSize: 0
   player: {fileID: 0}
   spawner: {fileID: 1652330310099408450}
-  delay: 0.5
+  delay: 0
 --- !u!1 &7358250121332119399
 GameObject:
   m_ObjectHideFlags: 0
