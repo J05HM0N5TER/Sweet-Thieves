@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class BaseStash : MonoBehaviour
 {
+
+    //text to display the points
+    public Text points = null;
     // size of current stash
      public float stashSize = 0;
     // what player is connected to base
@@ -12,6 +15,15 @@ public class BaseStash : MonoBehaviour
     [SerializeField] Spawner spawner = null;
     // delay between spawning pancakes into base
     [SerializeField] float delay = 0.0f;
+
+
+    //update function
+    //set the score to stashsize;
+    void Update()
+    {
+        points.text = stashSize.ToString();    
+    }
+
 
     // on collision of base
     private IEnumerator OnTriggerEnter(Collider other)

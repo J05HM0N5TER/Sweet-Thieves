@@ -4,11 +4,12 @@ using UnityEngine;
 
 
 // this code is to allow UI functionality 
-// it simply makes it so that there is a way to count how nmany pancakes 
+// it simply makes it so that there is a way to count how many pancakes 
 // are currently in the stash
 
 public class BasePoint : MonoBehaviour
 {
+    
     //what stash is being referenced
     [SerializeField] BaseStash stash = null;
     
