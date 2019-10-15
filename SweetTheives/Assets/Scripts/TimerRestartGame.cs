@@ -89,7 +89,7 @@ public class TimerRestartGame : MonoBehaviour
             
 
 
-            winner.text = "player " + winningPlayer + " Won!"; 
+            winner.text = "Player " + winningPlayer + " Won!"; 
             winscreen.GetComponent<Canvas>().enabled = true;
             
 

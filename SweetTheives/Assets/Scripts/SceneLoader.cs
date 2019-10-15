@@ -1,16 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement; 
+using UnityEngine.SceneManagement;
+using XboxCtrlrInput;
 
 public class SceneLoader : MonoBehaviour
 {
+    [SerializeField] XboxButton selectbutton = XboxButton.A;
+    //public void PlayGame()
+    //{
+   //     SceneManager.LoadScene(1);
 
-    public void PlayGame()
+    //}
+    public void Update()
     {
-        SceneManager.LoadScene(1); 
+       
+        if (XCI.GetButton(selectbutton))
+        {
+            SceneManager.LoadScene(1);
+        }
     }
-
     public void QuitGame()
     {
         Application.Quit(); 

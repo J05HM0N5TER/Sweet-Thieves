@@ -61,8 +61,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 033a43b05edc52f45a1796577af29943, type: 2}
-  - {fileID: 2100000, guid: daefe3f0ba83bee45a3089b64f804829, type: 2}
+  - {fileID: 2100000, guid: a13f75ce22e456e42b3f75c3c1fa5fc6, type: 2}
+  - {fileID: 0}
   - {fileID: 2100004, guid: e9c7b4e5e03fa1d40997e7f532a70bc7, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -109,10 +109,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.787166
-  m_Height: 1.7091405
+  m_Radius: 0.30786964
+  m_Height: 1.6502546
   m_Direction: 1
-  m_Center: {x: 0.000001937151, y: 0.0000011026859, z: -0.000000029802326}
+  m_Center: {x: 0.038193766, y: -0.029443424, z: -1.6425916e-10}
 --- !u!120 &1313137282
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -220,8 +220,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 814b8a19727f66a4f872f6000d10d6ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: 0
-  maxMoveSpeed: 10
+  controller: 1
+  maxVelocity: 50
+  moveSpeed: 800
   dashSpeed: 0
   dashButton: 0
   tongueButton: 1
@@ -234,7 +235,7 @@ MonoBehaviour:
   collectablePrefab: {fileID: 3491059977982518338, guid: 1288e3b9f0d5ab142b655e2fbe6d8928,
     type: 3}
   maxHeldCollectables: 3
-  grappleAcceleration: 75
+  grappleAcceleration: 3000
   tongueCooldown: 0
   tongueOffset: {x: 0, y: 0.25, z: 0}
   acceptanceRange: 1.5
