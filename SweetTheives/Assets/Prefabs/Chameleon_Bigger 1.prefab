@@ -223,9 +223,7 @@ MonoBehaviour:
   controller: 1
   maxVelocity: 50
   moveSpeed: 800
-  dashSpeed: 0
-  dashButton: 0
-  tongueButton: 1
+  tongueButton: 9
   environmentLayer:
     serializedVersion: 2
     m_Bits: 512
