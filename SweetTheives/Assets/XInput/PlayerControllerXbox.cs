@@ -11,11 +11,7 @@ public class PlayerControllerXbox : MonoBehaviour
     //max move speeds
     [SerializeField] float maxVelocity = 50;
     [SerializeField] float moveSpeed = 500;
-    // v DEBUG v
-    [SerializeField] float dashSpeed = 20;
-    [SerializeField] XboxButton dashButton = XboxButton.A;
-    // ^ DEBUG ^
-    [SerializeField] XboxButton tongueButton = XboxButton.B;
+    [SerializeField] XboxButton tongueButton = XboxButton.RightBumper;
     //public Material matYellow;
 
     private static bool didQueryNumOfCtrlrs = false;
@@ -101,20 +97,19 @@ public class PlayerControllerXbox : MonoBehaviour
         // Get input (put it in x and z because we are moving accross those axes)
         Vector3 xboxInput = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX, controller), 0.0f, XCI.GetAxis(XboxAxis.LeftStickY, controller));
 
-        // dash FOR DEBUGGING ONLY
-        if (XCI.GetButton(dashButton, controller))
-        {
-            transform.position += xboxInput * dashSpeed * Time.deltaTime;
-        }
-
         // The more your holding the slower you go (0.5 + (amount held / max held) / 2)%
-        float speedModifier = (1 - (((float)heldCollectables / maxHeldCollectables) / 2) + 0.5f);
+        float speedModifier = ((1 - ((float)heldCollectables / maxHeldCollectables) / 2) + 0.5f);
 
         // movement from left joystick
         rb.AddForce(xboxInput * moveSpeed * speedModifier);
       
         // Look the direction the controler is going
-        if (xboxInput.x != 0 || xboxInput.z != 0)
+        Vector3 lookInput = new Vector3(XCI.GetAxis(XboxAxis.RightStickX, controller), 0.0f, XCI.GetAxis(XboxAxis.RightStickY, controller));
+        if (lookInput.x != 0 || lookInput.z != 0)
+        {
+            transform.rotation = Quaternion.LookRotation(lookInput);
+        }
+        else
         {
             transform.rotation = Quaternion.LookRotation(xboxInput);
         }
@@ -191,6 +186,7 @@ public class PlayerControllerXbox : MonoBehaviour
             }
         }
     }
+
     /// <summary>
     /// Fixed update look deals with the tongue actions
     /// </summary>
@@ -255,9 +251,6 @@ public class PlayerControllerXbox : MonoBehaviour
             {
                 // Move collectable towards player
                 Vector3 towardsPlayer = (transform.position - objectHit.transform.position).normalized;
-
-                //collectableSpeed += grappleAcceleration * Time.fixedDeltaTime;
-                //objectHit.transform.position = objectHit.transform.position + (towardsPlayer * collectableSpeed) * Time.fixedDeltaTime;
 
                 objectHit.GetComponent<Rigidbody>().AddForce(grappleAcceleration * towardsPlayer);
             }
