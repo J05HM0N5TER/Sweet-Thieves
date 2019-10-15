@@ -7,18 +7,15 @@ using XboxCtrlrInput;
 public class PlayerControllerXbox : MonoBehaviour
 {
     // What is this player (first, second, ect)
-    [SerializeField] XboxController controller;
+    [SerializeField] XboxController controller = XboxController.All;
     //max move speeds
-    [SerializeField] float maxMoveSpeed = 20;
+    [SerializeField] float maxVelocity = 50;
+    [SerializeField] float moveSpeed = 500;
     // v DEBUG v
     [SerializeField] float dashSpeed = 20;
     [SerializeField] XboxButton dashButton = XboxButton.A;
     // ^ DEBUG ^
     [SerializeField] XboxButton tongueButton = XboxButton.B;
-
-    //public Material matRed;
-    //public Material matGreen;
-    //public Material matBlue;
     //public Material matYellow;
 
     private static bool didQueryNumOfCtrlrs = false;
@@ -58,9 +55,7 @@ public class PlayerControllerXbox : MonoBehaviour
 
     private Rigidbody rb;
     private LineRenderer line;
-
-    //The current speed of the collectable
-    private float collectableSpeed;
+    
     /* The collectable that someone else has stolen from this player 
      * (used to make sure that the player doesn't instantly pick it back up.*/
     [HideInInspector] public GameObject stolenCollectable;
@@ -74,15 +69,6 @@ public class PlayerControllerXbox : MonoBehaviour
         // Only draws tongue if there is a line renderer on the game object
         line = GetComponent<LineRenderer>();
         rb = gameObject.GetComponent<Rigidbody>();
-
-
-        //switch (controller)
-        //{
-        //    case XboxController.First: GetComponent<Renderer>().material = matRed; break;
-        //    case XboxController.Second: GetComponent<Renderer>().material = matGreen; break;
-        //    case XboxController.Third: GetComponent<Renderer>().material = matBlue; break;
-        //    case XboxController.Fourth: GetComponent<Renderer>().material = matYellow; break;
-        //}
 
         if (!didQueryNumOfCtrlrs)
         {
@@ -106,8 +92,10 @@ public class PlayerControllerXbox : MonoBehaviour
         }
 
     }
-
-    // Update is called once per frame
+    
+    /// <summary>
+    /// Update loop deals with movement and input
+    /// </summary>
     void Update()
     {
         // Get input (put it in x and z because we are moving accross those axes)
@@ -123,13 +111,14 @@ public class PlayerControllerXbox : MonoBehaviour
         float speedModifier = (1 - (((float)heldCollectables / maxHeldCollectables) / 2) + 0.5f);
 
         // movement from left joystick
-        transform.position += xboxInput * maxMoveSpeed * Time.deltaTime * speedModifier;
-
+        rb.AddForce(xboxInput * moveSpeed * speedModifier);
+      
         // Look the direction the controler is going
         if (xboxInput.x != 0 || xboxInput.z != 0)
         {
             transform.rotation = Quaternion.LookRotation(xboxInput);
         }
+
         // Commented out because causeing errors because there is no animator on gameObject
         //GetComponent<Animator>().SetFloat("Speed", 1);
 
@@ -169,6 +158,7 @@ public class PlayerControllerXbox : MonoBehaviour
                     hitPoint = hit.point;
                     tongueHitEnvionment = false;
                     tongueHitCollectible = true;
+                    objectHit.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
                 }
                 // If you hit another player
                 else if (objectHit.tag == "Player")
@@ -201,12 +191,16 @@ public class PlayerControllerXbox : MonoBehaviour
             }
         }
     }
-
+    /// <summary>
+    /// Fixed update look deals with the tongue actions
+    /// </summary>
     void FixedUpdate()
     {
+        rb.velocity = Vector3.zero;
+
         // Where the start of the tongue is drawn
         Vector3 tongueStartPosition = transform.TransformPoint(tongueOffset);
-
+        
         // If the tongue has hit a wall or other environment
         if (tongueHitEnvionment)
         {
@@ -227,7 +221,7 @@ public class PlayerControllerXbox : MonoBehaviour
             if (!XCI.GetButton(tongueButton, controller))
             {
                 // Move player towards tongue
-                rb.AddForce(-differnce.normalized * grappleAcceleration, ForceMode.Acceleration);
+                rb.AddForce(-differnce.normalized * grappleAcceleration);
             }
             // Check if the tongue has fully retracted
             if (differnce.x < acceptanceRange && differnce.x > -acceptanceRange &&
@@ -236,6 +230,10 @@ public class PlayerControllerXbox : MonoBehaviour
             {
                 tongueHitEnvionment = false;
                 currentCooldown = tongueCooldown;
+            }
+            if (XCI.GetButtonDown(tongueButton, controller))
+            {
+                tongueHitEnvionment = false;
             }
 
         }
@@ -258,13 +256,19 @@ public class PlayerControllerXbox : MonoBehaviour
                 // Move collectable towards player
                 Vector3 towardsPlayer = (transform.position - objectHit.transform.position).normalized;
 
-                collectableSpeed += grappleAcceleration * Time.fixedDeltaTime;
-                objectHit.transform.position = objectHit.transform.position + (towardsPlayer * collectableSpeed) * Time.fixedDeltaTime;
+                //collectableSpeed += grappleAcceleration * Time.fixedDeltaTime;
+                //objectHit.transform.position = objectHit.transform.position + (towardsPlayer * collectableSpeed) * Time.fixedDeltaTime;
+
+                objectHit.GetComponent<Rigidbody>().AddForce(grappleAcceleration * towardsPlayer);
+            }
+            if (XCI.GetButtonDown(tongueButton, controller))
+            {
+                tongueHitCollectible = false;
             }
         }
         else
         {
-            rb.velocity = Vector3.zero;
+            // If the tongue is not being drawn set the position of the player
             if (line != null)
             {
                 line.enabled = false;
