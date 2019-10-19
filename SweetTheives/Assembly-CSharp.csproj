@@ -81,6 +81,7 @@
     <None Include="Assets\Particles\test.txt" />
     <None Include="Assets\XInput\XInputDotNet\MITLicense.txt" />
     <None Include="Assets\Sprites\test.txt" />
+    <None Include="Assets\Texture\Materials\Water.shader" />
     <None Include="Assets\Prefabs\test.txt" />
     <None Include="Assets\Shader\test.txt" />
     <None Include="Assets\Audio\test.txt" />
