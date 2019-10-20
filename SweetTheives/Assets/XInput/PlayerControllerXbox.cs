@@ -95,23 +95,24 @@ public class PlayerControllerXbox : MonoBehaviour
     void Update()
     {
         // Get input (put it in x and z because we are moving accross those axes)
-        Vector3 xboxInput = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX, controller), 0.0f, XCI.GetAxis(XboxAxis.LeftStickY, controller));
+        Vector3 moveInput = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX, controller), 0.0f, XCI.GetAxis(XboxAxis.LeftStickY, controller));
 
         // The more your holding the slower you go (0.5 + (amount held / max held) / 2)%
         float speedModifier = ((1 - ((float)heldCollectables / maxHeldCollectables) / 2) + 0.5f);
 
         // movement from left joystick
-        rb.AddForce(xboxInput * moveSpeed * speedModifier);
+        rb.AddForce(moveInput * moveSpeed * speedModifier);
       
-        // Look the direction the controler is going
+        // Look the direction the controler is going if there is input
         Vector3 lookInput = new Vector3(XCI.GetAxis(XboxAxis.RightStickX, controller), 0.0f, XCI.GetAxis(XboxAxis.RightStickY, controller));
         if (lookInput.x != 0 || lookInput.z != 0)
         {
             transform.rotation = Quaternion.LookRotation(lookInput);
         }
-        else
+        // If there is no input on the look input then face the way the player is moving
+        else if (moveInput.x != 0 || moveInput.z != 0)
         {
-            transform.rotation = Quaternion.LookRotation(xboxInput);
+            transform.rotation = Quaternion.LookRotation(moveInput);
         }
 
         // Commented out because causeing errors because there is no animator on gameObject
@@ -144,10 +145,10 @@ public class PlayerControllerXbox : MonoBehaviour
                 // If the wall has hit a collectable
                 else if (collectableLayer.value == (1 << objectHit.layer))
                 {
-                    CollectableController collectablesScript = objectHit.GetComponent<CollectableController>();
-                    if (collectablesScript.stackSize > 1)
+                    CollectableController collectable = objectHit.GetComponent<CollectableController>();
+                    if (collectable.stackSize > 1)
                     {
-                        collectablesScript.stackSize--;
+                        collectable.stackSize--;
                         objectHit = Instantiate(collectablePrefab, objectHit.transform.position, objectHit.transform.rotation);
                     }
                     hitPoint = hit.point;
