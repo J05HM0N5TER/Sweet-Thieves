@@ -11,8 +11,8 @@ public class PlayerControllerXbox : MonoBehaviour
     //max move speeds
     [SerializeField] float maxVelocity = 50;
     [SerializeField] float moveSpeed = 500;
+    // Control to fire the tongue
     [SerializeField] XboxButton tongueButton = XboxButton.RightBumper;
-    //public Material matYellow;
 
     private static bool didQueryNumOfCtrlrs = false;
 
@@ -33,8 +33,8 @@ public class PlayerControllerXbox : MonoBehaviour
     // How close to the collision position for the tongue it has to be for it to release
     [SerializeField] float acceptanceRange = 0.5f;
     // The radus for the sphere cast
-    [SerializeField] float sphereCastRadus = 5f;
-    // How many collectables id the player holding
+    [SerializeField] float sphereCastRadus = 1f;
+    // How many collectables is the player holding
     public int heldCollectables = 0;
     // If the tongue is currently retracting
     private bool tongueHitEnvionment = false;
@@ -51,7 +51,7 @@ public class PlayerControllerXbox : MonoBehaviour
 
     private Rigidbody rb;
     private LineRenderer line;
-    
+
     /* The collectable that someone else has stolen from this player 
      * (used to make sure that the player doesn't instantly pick it back up.*/
     [HideInInspector] public GameObject stolenCollectable;
@@ -65,6 +65,11 @@ public class PlayerControllerXbox : MonoBehaviour
         // Only draws tongue if there is a line renderer on the game object
         line = GetComponent<LineRenderer>();
         rb = gameObject.GetComponent<Rigidbody>();
+        if (line != null)
+        {
+            line.enabled = true;
+            line.useWorldSpace = true;
+        }
 
         if (!didQueryNumOfCtrlrs)
         {
@@ -88,7 +93,7 @@ public class PlayerControllerXbox : MonoBehaviour
         }
 
     }
-    
+
     /// <summary>
     /// Update loop deals with movement and input
     /// </summary>
@@ -102,7 +107,7 @@ public class PlayerControllerXbox : MonoBehaviour
 
         // movement from left joystick
         rb.AddForce(moveInput * moveSpeed * speedModifier);
-      
+
         // Look the direction the controler is going if there is input
         Vector3 lookInput = new Vector3(XCI.GetAxis(XboxAxis.RightStickX, controller), 0.0f, XCI.GetAxis(XboxAxis.RightStickY, controller));
         if (lookInput.x != 0 || lookInput.z != 0)
@@ -123,7 +128,7 @@ public class PlayerControllerXbox : MonoBehaviour
         {
             currentCooldown -= Time.deltaTime;
         }
-        if (XCI.GetButtonDown(tongueButton, controller)/*Button is pressed*/ &&
+        if (XCI.GetButtonDown(tongueButton, controller)/*Button is pressed*/  &&
             !tongueHitCollectible && !tongueHitEnvionment /*Tongue is not already connected to something*/ &&
             heldCollectables < maxHeldCollectables /*The player is holding less then the max amount of collectables*/ &&
             currentCooldown <= 0 /*Tongue cooldown is finished*/)
@@ -184,6 +189,12 @@ public class PlayerControllerXbox : MonoBehaviour
                     tongueHitCollectible = false;
                     tongueHitEnvionment = false;
                 }
+                if (objectHit != null)
+                {
+                    // Set tongue to active
+                    line.useWorldSpace = true;
+                    line.enabled = true;
+                }
             }
         }
     }
@@ -197,14 +208,13 @@ public class PlayerControllerXbox : MonoBehaviour
 
         // Where the start of the tongue is drawn
         Vector3 tongueStartPosition = transform.TransformPoint(tongueOffset);
-        
+
         // If the tongue has hit a wall or other environment
         if (tongueHitEnvionment)
         {
             // Draw tongue to position hit
             if (line != null)
             {
-                line.enabled = true;
                 line.SetPositions(new Vector3[]
                     {
                     tongueStartPosition,
@@ -240,7 +250,6 @@ public class PlayerControllerXbox : MonoBehaviour
             // Draw tongue to collectable
             if (line != null)
             {
-                line.enabled = true;
                 line.SetPositions(new Vector3[]
                     {
                     tongueStartPosition,
@@ -262,14 +271,15 @@ public class PlayerControllerXbox : MonoBehaviour
         }
         else
         {
-            // If the tongue is not being drawn set the position of the player
             if (line != null)
             {
+                // Set tongue inactive
+                line.useWorldSpace = false;
                 line.enabled = false;
                 line.SetPositions(new Vector3[]
-                    {
-                    tongueStartPosition,
-                    tongueStartPosition
+                {
+                Vector3.zero,
+                Vector3.zero
                 });
             }
         }
