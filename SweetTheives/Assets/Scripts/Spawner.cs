@@ -7,9 +7,9 @@ public class Spawner : MonoBehaviour
     //what the spawner will spawn
     [SerializeField] GameObject spawnee = null;
     //stop it from spawning in editor
-    public bool stopSpawning = false;
+    [SerializeField] bool stopSpawning = false;
     //will it continue to spawn 
-    public bool repeating = false;
+    [SerializeField] bool repeating = false;
     //time until is starts spawning
     public float spawnTime = 0.0f;
     //time between spawns
@@ -18,10 +18,11 @@ public class Spawner : MonoBehaviour
     public int maxSpawn = 0;
     //amount that has been spawned
     int spawned = 0;
+    //is this spanwer part of a base
+    [SerializeField] bool isbase = false;
     // Start is called before the frst frame update
     void Start()
     {
-
         // initialize spawned objets to 0
         spawned = 0;
 
@@ -38,7 +39,7 @@ public class Spawner : MonoBehaviour
         
         // spawns the objects
         GameObject spawnedObject =  Instantiate(spawnee, transform.position, transform.rotation);
-        
+
 
         // increase the value of spawned for each itteration    
         spawned += 1;
@@ -57,4 +58,12 @@ public class Spawner : MonoBehaviour
 
         return spawnedObject;
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag != "Player")
+        {
+            other.GetComponent<CapsuleCollider>().enabled = false;
+        }
+    }
+
 }

@@ -16,15 +16,23 @@ public class BasePoint : MonoBehaviour
     // on colliding increase stash size 
     private void OnTriggerEnter(Collider other)
     {
-        stash.stashSize += 1;
+        if(other.tag != "Player")
+        {  
+            stash.stashSize += 1;
+        }
+       
         
     }
 
     //on leaving the collider stash size decreases and the pancake gains its collider back
     private void OnTriggerExit(Collider other)
     {
-        stash.stashSize -= 1;
-        other.GetComponent<CapsuleCollider>().enabled = true;
+        if (other.tag != "Player")
+        {
+            stash.stashSize -= 1;
+            other.GetComponent<CapsuleCollider>().enabled = true;
+        }
+            
     }
     
 }
