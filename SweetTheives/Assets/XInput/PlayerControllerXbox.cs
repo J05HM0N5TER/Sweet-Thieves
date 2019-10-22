@@ -100,16 +100,16 @@ public class PlayerControllerXbox : MonoBehaviour
     void Update()
     {
         // Get input (put it in x and z because we are moving accross those axes)
-        Vector3 moveInput = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX, controller), 0.0f, XCI.GetAxis(XboxAxis.LeftStickY, controller));
+        Vector3 moveInput = new Vector3(XCI.GetAxisRaw(XboxAxis.LeftStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.LeftStickY, controller));
 
         // The more your holding the slower you go (0.5 + (amount held / max held) / 2)%
         float speedModifier = ((1 - ((float)heldCollectables / maxHeldCollectables) / 2) + 0.5f);
 
         // movement from left joystick
-        rb.AddForce(moveInput * moveSpeed * speedModifier);
-
+        rb.velocity = (moveInput * moveSpeed * speedModifier);
+        //rb.AddForce(moveInput * moveSpeed * speedModifier);
         // Look the direction the controler is going if there is input
-        Vector3 lookInput = new Vector3(XCI.GetAxis(XboxAxis.RightStickX, controller), 0.0f, XCI.GetAxis(XboxAxis.RightStickY, controller));
+        Vector3 lookInput = new Vector3(XCI.GetAxisRaw(XboxAxis.RightStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.RightStickY, controller));
         if (lookInput.x != 0 || lookInput.z != 0)
         {
             transform.rotation = Quaternion.LookRotation(lookInput);
@@ -204,7 +204,7 @@ public class PlayerControllerXbox : MonoBehaviour
     /// </summary>
     void FixedUpdate()
     {
-        rb.velocity = Vector3.zero;
+        //rb.velocity = Vector3.zero;
 
         // Where the start of the tongue is drawn
         Vector3 tongueStartPosition = transform.TransformPoint(tongueOffset);
