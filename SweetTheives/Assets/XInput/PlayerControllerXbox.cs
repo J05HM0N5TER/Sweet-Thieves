@@ -9,7 +9,6 @@ public class PlayerControllerXbox : MonoBehaviour
     // What is this player (first, second, ect)
     [SerializeField] XboxController controller = XboxController.All;
     //max move speeds
-    [SerializeField] float maxVelocity = 50;
     [SerializeField] float moveSpeed = 500;
     // Control to fire the tongue
     [SerializeField] XboxButton tongueButton = XboxButton.RightBumper;
@@ -18,21 +17,23 @@ public class PlayerControllerXbox : MonoBehaviour
 
     // The layer that the walls and other environment are in
     [SerializeField] LayerMask environmentLayer;
-    // The layer that the collectabels are in
+    // The layer that the collectables are in
     [SerializeField] LayerMask collectableLayer;
-    [SerializeField] GameObject collectablePrefab;
+    [SerializeField] GameObject collectablePrefab = null;
 
     // The max collectables that the player can hold
     public int maxHeldCollectables = 3;
     // The amount that the grapple accelerates object every second
     [SerializeField] float grappleAcceleration = 20;
+    // Should the tongue be able to wrap around other environment when already attached
+    [SerializeField] bool tongueWrapOn = true;
     // How long you have to wait before you can fire the tongue again
     [SerializeField] public float tongueCooldown;
     // The start draw position for the tongue offset from the player
-    [SerializeField] Vector3 tongueOffset = new Vector3(0, 4.5f, 0);
+    [SerializeField] Vector3 tongueOffset = Vector3.zero;
     // How close to the collision position for the tongue it has to be for it to release
     [SerializeField] float acceptanceRange = 0.5f;
-    // The radus for the sphere cast
+    // The radius for the sphere cast
     [SerializeField] float sphereCastRadus = 1f;
     // How many collectables is the player holding
     public int heldCollectables = 0;
@@ -45,16 +46,21 @@ public class PlayerControllerXbox : MonoBehaviour
     // If the tongue hit a collectable or not
     [HideInInspector] public bool tongueHitCollectible = false;
     // The object that the tongue hit
-    [HideInInspector] public GameObject objectHit;
-    // The postion for the hit on the tongue on a wall
-    [HideInInspector] public Vector3 hitPoint;
+    [HideInInspector] public GameObject objectHit = null;
+
+
+    /* The positions that the players tongue is attached to in the environment
+            [0] Is the position of the player (where is starts displaying the tongue)
+            [1] Is the first position that the tongue is attacked to
+            [2]-[?] Is if there is more positions that the tongue is chained to*/
+    [HideInInspector] public List<Vector3> tongueHitPoints;
 
     private Rigidbody rb;
     private LineRenderer line;
 
     /* The collectable that someone else has stolen from this player 
      * (used to make sure that the player doesn't instantly pick it back up.*/
-    [HideInInspector] public GameObject stolenCollectable;
+    [HideInInspector] public GameObject stolenCollectable = null;
     // What the cooldown is currently at
     [HideInInspector] public float currentCooldown = 0.0f;
 
@@ -62,6 +68,9 @@ public class PlayerControllerXbox : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        tongueHitPoints = new List<Vector3>();
+        tongueHitPoints.Add(Vector3.zero);
+
         // Only draws tongue if there is a line renderer on the game object
         line = GetComponent<LineRenderer>();
         rb = gameObject.GetComponent<Rigidbody>();
@@ -99,7 +108,7 @@ public class PlayerControllerXbox : MonoBehaviour
     /// </summary>
     void Update()
     {
-        // Get input (put it in x and z because we are moving accross those axes)
+        // Get input (put it in x and z because we are moving across those axes)
         Vector3 moveInput = new Vector3(XCI.GetAxisRaw(XboxAxis.LeftStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.LeftStickY, controller));
 
         // The more your holding the slower you go (0.5 + (amount held / max held) / 2)%
@@ -108,7 +117,7 @@ public class PlayerControllerXbox : MonoBehaviour
         // movement from left joystick
         rb.velocity = (moveInput * moveSpeed * speedModifier);
         //rb.AddForce(moveInput * moveSpeed * speedModifier);
-        // Look the direction the controler is going if there is input
+        // Look the direction the controller is going if there is input
         Vector3 lookInput = new Vector3(XCI.GetAxisRaw(XboxAxis.RightStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.RightStickY, controller));
         if (lookInput.x != 0 || lookInput.z != 0)
         {
@@ -120,10 +129,10 @@ public class PlayerControllerXbox : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(moveInput);
         }
 
-        // Commented out because causeing errors because there is no animator on gameObject
+        // Commented out because causing errors because there is no animator on gameObject
         //GetComponent<Animator>().SetFloat("Speed", 1);
 
-        // ---Tougue lash---
+        // ---Tongue lash---
         if (currentCooldown >= -0.0001f)
         {
             currentCooldown -= Time.deltaTime;
@@ -133,17 +142,26 @@ public class PlayerControllerXbox : MonoBehaviour
             heldCollectables < maxHeldCollectables /*The player is holding less then the max amount of collectables*/ &&
             currentCooldown <= 0 /*Tongue cooldown is finished*/)
         {
+            // Clear points that the tongue
+
             // Casts sphereCast. hit = The object that the circleCast hits if it hits something
-            if (Physics.SphereCast(transform.position, sphereCastRadus, transform.forward, out RaycastHit hit, Mathf.Infinity))
+            if (Physics.SphereCast(transform.position, // Start position
+                sphereCastRadus, // Width
+                transform.forward, // Direction
+                out RaycastHit hit, // Output
+                Mathf.Infinity)) // Distance
             {
-                Debug.Log("SphereCase hit " + hit.collider.gameObject.name);
+                tongueHitPoints.Clear();
+                tongueHitPoints.Add(Vector3.zero);
+                tongueHitPoints.Add(hit.point);
+
+                //Debug.Log("SphereCase hit " + hit.collider.gameObject.name);
                 // Set what it hit.
                 objectHit = hit.collider.gameObject;
                 // If the tongue has hit a wall or other environment
                 if (environmentLayer.value == (1 << objectHit.layer))
                 {
-                    // The possition that the tongue hit
-                    hitPoint = hit.point;
+                    // The positions that the tongue hit
                     tongueHitEnvionment = true;
                     tongueHitCollectible = false;
                 }
@@ -154,9 +172,10 @@ public class PlayerControllerXbox : MonoBehaviour
                     if (collectable.stackSize > 1)
                     {
                         collectable.stackSize--;
-                        objectHit = Instantiate(collectablePrefab, objectHit.transform.position, objectHit.transform.rotation);
+                        objectHit = Instantiate(collectablePrefab,
+                            objectHit.transform.position,
+                            objectHit.transform.rotation);
                     }
-                    hitPoint = hit.point;
                     tongueHitEnvionment = false;
                     tongueHitCollectible = true;
                     objectHit.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
@@ -169,7 +188,10 @@ public class PlayerControllerXbox : MonoBehaviour
                     if (player.heldCollectables > 0)
                     {
                         player.heldCollectables--;
-                        objectHit = Instantiate(collectablePrefab, objectHit.transform.position, objectHit.transform.rotation);
+                        objectHit = Instantiate(collectablePrefab,
+                            objectHit.transform.position,
+                            objectHit.transform.rotation);
+
                         player.stolenCollectable = objectHit;
                         tongueHitCollectible = true;
                     }
@@ -179,7 +201,6 @@ public class PlayerControllerXbox : MonoBehaviour
                         tongueHitCollectible = false;
                         objectHit = null;
                     }
-                    hitPoint = hit.point;
                     tongueHitEnvionment = false;
                 }
                 // If the tongue activated but didn't hit anything
@@ -192,7 +213,6 @@ public class PlayerControllerXbox : MonoBehaviour
                 if (objectHit != null)
                 {
                     // Set tongue to active
-                    line.useWorldSpace = true;
                     line.enabled = true;
                 }
             }
@@ -207,7 +227,7 @@ public class PlayerControllerXbox : MonoBehaviour
         //rb.velocity = Vector3.zero;
 
         // Where the start of the tongue is drawn
-        Vector3 tongueStartPosition = transform.TransformPoint(tongueOffset);
+        tongueHitPoints[0] = transform.TransformPoint(tongueOffset);
 
         // If the tongue has hit a wall or other environment
         if (tongueHitEnvionment)
@@ -215,34 +235,46 @@ public class PlayerControllerXbox : MonoBehaviour
             // Draw tongue to position hit
             if (line != null)
             {
-                line.SetPositions(new Vector3[]
-                    {
-                    tongueStartPosition,
-                    hitPoint
-                });
+                line.positionCount = tongueHitPoints.Count;
+                line.SetPositions(tongueHitPoints.ToArray());
             }
-            // The seperation between the player and the grapple point.
-            Vector3 differnce = transform.position - hitPoint;
+            // The separation between the player and the grapple point.
+            Vector3 difference = transform.position - tongueHitPoints[1];
 
+            bool shouldAddWrap;
             // Only move to the position that the tongue hit if the button is not pressed down
             if (!XCI.GetButton(tongueButton, controller))
             {
                 // Move player towards tongue
-                rb.AddForce(-differnce.normalized * grappleAcceleration);
+                rb.AddForce(-difference.normalized * grappleAcceleration);
+                shouldAddWrap = false;
             }
-            // Check if the tongue has fully retracted
-            if (differnce.x < acceptanceRange && differnce.x > -acceptanceRange &&
-                differnce.y < acceptanceRange && differnce.y > -acceptanceRange &&
-                differnce.z < acceptanceRange && differnce.z > -acceptanceRange)
+            else
             {
-                tongueHitEnvionment = false;
-                currentCooldown = tongueCooldown;
+                shouldAddWrap = true;
             }
-            if (XCI.GetButtonDown(tongueButton, controller))
+            if (tongueWrapOn)
             {
-                tongueHitEnvionment = false;
+                this.CheckTongueWrap(shouldAddWrap);
             }
 
+            // Check if the tongue has fully retracted
+            if (difference.x < acceptanceRange && difference.x > -acceptanceRange &&
+                difference.y < acceptanceRange && difference.y > -acceptanceRange &&
+                difference.z < acceptanceRange && difference.z > -acceptanceRange)
+            {
+                // If there is more then one point that the tongue is attached to then remove one
+                if (tongueHitPoints.Count > 2)
+                {
+                    tongueHitPoints.RemoveAt(1);
+                }
+                else
+                {
+                    tongueHitEnvionment = false;
+                    // Set cooldown
+                    currentCooldown = tongueCooldown;
+                }
+            }
         }
         // If the tongue has hit a collectable
         else if (tongueHitCollectible)
@@ -250,13 +282,10 @@ public class PlayerControllerXbox : MonoBehaviour
             // Draw tongue to collectable
             if (line != null)
             {
-                line.SetPositions(new Vector3[]
-                    {
-                    tongueStartPosition,
-                    objectHit.transform.position
-                });
+                line.positionCount = tongueHitPoints.Count;
+                line.SetPositions(tongueHitPoints.ToArray());
             }
-            // Only movve the collectable to the player if the button is not pressed down
+            // Only move the collectable to the player if the button is not pressed down
             if (!XCI.GetButton(tongueButton, controller))
             {
                 // Move collectable towards player
@@ -264,24 +293,51 @@ public class PlayerControllerXbox : MonoBehaviour
 
                 objectHit.GetComponent<Rigidbody>().AddForce(grappleAcceleration * towardsPlayer);
             }
-            if (XCI.GetButtonDown(tongueButton, controller))
-            {
-                tongueHitCollectible = false;
-            }
         }
         else
         {
             if (line != null)
             {
                 // Set tongue inactive
-                line.useWorldSpace = false;
                 line.enabled = false;
-                line.SetPositions(new Vector3[]
-                {
-                Vector3.zero,
-                Vector3.zero
-                });
+                line.positionCount = 0;
             }
+        }
+    }
+
+    /// <summary>
+    /// Checks if the tongue needs to wrap around an object or should be unwrapped
+    /// </summary>
+    private void CheckTongueWrap(bool enableAdding = true)
+    {
+        float acceptanceModifier = 5f;
+        RaycastHit hit;
+
+        // If it can't see the next position then add a new one
+        if (Physics.Raycast(transform.position, // Start position
+            (tongueHitPoints[1] - transform.position).normalized, // Direction
+            out hit, // Output
+            Vector3.Distance(transform.position, tongueHitPoints[1])
+            - acceptanceRange / acceptanceModifier, // Distance
+            environmentLayer, // What layers should it collide with 
+            QueryTriggerInteraction.UseGlobal))
+        {
+            if (enableAdding)
+            {
+                tongueHitPoints.Insert(1, hit.point);
+            }
+        }
+
+        // If you can see the next point and the one previous then remove the next one
+        else if (tongueHitPoints.Count > 2 && !Physics.Raycast(transform.position, // Start position
+            (tongueHitPoints[2] - transform.position).normalized, // Direction
+            out hit, // Output
+            Vector3.Distance(transform.position, tongueHitPoints[2])
+            - acceptanceRange / acceptanceModifier,  // Distance
+            environmentLayer, // What layers should it collide with 
+            QueryTriggerInteraction.UseGlobal))
+        {
+            tongueHitPoints.RemoveAt(1);
         }
     }
 }
