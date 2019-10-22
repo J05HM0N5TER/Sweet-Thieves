@@ -1,19 +1,16 @@
 fileFormatVersion: 2
-guid: 91822806880cfc546b79accc336db4be
+guid: f033a197c5fa2db43bd2c8651c4c2047
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Bear_Hair_Material
-    2100002: Bear_Face
-    2100004: Bear_Material
-    2100006: Bear_Accent_Material
-    2100008: Bear_ShirtDecal_Material
-    2100010: Bear_Shirt_Material
+    2100000: Mushroom_Stalk_Material
+    2100002: Mushroom_Cap_Material
+    2100004: Mushroom_Skirt_Material
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Shane_Bear
+    4300000: Mushroom_01
   externalObjects: {}
   materials:
     importMaterials: 1

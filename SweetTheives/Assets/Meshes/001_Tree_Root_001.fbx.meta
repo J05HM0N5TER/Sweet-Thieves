@@ -1,15 +1,14 @@
 fileFormatVersion: 2
-guid: 91d87337be407204f9886833589b8eb0
+guid: a42fbe60471b48d49a23d0810b2b0d6f
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Tiki_Material
-    2100002: Tiki_Accent_Material
+    2100000: Root_Material
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Tiki_01
+    4300000: Root_01
   externalObjects: {}
   materials:
     importMaterials: 1
