@@ -603,7 +603,7 @@ GameObject:
   - component: {fileID: 1188792375801558090}
   m_Layer: 0
   m_Name: Chameleon_001_Player_3
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -634,7 +634,7 @@ Animator:
   m_GameObject: {fileID: 1188792376071818833}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: a0b3fa16e4b86f84fb157bd5bfa0f545, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7cc4271176fab964c83598a9142cdceb, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
