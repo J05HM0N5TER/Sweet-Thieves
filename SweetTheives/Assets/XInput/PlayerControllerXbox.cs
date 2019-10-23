@@ -88,6 +88,8 @@ public class PlayerControllerXbox : MonoBehaviour
     [HideInInspector] public GameObject stolenCollectable = null;
     // What the cooldown is currently at
     [HideInInspector] public float currentCooldown = 0.0f;
+    //initilization of animation stuff
+    private Animator anim;
 
 
     // Start is called before the first frame update
@@ -131,7 +133,8 @@ public class PlayerControllerXbox : MonoBehaviour
 
             XCI.DEBUG_LogControllerNames();
         }
-
+        // getting component
+        anim = GetComponent<Animator>();
     }
 
     /// <summary>
@@ -252,6 +255,8 @@ public class PlayerControllerXbox : MonoBehaviour
                 }
             }
         }
+        // animation stuff
+        anim.SetFloat("runningSpeed", rb.velocity.magnitude);
     }
 
     /// <summary>
