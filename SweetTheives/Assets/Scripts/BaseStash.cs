@@ -8,7 +8,7 @@ public class BaseStash : MonoBehaviour
     //text to display the points
     public Text points = null;
     // size of current stash
-     public float stashSize = 0;
+    public float stashSize = 0;
     // what player is connected to base
     [SerializeField] Transform player = null;
     // what spawner is connected to base
@@ -21,24 +21,24 @@ public class BaseStash : MonoBehaviour
     //set the score to stashsize;
     void Update()
     {
-        points.text = stashSize.ToString();    
+        points.text = stashSize.ToString();
     }
 
 
     // on collision of base
     private IEnumerator OnTriggerEnter(Collider other)
     {
-        //getting script from PlayerControllerXbox
-        PlayerControllerXbox playercontrol = other.gameObject.GetComponent<PlayerControllerXbox>();
-        int collectablesHeld = playercontrol.heldCollectables;
-        playercontrol.heldCollectables = 0;
 
         //if it is the players base do code, if not nothing happens
         if (other.gameObject.transform == player)
         {
+            //getting script from PlayerControllerXbox
+            PlayerControllerXbox playercontrol = other.gameObject.GetComponent<PlayerControllerXbox>();
+            int collectablesHeld = playercontrol.heldCollectables;
+            playercontrol.heldCollectables = 0;
 
             //if no script found load error
-            if (playercontrol == null )
+            if (playercontrol == null)
             {
                 Debug.Log("No script");
             }
@@ -62,7 +62,7 @@ public class BaseStash : MonoBehaviour
                 spawner.maxSpawn = 0;
 
             }
-           
+
         }
 
 

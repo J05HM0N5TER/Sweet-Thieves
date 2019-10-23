@@ -1,4 +1,15 @@
-﻿using System.Collections;
+﻿/* ---Requirements---
+ * On collectable / parent game object:
+ * - Renderer
+ * - Capsule Collider:
+ *      ~ Is trigger = true
+ * - Rigidbody
+ * - Mesh Collider
+ * - Layer = Collectables
+ * */
+
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

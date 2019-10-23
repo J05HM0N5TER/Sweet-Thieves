@@ -1,8 +1,33 @@
-﻿using System.Collections;
+﻿/* ---Requirements---
+ * On player / parent game object:
+ * - Line renderer:
+ *      ~ Positions - Size = 0
+ * - Rigidbody
+ * - Capsule collider
+ * - Animator:
+ *      ~ Controller = ChameleonAnimationController
+ *      ~ Avatar = Chameleon_001Avatar
+ *  - Tag = Player
+ * 
+ * On script
+ * - Controller
+ * - Environment layer
+ * - Collectable layer
+ * - Collectable prefab
+ *  
+ * On environment:
+ * - Layer = Environment
+ * - Collider
+ * 
+ * On Collectable:
+ * - CollectableControler script and specified requirements
+ * */
+
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using XboxCtrlrInput;
-
 
 public class PlayerControllerXbox : MonoBehaviour
 {
@@ -73,11 +98,17 @@ public class PlayerControllerXbox : MonoBehaviour
 
         // Only draws tongue if there is a line renderer on the game object
         line = GetComponent<LineRenderer>();
-        rb = gameObject.GetComponent<Rigidbody>();
-        if (line != null)
+        if (line == null)
         {
-            line.enabled = true;
-            line.useWorldSpace = true;
+            Debug.LogError("Requires Line renderer");
+        }
+        line.enabled = true;
+        line.useWorldSpace = true;
+
+        rb = gameObject.GetComponent<Rigidbody>();
+        if (rb == null)
+        {
+            Debug.LogError("Requires Rigidbody");
         }
 
         if (!didQueryNumOfCtrlrs)
@@ -149,24 +180,28 @@ public class PlayerControllerXbox : MonoBehaviour
                 sphereCastRadus, // Width
                 transform.forward, // Direction
                 out RaycastHit hit, // Output
-                Mathf.Infinity)) // Distance
+                Mathf.Infinity,
+                environmentLayer + collectableLayer)) // Distance
             {
                 tongueHitPoints.Clear();
                 tongueHitPoints.Add(Vector3.zero);
                 tongueHitPoints.Add(hit.point);
 
-                //Debug.Log("SphereCase hit " + hit.collider.gameObject.name);
+                Debug.Log("SphereCase hit " + hit.collider.gameObject.name);
                 // Set what it hit.
                 objectHit = hit.collider.gameObject;
+
                 // If the tongue has hit a wall or other environment
-                if (environmentLayer.value == (1 << objectHit.layer))
+                if ((environmentLayer.value & (1 << objectHit.layer)) != 0)
                 {
                     // The positions that the tongue hit
                     tongueHitEnvionment = true;
                     tongueHitCollectible = false;
+                    // Set cooldown
+                    currentCooldown = tongueCooldown;
                 }
                 // If the wall has hit a collectable
-                else if (collectableLayer.value == (1 << objectHit.layer))
+                else if ((collectableLayer.value & (1 << objectHit.layer)) != 0)
                 {
                     CollectableController collectable = objectHit.GetComponent<CollectableController>();
                     if (collectable.stackSize > 1)
@@ -255,7 +290,7 @@ public class PlayerControllerXbox : MonoBehaviour
             }
             if (tongueWrapOn)
             {
-                this.CheckTongueWrap(shouldAddWrap);
+                CheckTongueWrap(shouldAddWrap);
             }
 
             // Check if the tongue has fully retracted
@@ -271,8 +306,6 @@ public class PlayerControllerXbox : MonoBehaviour
                 else
                 {
                     tongueHitEnvionment = false;
-                    // Set cooldown
-                    currentCooldown = tongueCooldown;
                 }
             }
         }
