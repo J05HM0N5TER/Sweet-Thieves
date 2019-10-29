@@ -39,8 +39,7 @@ public class Spawner : MonoBehaviour
         
         // spawns the objects
         GameObject spawnedObject =  Instantiate(spawnee, transform.position, transform.rotation);
-
-
+ 
         // increase the value of spawned for each itteration    
         spawned += 1;
 

@@ -18,7 +18,7 @@ public class BasePoint : MonoBehaviour
     {
         if(other.tag != "Player")
         {  
-            stash.stashSize += 1;
+           // stash.stashSize += 1;
         }
        
         

@@ -16,6 +16,22 @@ public class BaseStash : MonoBehaviour
     // delay between spawning pancakes into base
     [SerializeField] float delay = 0.0f;
 
+    [SerializeField] GameObject spawnee = null;
+    //stop it from spawning in editor
+    [SerializeField] bool stopSpawning = false;
+    //will it continue to spawn 
+    [SerializeField] bool repeating = false;
+    //time until is starts spawning
+    public float spawnTime = 0.0f;
+    //time between spawns
+    public float spawnDelay = 0.0f;
+    //max amount it will spawn
+    public int maxSpawn = 0;
+    //amount that has been spawned
+    int spawned = 0;
+    //is this spanwer part of a base
+    [SerializeField] bool isbase = false;
+
 
     //update function
     //set the score to stashsize;
@@ -51,7 +67,7 @@ public class BaseStash : MonoBehaviour
                 //spawn the amount the player is holding with frozen transforms and a delay between spawns
                 for (int i = 0; i < collectablesHeld; i++)
                 {
-                    spawner.SpawnObject().GetComponent<Rigidbody>().constraints =
+                    SpawnObject().GetComponent<Rigidbody>().constraints =
                         RigidbodyConstraints.FreezePositionX |
                         RigidbodyConstraints.FreezePositionZ |
                         RigidbodyConstraints.FreezeRotation;
@@ -60,11 +76,20 @@ public class BaseStash : MonoBehaviour
                 }
                 // the max spawn is returned to 0.
                 spawner.maxSpawn = 0;
-
             }
-
         }
+    }
+    public GameObject SpawnObject()
+    {
 
+        // spawns the objects
+        GameObject spawnedObject = Instantiate(spawnee, new Vector3(gameObject.transform.position.x, spawned * 0.2f, gameObject.transform.position.z), transform.rotation);
+        spawnedObject.GetComponent<CapsuleCollider>().enabled = false;
 
+        // increase the value of spawned for each itteration    
+        spawned += 1;
+        stashSize++;
+
+        return spawnedObject;
     }
 }
