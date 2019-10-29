@@ -42,7 +42,7 @@ public class CollectableController : MonoBehaviour
                 if (player.objectHit == gameObject)
                 {
                     player.objectHit = null;
-                    player.tongueHitCollectible = false;
+                    player.tongueHit = hitType.COLLECTABLE;
                     player.currentCooldown = player.tongueCooldown;
                 }
                 Destroy(gameObject);

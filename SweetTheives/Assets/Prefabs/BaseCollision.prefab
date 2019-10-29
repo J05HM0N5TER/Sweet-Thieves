@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 3291220546178375239}
   m_Layer: 0
   m_Name: BaseCollision
-  m_TagString: Untagged
+  m_TagString: Player Base
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

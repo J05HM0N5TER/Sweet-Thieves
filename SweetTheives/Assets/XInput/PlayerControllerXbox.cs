@@ -29,6 +29,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using XboxCtrlrInput;
 
+/// <summary>
+/// Used to keep track on what the tongue is interacting with
+/// </summary>
+public enum hitType : byte
+{
+    NONE,
+    ENVIRONMENT,
+    COLLECTABLE
+}
+
 [RequireComponent(typeof(Rigidbody), typeof(LineRenderer), typeof(Collider))]
 [RequireComponent(typeof(Animation))]
 public class PlayerControllerXbox : MonoBehaviour
@@ -64,14 +74,11 @@ public class PlayerControllerXbox : MonoBehaviour
     [SerializeField] float sphereCastRadus = 1f;
     // How many collectables is the player holding
     public int heldCollectables = 0;
-    // If the tongue is currently retracting
-    [HideInInspector] public bool tongueHitEnvionment = false;
-
 
 
     /* --Variables needed by the collectableController-- */
-    // If the tongue hit a collectable or not
-    [HideInInspector] public bool tongueHitCollectible = false;
+    // What the kind of interaction does the tongue have with the hit
+    [HideInInspector] public hitType tongueHit = hitType.NONE;
     // The object that the tongue hit
     [HideInInspector] public GameObject objectHit = null;
 
@@ -164,8 +171,8 @@ public class PlayerControllerXbox : MonoBehaviour
         {
             currentCooldown -= Time.deltaTime;
         }
-        if (XCI.GetButtonDown(tongueButton, controller)/*Button is pressed*/  &&
-            !tongueHitCollectible && !tongueHitEnvionment /*Tongue is not already connected to something*/ &&
+        if (XCI.GetButtonDown(tongueButton, controller) /*Button is pressed*/  &&
+            tongueHit == hitType.NONE /*Tongue is not already connected to something*/ &&
             heldCollectables < maxHeldCollectables /*The player is holding less then the max amount of collectables*/ &&
             currentCooldown <= 0 /*Tongue cooldown is finished*/)
         {
@@ -189,30 +196,20 @@ public class PlayerControllerXbox : MonoBehaviour
             Mathf.Infinity,
             environmentLayer + collectableLayer)) // Distance
         {
+            // Set defaults
+            tongueHit = hitType.NONE;
             tongueHitPoints.Clear();
             tongueHitPoints.Add(Vector3.zero);
             tongueHitPoints.Add(hit.point);
-
-            Debug.Log("SphereCase hit " + hit.collider.gameObject.name);
             // Set what it hit.
             objectHit = hit.collider.gameObject;
 
             // If the tongue has hit a wall or other environment
             if ((environmentLayer.value & (1 << objectHit.layer)) != 0)
             {
-                //if (objectHit.tag == "Button")
-                //{
-                //    objectHit.GetComponent<ButtonController>().OnClick();
-                //tongueHitEnvionment = false;
-                //}
-                //else
-                //{
-                // The positions that the tongue hit
-                tongueHitEnvionment = true;
-                //}
+                tongueHit = hitType.ENVIRONMENT;
                 // Set cooldown
                 currentCooldown = tongueCooldown;
-                tongueHitCollectible = false;
 
             }
             // If the wall has hit a collectable
@@ -226,8 +223,7 @@ public class PlayerControllerXbox : MonoBehaviour
                         objectHit.transform.position,
                         objectHit.transform.rotation);
                 }
-                tongueHitEnvionment = false;
-                tongueHitCollectible = true;
+                tongueHit = hitType.COLLECTABLE;
                 objectHit.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
             }
             // If you hit another player
@@ -243,28 +239,11 @@ public class PlayerControllerXbox : MonoBehaviour
                         objectHit.transform.rotation);
 
                     player.stolenCollectable = objectHit;
-                    tongueHitCollectible = true;
+                    tongueHit = hitType.COLLECTABLE;
                 }
-                // If the player has nothing to steal
-                else
-                {
-                    tongueHitCollectible = false;
-                    objectHit = null;
-                }
-                tongueHitEnvionment = false;
             }
-            // If the tongue activated but didn't hit anything
-            else
-            {
-                objectHit = null;
-                tongueHitCollectible = false;
-                tongueHitEnvionment = false;
-            }
-            if (objectHit != null)
-            {
-                // Set tongue to active
-                line.enabled = true;
-            }
+            // If the tongue is attached to something then activate it
+            line.enabled = tongueHit != hitType.NONE;
         }
     }
 
@@ -273,26 +252,27 @@ public class PlayerControllerXbox : MonoBehaviour
     /// </summary>
     void FixedUpdate()
     {
-        //rb.velocity = Vector3.zero;
-
         // Where the start of the tongue is drawn
         tongueHitPoints[0] = transform.TransformPoint(tongueOffset);
 
-        // If the tongue has hit a wall or other environment
-        if (tongueHitEnvionment)
+        switch (tongueHit)
         {
-            TongueEnvironmentInteraction();
-        }
-        // If the tongue has hit a collectable
-        else if (tongueHitCollectible)
-        {
-            TongueCollectableInteraction();
-        }
-        else
-        {
-            // Set tongue inactive
-            line.enabled = false;
-            line.positionCount = 0;
+            // If the tongue isn't attached to anything then don't do anything
+            case hitType.NONE:
+                // Set tongue inactive
+                line.enabled = false;
+                line.positionCount = 0;
+                break;
+            // If the tongue has hit a wall or other environment 
+            case hitType.ENVIRONMENT:
+                TongueEnvironmentInteraction();
+                break;
+            // If the tongue has hit a collectable
+            case hitType.COLLECTABLE:
+                TongueCollectableInteraction();
+                break;
+            default:
+                break;
         }
     }
 
@@ -337,7 +317,7 @@ public class PlayerControllerXbox : MonoBehaviour
             }
             else
             {
-                tongueHitEnvionment = false;
+                tongueHit = hitType.NONE;
             }
         }
     }

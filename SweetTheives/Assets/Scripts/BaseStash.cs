@@ -10,7 +10,7 @@ public class BaseStash : MonoBehaviour
     // size of current stash
     public float stashSize = 0;
     // what player is connected to base
-    [SerializeField] Transform player = null;
+    public Transform player = null;
     // what spawner is connected to base
     [SerializeField] Spawner spawner = null;
     // delay between spawning pancakes into base
