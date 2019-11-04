@@ -29,13 +29,20 @@ public class BaseStash : MonoBehaviour
     public int maxSpawn = 0;
     //amount that has been spawned
     int spawned = 0;
-    //is this spanwer part of a base
+    //is this spawner part of a base
     [SerializeField] bool isbase = false;
 
+	public float spawneeHeight;
 
-    //update function
-    //set the score to stashsize;
-    void Update()
+	private void Start()
+	{
+		// Get the height of the collectable to use to stack them later
+		spawneeHeight = spawnee.GetComponent<CapsuleCollider>().bounds.size.y;
+	}
+
+	//update function
+	//set the score to stashsize;
+	void Update()
     {
         points.text = stashSize.ToString();
     }
@@ -61,7 +68,7 @@ public class BaseStash : MonoBehaviour
             // otherwise
             else
             {
-                // the max allowed to spawn in this instance is equal to how mnay pancakes the player is holding
+                // the max allowed to spawn in this instance is equal to how many pancakes the player is holding
                 spawner.maxSpawn += collectablesHeld;
 
                 //spawn the amount the player is holding with frozen transforms and a delay between spawns
@@ -81,12 +88,11 @@ public class BaseStash : MonoBehaviour
     }
     public GameObject SpawnObject()
     {
-
         // spawns the objects
-        GameObject spawnedObject = Instantiate(spawnee, new Vector3(gameObject.transform.position.x, spawned * 0.2f, gameObject.transform.position.z), transform.rotation);
+        GameObject spawnedObject = Instantiate(spawnee, new Vector3(gameObject.transform.position.x, spawned * spawneeHeight, gameObject.transform.position.z), transform.rotation);
         spawnedObject.GetComponent<CapsuleCollider>().enabled = false;
 
-        // increase the value of spawned for each itteration    
+        // increase the value of spawned for each iteration    
         spawned += 1;
         stashSize++;
 

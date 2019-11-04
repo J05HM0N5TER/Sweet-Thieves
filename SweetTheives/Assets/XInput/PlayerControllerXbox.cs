@@ -32,364 +32,428 @@ using XboxCtrlrInput;
 /// <summary>
 /// Used to keep track on what the tongue is interacting with
 /// </summary>
-public enum hitType : byte
+public enum HitType : byte
 {
-    NONE,
-    ENVIRONMENT,
-    COLLECTABLE
+	NONE,
+	ENVIRONMENT,
+	COLLECTABLE
 }
 
 [RequireComponent(typeof(Rigidbody), typeof(LineRenderer), typeof(Collider))]
 [RequireComponent(typeof(Animation))]
 public class PlayerControllerXbox : MonoBehaviour
 {
-    // What is this player (first, second, ect)
-    [SerializeField] XboxController controller = XboxController.All;
-    // Max move speeds
-    [SerializeField] float moveSpeed = 500;
-    // Control to fire the tongue
-    [SerializeField] XboxButton tongueButton = XboxButton.RightBumper;
+	// What is this player (first, second, ect)
+	[SerializeField] XboxController controller = XboxController.All;
+	// Max move speeds
+	[SerializeField] float moveSpeed = 500;
+	// Control to fire the tongue
+	[SerializeField] XboxButton tongueButton = XboxButton.RightBumper;
 
-    private static bool didQueryNumOfCtrlrs = false;
+	private static bool didQueryNumOfCtrlrs = false;
 
-    // The layer that the walls and other environment are in
-    [SerializeField] LayerMask environmentLayer;
-    // The layer that the collectables are in
-    [SerializeField] LayerMask collectableLayer;
-    [SerializeField] GameObject collectablePrefab = null;
+	// The layer that the walls and other environment are in
+	[SerializeField] LayerMask environmentLayer;
+	// The layer that the collectables are in
+	[SerializeField] LayerMask collectableLayer;
+	[SerializeField] GameObject collectablePrefab = null;
 
-    // The max collectables that the player can hold
-    public int maxHeldCollectables = 3;
-    // The amount that the grapple accelerates object every second
-    [SerializeField] float grappleAcceleration = 20;
-    // Should the tongue be able to wrap around other environment when already attached
-    [SerializeField] bool tongueWrapOn = true;
-    // How long you have to wait before you can fire the tongue again
-    [SerializeField] public float tongueCooldown;
-    // The start draw position for the tongue offset from the player
-    [SerializeField] Vector3 tongueOffset = Vector3.zero;
-    // How close to the collision position for the tongue it has to be for it to release
-    [SerializeField] float acceptanceRange = 0.5f;
-    // The radius for the sphere cast
-    [SerializeField] float sphereCastRadus = 1f;
-    // How many collectables is the player holding
-    public int heldCollectables = 0;
+	// The max collectables that the player can hold
+	public int maxHeldCollectables = 3;
+	// The amount that the grapple accelerates object every second
+	[SerializeField] float grappleAcceleration = 20;
+	[SerializeField] float tripForce = 250;
+	// Should the tongue be able to wrap around other environment when already attached
+	[SerializeField] bool tongueWrapOn = true;
+	// How long you have to wait before you can fire the tongue again
+	[SerializeField] public float tongueCooldown;
+	// The start draw position for the tongue offset from the player
+	[SerializeField] Vector3 tongueOffset = Vector3.zero;
+	// How close to the collision position for the tongue it has to be for it to release
+	[SerializeField] float acceptanceRange = 0.5f;
+	// The radius for the sphere cast
+	[SerializeField] float sphereCastRadus = 1f;
+	// How many collectables is the player holding
+	public int heldCollectables = 0;
+
+	private Vector3 SpawnPos;
+	private Quaternion SpawnRot;
+
+	/* --Variables needed by the collectableController-- */
+	// What the kind of interaction does the tongue have with the hit
+	[HideInInspector] public HitType tongueHit = HitType.NONE;
+	// The object that the tongue hit
+	[HideInInspector] public GameObject objectHit = null;
 
 
-    /* --Variables needed by the collectableController-- */
-    // What the kind of interaction does the tongue have with the hit
-    [HideInInspector] public hitType tongueHit = hitType.NONE;
-    // The object that the tongue hit
-    [HideInInspector] public GameObject objectHit = null;
-
-
-    /* The positions that the players tongue is attached to in the environment
+	/* The positions that the players tongue is attached to in the environment
             [0] Is the position of the player (where is starts displaying the tongue)
             [1] Is the first position that the tongue is attacked to
             [2]-[?] Is if there is more positions that the tongue is chained to*/
-    [HideInInspector] public List<Vector3> tongueHitPoints;
+	[HideInInspector] public List<Vector3> tongueHitPoints;
 
-    private Rigidbody rb;
-    private LineRenderer line;
+	private Rigidbody rb;
+	private LineRenderer line;
 
-    /* The collectable that someone else has stolen from this player 
-     * (used to make sure that the player doesn't instantly pick it back up.*/
-    [HideInInspector] public GameObject stolenCollectable = null;
-    // What the cooldown is currently at
-    [HideInInspector] public float currentCooldown = 0.0f;
-    // Initialisation of animation stuff
-    private Animator anim;
+	// What the cooldown is currently at
+	[HideInInspector] public float currentCooldown = 0.0f;
+	// Initialisation of animation stuff
+	private Animator anim;
 
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        tongueHitPoints = new List<Vector3>
-        {
-            Vector3.zero
-        };
+	// Start is called before the first frame update
+	void Start()
+	{
+		tongueHitPoints = new List<Vector3>
+		{
+			Vector3.zero
+		};
 
-        // Only draws tongue if there is a line renderer on the game object
-        line = GetComponent<LineRenderer>();
-        line.enabled = true;
-        line.useWorldSpace = true;
+		// Only draws tongue if there is a line renderer on the game object
+		line = GetComponent<LineRenderer>();
+		line.enabled = true;
+		line.useWorldSpace = true;
 
-        rb = gameObject.GetComponent<Rigidbody>();
+		rb = gameObject.GetComponent<Rigidbody>();
 
-        if (!didQueryNumOfCtrlrs)
-        {
-            didQueryNumOfCtrlrs = true;
+		if (!didQueryNumOfCtrlrs)
+		{
+			didQueryNumOfCtrlrs = true;
 
-            int queriedNumberOfCtrlrs = XCI.GetNumPluggedCtrlrs();
-            if (queriedNumberOfCtrlrs == 1)
-            {
-                Debug.Log("Only " + queriedNumberOfCtrlrs + " Xbox controller plugged in.");
-            }
-            else if (queriedNumberOfCtrlrs == 0)
-            {
-                Debug.Log("No Xbox controllers plugged in!");
-            }
-            else
-            {
-                Debug.Log(queriedNumberOfCtrlrs + " Xbox controllers plugged in.");
-            }
+			int queriedNumberOfCtrlrs = XCI.GetNumPluggedCtrlrs();
+			if (queriedNumberOfCtrlrs == 1)
+			{
+				Debug.Log("Only " + queriedNumberOfCtrlrs + " Xbox controller plugged in.");
+			}
+			else if (queriedNumberOfCtrlrs == 0)
+			{
+				Debug.Log("No Xbox controllers plugged in!");
+			}
+			else
+			{
+				Debug.Log(queriedNumberOfCtrlrs + " Xbox controllers plugged in.");
+			}
 
-            XCI.DEBUG_LogControllerNames();
-        }
-        // getting component
-        anim = GetComponent<Animator>();
-    }
+			XCI.DEBUG_LogControllerNames();
+		}
+		// getting component
+		anim = GetComponent<Animator>();
 
-    /// <summary>
-    /// Update loop deals with movement and input
-    /// </summary>
-    void Update()
-    {
-        // Get input (put it in x and z because we are moving across those axes)
-        Vector3 moveInput = new Vector3(XCI.GetAxisRaw(XboxAxis.LeftStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.LeftStickY, controller));
+		// Set variables on spawn
+		SpawnPos = transform.position;
+		SpawnRot = transform.rotation;
+	}
 
-        // The more your holding the slower you go (0.5 + (amount held / max held) / 2)%
-        float speedModifier = ((1 - ((float)heldCollectables / maxHeldCollectables) / 2) + 0.5f);
+	/// <summary>
+	/// Update loop deals with movement and input
+	/// </summary>
+	void Update()
+	{
+		// Get input (put it in x and z because we are moving across those axes)
+		Vector3 moveInput = new Vector3(XCI.GetAxisRaw(XboxAxis.LeftStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.LeftStickY, controller));
 
-        // movement from left joystick
-        rb.velocity = (moveInput * moveSpeed * speedModifier);
+		// The more your holding the slower you go (0.5 + (amount held / max held) / 2)%
+		float speedModifier = ((1 - ((float)heldCollectables / maxHeldCollectables) / 2) + 0.5f);
 
-        // Look the direction the controller is going if there is input
-        Vector3 lookInput = new Vector3(XCI.GetAxisRaw(XboxAxis.RightStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.RightStickY, controller));
-        if (lookInput.x != 0 || lookInput.z != 0)
-        {
-            transform.rotation = Quaternion.LookRotation(lookInput);
-        }
-        // If there is no input on the look input then face the way the player is moving
-        else if (moveInput.x != 0 || moveInput.z != 0)
-        {
-            transform.rotation = Quaternion.LookRotation(moveInput);
-        }
+		// movement from left joystick
+		rb.velocity = (moveInput * moveSpeed * speedModifier);
 
-        // ---Tongue lash---
-        if (currentCooldown >= -0.0001f)
-        {
-            currentCooldown -= Time.deltaTime;
-        }
-        if (XCI.GetButtonDown(tongueButton, controller) /*Button is pressed*/  &&
-            tongueHit == hitType.NONE /*Tongue is not already connected to something*/ &&
-            heldCollectables < maxHeldCollectables /*The player is holding less then the max amount of collectables*/ &&
-            currentCooldown <= 0 /*Tongue cooldown is finished*/)
-        {
-            TongueLash();
-        }
+		// Look the direction the controller is going if there is input
+		Vector3 lookInput = new Vector3(XCI.GetAxisRaw(XboxAxis.RightStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.RightStickY, controller));
+		if (lookInput.x != 0 || lookInput.z != 0)
+		{
+			transform.rotation = Quaternion.LookRotation(lookInput);
+		}
+		// If there is no input on the look input then face the way the player is moving
+		else if (moveInput.x != 0 || moveInput.z != 0)
+		{
+			transform.rotation = Quaternion.LookRotation(moveInput);
+		}
 
-        // animation stuff
-        anim.SetFloat("runningSpeed", rb.velocity.magnitude);
-    }
+		// ---Tongue lash---
+		if (currentCooldown >= -0.0001f)
+		{
+			currentCooldown -= Time.deltaTime;
+		}
+		if (XCI.GetButtonDown(tongueButton, controller) /*Button is pressed*/  &&
+			tongueHit == HitType.NONE /*Tongue is not already connected to something*/ &&
+			heldCollectables < maxHeldCollectables /*The player is holding less then the max amount of collectables*/ &&
+			currentCooldown <= 0 /*Tongue cooldown is finished*/)
+		{
+			TongueLash();
+		}
 
-    /// <summary>
-    /// Used to calculate what the tongue should be interacting with
-    /// </summary>
-    private void TongueLash()
-    {
-        // Casts sphereCast. hit = The object that the circleCast hits if it hits something
-        if (Physics.SphereCast(transform.position, // Start position
-            sphereCastRadus, // Width
-            transform.forward, // Direction
-            out RaycastHit hit, // Output
-            Mathf.Infinity,
-            environmentLayer + collectableLayer)) // Distance
-        {
-            // Set defaults
-            tongueHit = hitType.NONE;
-            tongueHitPoints.Clear();
-            tongueHitPoints.Add(Vector3.zero);
-            tongueHitPoints.Add(hit.point);
-            // Set what it hit.
-            objectHit = hit.collider.gameObject;
+		// animation stuff
+		anim.SetFloat("runningSpeed", rb.velocity.magnitude);
+	}
 
-            // If the tongue has hit a wall or other environment
-            if ((environmentLayer.value & (1 << objectHit.layer)) != 0)
-            {
-                tongueHit = hitType.ENVIRONMENT;
-                // Set cooldown
-                currentCooldown = tongueCooldown;
+	/// <summary>
+	/// Used to calculate what the tongue should be interacting with
+	/// </summary>
+	private void TongueLash()
+	{
+		// Casts sphereCast. hit = The object that the circleCast hits if it hits something
+		if (Physics.SphereCast(transform.position, // Start position
+			sphereCastRadus, // Width
+			transform.forward, // Direction
+			out RaycastHit hit, // Output
+			Mathf.Infinity)) // Distance
+		{
+			// Set defaults
+			tongueHit = HitType.NONE;
+			tongueHitPoints.Clear();
+			tongueHitPoints.Add(Vector3.zero);
+			tongueHitPoints.Add(hit.point);
+			// Set what it hit.
+			objectHit = hit.collider.gameObject;
 
-            }
-            // If the wall has hit a collectable
-            else if ((collectableLayer.value & (1 << objectHit.layer)) != 0)
-            {
-                CollectableController collectable = objectHit.GetComponent<CollectableController>();
-                if (collectable.stackSize > 1)
-                {
-                    collectable.stackSize--;
-                    objectHit = Instantiate(collectablePrefab,
-                        objectHit.transform.position,
-                        objectHit.transform.rotation);
-                }
-                tongueHit = hitType.COLLECTABLE;
-                objectHit.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
-            }
-            // If you hit another player
-            else if (objectHit.tag == "Player")
-            {
-                PlayerControllerXbox player = objectHit.GetComponent<PlayerControllerXbox>();
-                // If the player has something to steal
-                if (player.heldCollectables > 0)
-                {
-                    player.heldCollectables--;
-                    objectHit = Instantiate(collectablePrefab,
-                        objectHit.transform.position,
-                        objectHit.transform.rotation);
+			// If the tongue has hit a wall or other environment
+			if ((environmentLayer.value & (1 << objectHit.layer)) != 0)
+			{
+				tongueHit = HitType.ENVIRONMENT;
+				// Set cooldown
+				currentCooldown = tongueCooldown;
 
-                    player.stolenCollectable = objectHit;
-                    tongueHit = hitType.COLLECTABLE;
-                }
-            }
-            // If the tongue is attached to something then activate it
-            line.enabled = tongueHit != hitType.NONE;
-        }
-    }
+			}
+			// If the wall has hit a collectable
+			else if ((collectableLayer.value & (1 << objectHit.layer)) != 0)
+			{
+				CollectableController collectable = objectHit.GetComponent<CollectableController>();
+				if (collectable.stackSize > 1)
+				{
+					collectable.stackSize--;
+					objectHit = Instantiate(collectablePrefab,
+						objectHit.transform.position,
+						objectHit.transform.rotation);
+				}
+				tongueHit = HitType.COLLECTABLE;
+				objectHit.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
+			}
+			// If you hit another player
+			else if (objectHit.tag == "Player")
+			{
+				PlayerControllerXbox player = objectHit.GetComponent<PlayerControllerXbox>();
+				// If the player has something to steal
+				if (player.heldCollectables > 0)
+				{
+					player.heldCollectables--;
+					objectHit = Instantiate(collectablePrefab,
+						objectHit.transform.position,
+						objectHit.transform.rotation);
 
-    /// <summary>
-    /// Fixed update look deals with the tongue actions
-    /// </summary>
-    void FixedUpdate()
-    {
-        // Where the start of the tongue is drawn
-        tongueHitPoints[0] = transform.TransformPoint(tongueOffset);
+					tongueHit = HitType.COLLECTABLE;
+				}
+			}
+			// If the tongue is attached to something then activate it
+			line.enabled = tongueHit != HitType.NONE;
+		}
+	}
 
-        switch (tongueHit)
-        {
-            // If the tongue isn't attached to anything then don't do anything
-            case hitType.NONE:
-                // Set tongue inactive
-                line.enabled = false;
-                line.positionCount = 0;
-                break;
-            // If the tongue has hit a wall or other environment 
-            case hitType.ENVIRONMENT:
-                TongueEnvironmentInteraction();
-                break;
-            // If the tongue has hit a collectable
-            case hitType.COLLECTABLE:
-                TongueCollectableInteraction();
-                break;
-            default:
-                break;
-        }
-    }
+	/// <summary>
+	/// Fixed update look deals with the tongue actions
+	/// </summary>
+	void FixedUpdate()
+	{
+		// Where the start of the tongue is drawn
+		tongueHitPoints[0] = transform.TransformPoint(tongueOffset);
 
-    /// <summary>
-    /// Deals with the interaction between the tongue and the environment
-    /// </summary>
-    private void TongueEnvironmentInteraction()
-    {
-        // Draw tongue to position hit
-        line.positionCount = tongueHitPoints.Count;
-        line.SetPositions(tongueHitPoints.ToArray());
+		switch (tongueHit)
+		{
+			// If the tongue isn't attached to anything then don't do anything
+			case HitType.NONE:
+				// Set tongue inactive
+				line.enabled = false;
+				line.positionCount = 0;
+				break;
+			// If the tongue has hit a wall or other environment 
+			case HitType.ENVIRONMENT:
+				TongueEnvironmentInteraction();
+				CheckIfTripping();
+				break;
+			// If the tongue has hit a collectable
+			case HitType.COLLECTABLE:
+				TongueCollectableInteraction();
+				CheckIfTripping();
+				break;
+			default:
+				break;
+		}
+	}
 
-        // The separation between the player and the grapple point.
-        Vector3 difference = transform.position - tongueHitPoints[1];
+	/// <summary>
+	/// Deals with the interaction between the tongue and the environment
+	/// </summary>
+	private void TongueEnvironmentInteraction()
+	{
+		// Draw tongue to position hit
+		line.positionCount = tongueHitPoints.Count;
+		line.SetPositions(tongueHitPoints.ToArray());
 
-        bool shouldAddWrap;
-        // Only move to the position that the tongue hit if the button is not pressed down
-        if (!XCI.GetButton(tongueButton, controller))
-        {
-            // Move player towards tongue
-            rb.AddForce(-difference.normalized * grappleAcceleration);
-            shouldAddWrap = false;
-        }
-        else
-        {
-            shouldAddWrap = true;
-        }
-        if (tongueWrapOn)
-        {
-            CheckTongueWrap(shouldAddWrap);
-        }
+		// The separation between the player and the grapple point.
+		Vector3 difference = transform.position - tongueHitPoints[1];
 
-        // Check if the tongue has fully retracted
-        if (difference.x < acceptanceRange && difference.x > -acceptanceRange &&
-            difference.y < acceptanceRange && difference.y > -acceptanceRange &&
-            difference.z < acceptanceRange && difference.z > -acceptanceRange)
-        {
-            // If there is more then one point that the tongue is attached to then remove one
-            if (tongueHitPoints.Count > 2)
-            {
-                tongueHitPoints.RemoveAt(1);
-            }
-            else
-            {
-                tongueHit = hitType.NONE;
-            }
-        }
-    }
+		bool shouldAddWrap;
+		// Only move to the position that the tongue hit if the button is not pressed down
+		if (!XCI.GetButton(tongueButton, controller))
+		{
+			// Move player towards tongue
+			rb.AddForce(-difference.normalized * grappleAcceleration);
+			shouldAddWrap = false;
+		}
+		else
+		{
+			shouldAddWrap = true;
+		}
+		if (tongueWrapOn)
+		{
+			CheckTongueWrap(shouldAddWrap);
+		}
 
-    /// <summary>
-    /// Deals with the interaction between the tongue and the collectable
-    /// </summary>
-    private void TongueCollectableInteraction()
-    {
-        // Draw tongue to collectable
-        line.positionCount = tongueHitPoints.Count;
-        line.SetPositions(tongueHitPoints.ToArray());
+		// Check if the tongue has fully retracted
+		if (difference.x < acceptanceRange && difference.x > -acceptanceRange &&
+			difference.y < acceptanceRange && difference.y > -acceptanceRange &&
+			difference.z < acceptanceRange && difference.z > -acceptanceRange)
+		{
+			// If there is more then one point that the tongue is attached to then remove one
+			if (tongueHitPoints.Count > 2)
+			{
+				tongueHitPoints.RemoveAt(1);
+			}
+			else
+			{
+				tongueHit = HitType.NONE;
+			}
+		}
+	}
 
-        // Only move the collectable to the player if the button is not pressed down
-        if (!XCI.GetButton(tongueButton, controller))
-        {
-            // Move collectable towards player
-            Vector3 towardsPlayer = (transform.position - objectHit.transform.position).normalized;
+	/// <summary>
+	/// Deals with the interaction between the tongue and the collectable
+	/// </summary>
+	private void TongueCollectableInteraction()
+	{
+		// Draw tongue to collectable
+		line.positionCount = tongueHitPoints.Count;
+		line.SetPositions(tongueHitPoints.ToArray());
 
-            objectHit.GetComponent<Rigidbody>().AddForce(grappleAcceleration * towardsPlayer);
-        }
-    }
+		// Only move the collectable to the player if the button is not pressed down
+		if (!XCI.GetButton(tongueButton, controller))
+		{
+			// Move collectable towards player
+			Vector3 towardsPlayer = (transform.position - objectHit.transform.position).normalized;
 
-    /// <summary>
-    /// Checks if the tongue needs to wrap around an object or should be unwrapped
-    /// </summary>
-    private void CheckTongueWrap(bool enableAdding = true)
-    {
-        float acceptanceModifier = 5f;
-        RaycastHit hit;
+			objectHit.GetComponent<Rigidbody>().AddForce(grappleAcceleration * towardsPlayer);
+		}
+	}
 
-        // If it can't see the next position then add a new one
-        if (Physics.Raycast(transform.position, // Start position
-            (tongueHitPoints[1] - transform.position).normalized, // Direction
-            out hit, // Output
-            Vector3.Distance(transform.position, tongueHitPoints[1])
-            - acceptanceRange / acceptanceModifier, // Distance
-            environmentLayer, // What layers should it collide with 
-            QueryTriggerInteraction.UseGlobal))
-        {
-            if (enableAdding)
-            {
-                tongueHitPoints.Insert(1, hit.point);
-            }
-        }
+	/// <summary>
+	/// Checks if the tongue needs to wrap around an object or should be unwrapped
+	/// </summary>
+	private void CheckTongueWrap(bool enableAdding = true)
+	{
+		float acceptanceModifier = 5f;
+		RaycastHit hit;
 
-        // If you can see the next point and the one previous then remove the next one
-        else if (tongueHitPoints.Count > 2 && !Physics.Raycast(transform.position, // Start position
-            (tongueHitPoints[2] - transform.position).normalized, // Direction
-            out hit, // Output
-            Vector3.Distance(transform.position, tongueHitPoints[2])
-            - acceptanceRange / acceptanceModifier,  // Distance
-            environmentLayer, // What layers should it collide with 
-            QueryTriggerInteraction.UseGlobal))
-        {
-            tongueHitPoints.RemoveAt(1);
-        }
-    }
+		// If it can't see the next position then add a new one
+		if (Physics.Raycast(transform.position, // Start position
+			(tongueHitPoints[1] - transform.position).normalized, // Direction
+			out hit, // Output
+			Vector3.Distance(transform.position, tongueHitPoints[1])
+			- acceptanceRange / acceptanceModifier, // Distance
+			environmentLayer, // What layers should it collide with 
+			QueryTriggerInteraction.UseGlobal))
+		{
+			if (enableAdding)
+			{
+				tongueHitPoints.Insert(1, hit.point);
+			}
+		}
 
-    /// <summary>
-    /// Gets the base that the player is connected to
-    /// </summary>
-    /// <returns>The GameObject of the base</returns>
-    public GameObject GetBase()
-    {
-        foreach (GameObject current in GameObject.FindGameObjectsWithTag("Player Base"))
-        {
-            if (current.GetComponent<BaseStash>().player.transform == transform)
-            {
-                return current;
-            }
-        }
-        return null;
-    }
+		// If you can see the next point and the one previous then remove the next one
+		else if (tongueHitPoints.Count > 2 && !Physics.Raycast(transform.position, // Start position
+			(tongueHitPoints[2] - transform.position).normalized, // Direction
+			out hit, // Output
+			Vector3.Distance(transform.position, tongueHitPoints[2])
+			- acceptanceRange / acceptanceModifier,  // Distance
+			environmentLayer, // What layers should it collide with 
+			QueryTriggerInteraction.UseGlobal))
+		{
+			tongueHitPoints.RemoveAt(1);
+		}
+	}
+
+	/// <summary>
+	/// Gets the base that the player is connected to
+	/// </summary>
+	/// <returns>The GameObject of the base</returns>
+	public GameObject GetBase()
+	{
+		foreach (GameObject current in GameObject.FindGameObjectsWithTag("Player Base"))
+		{
+			if (current.GetComponent<BaseStash>().player.transform == transform)
+			{
+				return current;
+			}
+		}
+		return null;
+	}
+
+	/// <summary>
+	/// Checks if any of the tongue for this player is tripping another player
+	/// </summary>
+	private void CheckIfTripping()
+	{
+		for (int i = 0; i < tongueHitPoints.Count - 1; i++)
+		{
+			if (Physics.Linecast(tongueHitPoints[i], tongueHitPoints[i + 1], out RaycastHit hit) // If the linecast has hit something
+				&& hit.collider.tag == "Player" // The linecast hit a player
+				&& hit.collider.gameObject != gameObject) // And it is not the player that the tongue is from
+			{
+				hit.collider.GetComponent<PlayerControllerXbox>().TripPlayer();
+			}
+		}
+	}
+
+	/// <summary>
+	/// For when the player is tripped by the tongue of another player
+	/// </summary>
+	public void TripPlayer()
+	{
+		DropCollectables();
+
+		rb.AddForce(transform.forward * tripForce, ForceMode.Impulse);
+	}
+
+	public void DropCollectables()
+	{
+		if (heldCollectables == 0)
+		{
+			return;
+		}
+		else if (heldCollectables == 1)
+		{
+			Instantiate(collectablePrefab, transform.position, transform.rotation);
+		}
+		else
+		{
+			// Get the collectable height to stack on spawn
+			float collectableHeight = collectablePrefab.GetComponent<CapsuleCollider>().bounds.size.y + 0.05f;
+
+			for (int i = 0; i < heldCollectables; i++)
+			{
+				Instantiate(collectablePrefab, new Vector3(gameObject.transform.position.x, i * collectableHeight, gameObject.transform.position.z), transform.rotation);
+			}
+		}
+
+		// Reset held collectables
+		heldCollectables = 0;
+	}
+
+	/// <summary>
+	/// For when the player needs to be sent back to spawn
+	/// </summary>
+	public void ResetToSpawn()
+	{
+		transform.position = SpawnPos;
+		transform.rotation = SpawnRot;
+	}
 }

@@ -15,39 +15,43 @@ using UnityEngine;
 
 public class CollectableController : MonoBehaviour
 {
-    public int stackSize = 1;
-    private GameObject playerSpawnedFrom = null;
-    private void Start()
-    {
+	public int stackSize = 1;
 
-    }
+	/// <summary>
+	/// Deals with interaction with players
+	/// </summary>
+	/// <param name="other">The GameObject that is colliding with the collectable</param>
+	private void OnTriggerEnter(Collider other)
+	{
+		// If not a player then ignore interaction
+		if (other.gameObject.tag != "Player")
+		{
+			return;
+		}
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            PlayerControllerXbox player = other.gameObject.GetComponent<PlayerControllerXbox>();
-            if (player == null)
-            {
-                Debug.Log("No script");
-            }
-            if (player.stolenCollectable == gameObject || player.heldCollectables >= player.maxHeldCollectables)
-            {
-                //script.stolenCollectable = null;
-                return;
-            }
-            else
-            {
-                player.heldCollectables += stackSize;
-                if (player.objectHit == gameObject)
-                {
-                    player.objectHit = null;
-                    player.tongueHit = hitType.NONE;
-                    player.currentCooldown = player.tongueCooldown;
-                }
-                Destroy(gameObject);
-            }
+		// Reference to the player script
+		PlayerControllerXbox player = other.gameObject.GetComponent<PlayerControllerXbox>();
+		if (player == null)
+		{
+			Debug.LogError("No script on player");
+		}
 
-        }
-    }
+		// If the players tongue is not attached
+		if (player.objectHit != this.gameObject || player.tongueHit != HitType.COLLECTABLE)
+		{
+			// Ignore interaction
+			return;
+		}
+
+		// Add to the amount that the player is holding
+		player.heldCollectables += stackSize;
+		// Unset from what the tongue is attached to
+		player.objectHit = null;
+		// Set the tongue interaction to none
+		player.tongueHit = HitType.NONE;
+		// Set cooldown to start
+		player.currentCooldown = player.tongueCooldown;
+		// Destroy collectable
+		Destroy(this.gameObject);
+	}
 }

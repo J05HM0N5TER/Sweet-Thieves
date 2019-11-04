@@ -134,11 +134,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8765014768924433545}
+  - component: {fileID: 8765014769194285746}
   - component: {fileID: 8765014768917279597}
   - component: {fileID: 8765014769194285749}
   - component: {fileID: 8765014769194285747}
   - component: {fileID: 8765014769194285748}
-  - component: {fileID: 8765014769194285746}
   m_Layer: 0
   m_Name: Chameleon_001
   m_TagString: Untagged
@@ -162,6 +162,41 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8765014769194285746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8765014768924524713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 814b8a19727f66a4f872f6000d10d6ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: 0
+  moveSpeed: 10
+  tongueButton: 9
+  environmentLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  collectableLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  collectablePrefab: {fileID: 3491059977982518338, guid: 1288e3b9f0d5ab142b655e2fbe6d8928,
+    type: 3}
+  maxHeldCollectables: 3
+  grappleAcceleration: 4000
+  tongueWrapOn: 1
+  tongueCooldown: 3
+  tongueOffset: {x: 0, y: 1.7, z: 0}
+  acceptanceRange: 0.5
+  sphereCastRadus: 1
+  heldCollectables: 0
+  tongueHit: 0
+  objectHit: {fileID: 0}
+  tongueHitPoints: []
+  currentCooldown: 0
 --- !u!95 &8765014768917279597
 Animator:
   serializedVersion: 3
@@ -306,42 +341,6 @@ CapsuleCollider:
   m_Height: 2.62
   m_Direction: 1
   m_Center: {x: 0, y: 1.3, z: 0.18}
---- !u!114 &8765014769194285746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8765014768924524713}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 814b8a19727f66a4f872f6000d10d6ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controller: 0
-  maxVelocity: 50
-  moveSpeed: 10
-  tongueButton: 9
-  environmentLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  collectableLayer:
-    serializedVersion: 2
-    m_Bits: 1024
-  collectablePrefab: {fileID: 3491059977982518338, guid: 1288e3b9f0d5ab142b655e2fbe6d8928,
-    type: 3}
-  maxHeldCollectables: 3
-  grappleAcceleration: 4000
-  tongueCooldown: 3
-  tongueOffset: {x: 0, y: 1.7, z: 0}
-  acceptanceRange: 0.5
-  sphereCastRadus: 1
-  heldCollectables: 0
-  tongueHitCollectible: 0
-  objectHit: {fileID: 0}
-  hitPoint: {x: 0, y: 0, z: 0}
-  stolenCollectable: {fileID: 0}
-  currentCooldown: 0
 --- !u!1 &8765014768924524715
 GameObject:
   m_ObjectHideFlags: 0
