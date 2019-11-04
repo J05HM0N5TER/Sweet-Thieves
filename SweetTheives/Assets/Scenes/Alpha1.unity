@@ -4469,6 +4469,12 @@ PrefabInstance:
       propertyPath: points
       value: 
       objectReference: {fileID: 1738302885}
+    - target: {fileID: 3291220546178375239, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
+        type: 3}
+      propertyPath: spawnee
+      value: 
+      objectReference: {fileID: 3491059977982518338, guid: 1288e3b9f0d5ab142b655e2fbe6d8928,
+        type: 3}
     - target: {fileID: 7358250119850252992, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
         type: 3}
       propertyPath: m_Enabled
@@ -6916,6 +6922,12 @@ PrefabInstance:
       propertyPath: points
       value: 
       objectReference: {fileID: 651091870}
+    - target: {fileID: 3291220546178375239, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
+        type: 3}
+      propertyPath: spawnee
+      value: 
+      objectReference: {fileID: 3491059977982518338, guid: 1288e3b9f0d5ab142b655e2fbe6d8928,
+        type: 3}
     - target: {fileID: 7358250119850252992, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
         type: 3}
       propertyPath: m_Enabled
@@ -9594,6 +9606,12 @@ PrefabInstance:
       propertyPath: points
       value: 
       objectReference: {fileID: 919345204}
+    - target: {fileID: 3291220546178375239, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
+        type: 3}
+      propertyPath: spawnee
+      value: 
+      objectReference: {fileID: 3491059977982518338, guid: 1288e3b9f0d5ab142b655e2fbe6d8928,
+        type: 3}
     - target: {fileID: 7358250119850252992, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
         type: 3}
       propertyPath: m_Enabled
@@ -38486,6 +38504,12 @@ PrefabInstance:
       propertyPath: points
       value: 
       objectReference: {fileID: 1423952235}
+    - target: {fileID: 3291220546178375239, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
+        type: 3}
+      propertyPath: spawnee
+      value: 
+      objectReference: {fileID: 3491059977982518338, guid: 1288e3b9f0d5ab142b655e2fbe6d8928,
+        type: 3}
     - target: {fileID: 7358250119850252992, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
         type: 3}
       propertyPath: m_Enabled
