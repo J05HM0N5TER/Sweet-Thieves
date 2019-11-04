@@ -131,7 +131,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3669080550771920212}
-  - component: {fileID: 8615316717696799768}
   m_Layer: 0
   m_Name: 001_Tree_PalmTree_002
   m_TagString: Untagged
@@ -155,20 +154,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &8615316717696799768
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3669080550771626356}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.41
-  m_Height: 4.1087446
-  m_Direction: 1
-  m_Center: {x: -0.34, y: 1.85, z: 0.91}
 --- !u!1 &3669080550771626358
 GameObject:
   m_ObjectHideFlags: 0

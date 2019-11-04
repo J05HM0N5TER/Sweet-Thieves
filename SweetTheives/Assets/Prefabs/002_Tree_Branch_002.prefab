@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3077067586709193107}
   - component: {fileID: 3077067586708423091}
   - component: {fileID: 3077067586707293043}
-  - component: {fileID: 3363048925825837657}
   m_Layer: 0
   m_Name: 002_Tree_Branch_002
   m_TagString: Untagged
@@ -80,16 +79,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &3363048925825837657
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3077067586709233075}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.5721486, y: 0.65065277, z: 2.380781}
-  m_Center: {x: 0.018176258, y: -0.037248895, z: 0}
