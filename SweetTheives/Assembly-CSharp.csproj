@@ -65,6 +65,7 @@
     <Compile Include="Assets\Scripts\CollectableController.cs" />
     <Compile Include="Assets\Scripts\DefaultButton.cs" />
     <Compile Include="Assets\Scripts\Meshdisabler.cs" />
+    <Compile Include="Assets\Scripts\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\QuickTrigger.cs" />
     <Compile Include="Assets\Scripts\rotatingObstacle.cs" />
     <Compile Include="Assets\Scripts\SceneLoader.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Assets\Scripts\TimerRestartGame.cs" />
     <Compile Include="Assets\Scripts\TriggerTesting.cs" />
     <Compile Include="Assets\Scripts\UICoolDown.cs" />
+    <Compile Include="Assets\Scripts\VenusButton.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\XInput\PlayerControllerXbox.cs" />
     <Compile Include="Assets\XInput\Plugins\XboxCtrlrInput.cs" />
