@@ -175,7 +175,7 @@ public class PlayerControllerXbox : MonoBehaviour
 		{
 			currentCooldown -= Time.deltaTime;
 		}
-		if (XCI.GetButtonDown(tongueButton, controller) /*Button is pressed*/  &&
+		if (XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0 /*Button is pressed*/  &&
 			tongueHit == HitType.NONE /*Tongue is not already connected to something*/ &&
 			heldCollectables < maxHeldCollectables /*The player is holding less then the max amount of collectables*/ &&
 			currentCooldown <= 0 /*Tongue cooldown is finished*/)
@@ -294,7 +294,7 @@ public class PlayerControllerXbox : MonoBehaviour
 
 		bool shouldAddWrap;
 		// Only move to the position that the tongue hit if the button is not pressed down
-		if (!XCI.GetButton(tongueButton, controller))
+		if (!(XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0))
 		{
 			// Move player towards tongue
 			rb.AddForce(-difference.normalized * grappleAcceleration);
