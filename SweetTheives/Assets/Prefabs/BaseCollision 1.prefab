@@ -162,7 +162,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3722396938526755714}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -222,6 +222,14 @@ MonoBehaviour:
   player: {fileID: 0}
   spawner: {fileID: 4853504485524798910}
   delay: 0
+  spawnee: {fileID: 3880349758759058739, guid: 80be9bc2df14e154091afcaa58b9c0da, type: 3}
+  stopSpawning: 0
+  repeating: 0
+  spawnTime: 0
+  spawnDelay: 0
+  maxSpawn: 0
+  isbase: 0
+  spawneeHeight: 0
 --- !u!1 &3722396939640647992
 GameObject:
   m_ObjectHideFlags: 0

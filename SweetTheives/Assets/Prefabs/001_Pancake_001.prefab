@@ -11,6 +11,10 @@ GameObject:
   - component: {fileID: 3880349758759149843}
   - component: {fileID: 3880349758759952691}
   - component: {fileID: 3880349758761051123}
+  - component: {fileID: 4200722679466847237}
+  - component: {fileID: 2670006128744337872}
+  - component: {fileID: 5092056526947435043}
+  - component: {fileID: 8063092950161554962}
   m_Layer: 0
   m_Name: 001_Pancake_001
   m_TagString: Untagged
@@ -78,3 +82,60 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!136 &4200722679466847237
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3880349758759058739}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.29525375
+  m_Height: 0.29
+  m_Direction: 1
+  m_Center: {x: 0.0028266907, y: 0.038757086, z: 0.0022172928}
+--- !u!114 &2670006128744337872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3880349758759058739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86db59bd96688fe4c94fef84f60e9d9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stackSize: 1
+--- !u!54 &5092056526947435043
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3880349758759058739}
+  serializedVersion: 2
+  m_Mass: 10
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 1
+--- !u!64 &8063092950161554962
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3880349758759058739}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4300000, guid: 2fc8d08cb27598e41880b7589c7ddbe6, type: 3}

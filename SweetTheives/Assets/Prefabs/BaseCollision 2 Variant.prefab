@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 7358250121014665342, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
         type: 3}
       propertyPath: m_Name
-      value: BaseCollision 2
+      value: BaseCollision 2 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 7358250121014665337, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
         type: 3}
@@ -82,11 +82,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 5.68586
       objectReference: {fileID: 0}
-    - target: {fileID: 3432999364836448473, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
-        type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 7358250121014665339, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
         type: 3}
       propertyPath: m_Enabled
@@ -107,7 +102,23 @@ PrefabInstance:
       propertyPath: points
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3291220546178375239, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
+        type: 3}
+      propertyPath: spawnee
+      value: 
+      objectReference: {fileID: 3880349758759058739, guid: 80be9bc2df14e154091afcaa58b9c0da,
+        type: 3}
+    - target: {fileID: 3291220546178375239, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
+        type: 3}
+      propertyPath: stopSpawning
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7358250119850252992, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7358250121332119396, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
         type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -117,10 +128,10 @@ PrefabInstance:
       propertyPath: stash
       value: 
       objectReference: {fileID: 8724286174081783752}
-    - target: {fileID: 7358250121332119396, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
+    - target: {fileID: 3432999364836448473, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
         type: 3}
-      propertyPath: m_Enabled
-      value: 0
+      propertyPath: player
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7358250120835949684, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
         type: 3}
