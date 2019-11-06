@@ -75,6 +75,7 @@
     <Compile Include="Assets\Scripts\TriggerTesting.cs" />
     <Compile Include="Assets\Scripts\UICoolDown.cs" />
     <Compile Include="Assets\Scripts\VenusButton.cs" />
+    <Compile Include="Assets\Scripts\WinScreen.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\XInput\PlayerControllerXbox.cs" />
     <Compile Include="Assets\XInput\Plugins\XboxCtrlrInput.cs" />
