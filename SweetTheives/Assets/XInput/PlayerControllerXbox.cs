@@ -99,10 +99,22 @@ public class PlayerControllerXbox : MonoBehaviour
 	[HideInInspector] public float currentCooldown = 0.0f;
 	// Initialisation of animation stuff
 	private Animator anim;
+    public bool onePancake = false;
+    public bool twoPancake = false;
+    public bool threePancake = false;
+    [SerializeField] Transform  hand = null;
+    [SerializeField] GameObject pancakeMesh = null;
+    [HideInInspector] Vector3 holdingPosition = new Vector3(0.221f,-0.318f,0.084f);
+    public Quaternion holdingRotation;
+    public Vector3 holdingRotationEuler;
+    int pancakesspawned = 0;
+    private GameObject heldpancake1 = null;
+    private GameObject heldpancake2 = null;
+    private GameObject heldpancake3 = null;
 
 
-	// Start is called before the first frame update
-	void Start()
+    // Start is called before the first frame update
+    void Start()
 	{
 		tongueHitPoints = new List<Vector3>
 		{
@@ -175,7 +187,7 @@ public class PlayerControllerXbox : MonoBehaviour
 		{
 			currentCooldown -= Time.deltaTime;
 		}
-		if (XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0 /*Button is pressed*/  &&
+		if (XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0 /*Trigger is pressed*/  &&
 			tongueHit == HitType.NONE /*Tongue is not already connected to something*/ &&
 			heldCollectables < maxHeldCollectables /*The player is holding less then the max amount of collectables*/ &&
 			currentCooldown <= 0 /*Tongue cooldown is finished*/)
@@ -185,7 +197,64 @@ public class PlayerControllerXbox : MonoBehaviour
 
 		// animation stuff
 		anim.SetFloat("runningSpeed", rb.velocity.magnitude);
-	}
+        if(heldCollectables > 0)
+        {
+            anim.SetBool("holdingPancakes", true);
+        }
+        else if(heldCollectables <= 0)
+        {
+            anim.SetBool("holdingPancakes", false);
+        }
+        
+        if (heldCollectables == 1)
+        {
+            onePancake = true;
+            if (onePancake && pancakesspawned <= 0)
+            {
+                pancakesspawned = 1;
+                heldpancake1 = Instantiate(pancakeMesh);
+                heldpancake1.transform.SetParent(hand, false);
+                heldpancake1.transform.localPosition = holdingPosition;
+                heldpancake1.transform.localRotation = Quaternion.Euler(holdingRotationEuler);
+                onePancake = false;
+            }
+        }
+        else if (heldCollectables == 2)
+        {
+            twoPancake = true;
+            if (twoPancake && pancakesspawned <= 1)
+            {
+                pancakesspawned = 2;
+                heldpancake2 = Instantiate(pancakeMesh);
+                heldpancake2.transform.SetParent(hand, false);
+                heldpancake2.transform.localPosition = new Vector3(0.184f, -0.284f, -0.158f);
+                heldpancake2.transform.localRotation = Quaternion.Euler(holdingRotationEuler);
+                twoPancake = false;
+            }
+        }
+        else if (heldCollectables == 3)
+        {
+            threePancake = true;
+            if (threePancake && pancakesspawned <= 2)
+            {
+                pancakesspawned = 3;
+                heldpancake3 = Instantiate(pancakeMesh);
+                heldpancake3.transform.SetParent(hand, false);
+                heldpancake3.transform.localPosition =  new Vector3(0.158f, -0.276f, 0.277f);
+                heldpancake3.transform.localRotation = Quaternion.Euler(holdingRotationEuler);
+                threePancake = false;
+            }
+        }
+        else if(heldCollectables == 0)
+        {
+            Destroy(heldpancake1);
+            Destroy(heldpancake2);
+            Destroy(heldpancake3);
+            pancakesspawned = 0;
+        }
+       
+
+    }
 
 	/// <summary>
 	/// Used to calculate what the tongue should be interacting with
