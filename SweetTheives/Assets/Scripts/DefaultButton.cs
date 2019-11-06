@@ -29,4 +29,5 @@ public class DefaultButton : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(defaultButton);
         }
     }
+
 }

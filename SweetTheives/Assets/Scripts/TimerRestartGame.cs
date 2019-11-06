@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using XboxCtrlrInput;
@@ -13,15 +14,17 @@ public class TimerRestartGame : MonoBehaviour
     public float timer = 0.0f;
 
     public Text winner = null;
+    
 
     [SerializeField] BaseStash player1 = null;
     [SerializeField] BaseStash player2 = null;
     [SerializeField] BaseStash player3 = null;
     [SerializeField] BaseStash player4 = null;
     //[SerializeField] PlayerControllerXbox player = null;
-    [SerializeField] XboxButton selectbutton = XboxButton.A;
-    [SerializeField] XboxButton exitbutton = XboxButton.B;
+   // [SerializeField] XboxButton selectbutton = XboxButton.A;
+  //  [SerializeField] XboxButton exitbutton = XboxButton.B;
     [SerializeField] Canvas winscreen = null;
+   
 
     // Start is called before the first frame update
     void Start()
@@ -91,20 +94,26 @@ public class TimerRestartGame : MonoBehaviour
 
             winner.text = "Player " + winningPlayer + " Won!"; 
             winscreen.GetComponent<Canvas>().enabled = true;
-            
+            EventSystem.current.SetSelectedGameObject(null);
+            enabled = false;
+            ////lena
+            //Debug.Log("loadin winnig screen");
+            //SceneManager.LoadScene("WIN SCREEN");
+            //---------------
 
-            if (XCI.GetButton(selectbutton))
-            {
-                Time.timeScale = 1;
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
-            if (XCI.GetButton(exitbutton))
-            {
-                Application.Quit();
-            }
+
+            //if (XCI.GetButton(selectbutton))
+            //{
+            //    Time.timeScale = 1;
+            //    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            //}
+            //if (XCI.GetButton(exitbutton))
+            //{
+            //    Application.Quit();
+            //}
         }
         
         
     }
-
+   
 }
