@@ -71,9 +71,11 @@
     <Compile Include="Assets\Scripts\SceneLoader.cs" />
     <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
     <Compile Include="Assets\Scripts\Spawner.cs" />
+    <Compile Include="Assets\Scripts\TimedTrap.cs" />
     <Compile Include="Assets\Scripts\TimerRestartGame.cs" />
     <Compile Include="Assets\Scripts\TriggerTesting.cs" />
     <Compile Include="Assets\Scripts\UICoolDown.cs" />
+    <Compile Include="Assets\Scripts\UIPancakeCount.cs" />
     <Compile Include="Assets\Scripts\VenusButton.cs" />
     <Compile Include="Assets\Scripts\WinScreen.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
