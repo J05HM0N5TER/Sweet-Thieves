@@ -1,0 +1,167 @@
+fileFormatVersion: 2
+guid: b51c327b40dd28d4ab97152a6d2a5def
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Controls
+    100002: Ctrl_Bottom
+    100004: Ctrl_BottomJaw
+    100006: Ctrl_Head
+    100008: Ctrl_TopJaw
+    100010: Ctrl_World
+    100012: Grp_Bottom
+    100014: Grp_BottomJaw
+    100016: Grp_Head
+    100018: Grp_TopJaw
+    100020: Grp_World
+    100022: ikHandle1
+    100024: Jnt_Head
+    100026: Jnt_L_Leaf
+    100028: Jnt_R_Leaf
+    100030: Jnt_Root
+    100032: Jnt_Stem_0
+    100034: Jnt_Stem_1
+    100036: Jnt_Stem_2
+    100038: Jnt_Stem_3
+    100040: Jnt_Stem_4
+    100042: Jnt_Stem_5
+    100044: Jnt_Stem_6
+    100046: joint10
+    100048: joint9
+    100050: Joints
+    100052: left
+    100054: Mesh
+    100056: Mesh_Venus
+    100058: Stuff
+    100060: Venus
+    100062: //RootNode
+    400000: Controls
+    400002: Ctrl_Bottom
+    400004: Ctrl_BottomJaw
+    400006: Ctrl_Head
+    400008: Ctrl_TopJaw
+    400010: Ctrl_World
+    400012: Grp_Bottom
+    400014: Grp_BottomJaw
+    400016: Grp_Head
+    400018: Grp_TopJaw
+    400020: Grp_World
+    400022: ikHandle1
+    400024: Jnt_Head
+    400026: Jnt_L_Leaf
+    400028: Jnt_R_Leaf
+    400030: Jnt_Root
+    400032: Jnt_Stem_0
+    400034: Jnt_Stem_1
+    400036: Jnt_Stem_2
+    400038: Jnt_Stem_3
+    400040: Jnt_Stem_4
+    400042: Jnt_Stem_5
+    400044: Jnt_Stem_6
+    400046: joint10
+    400048: joint9
+    400050: Joints
+    400052: left
+    400054: Mesh
+    400056: Mesh_Venus
+    400058: Stuff
+    400060: Venus
+    400062: //RootNode
+    2000000: left
+    2100000: Teeth
+    2100002: Mouth_Ext
+    2100004: Mouth_In
+    2100006: lambert1
+    2100008: Frill
+    2100010: Stem
+    2100012: Base_Frill
+    4300000: Mesh_Venus
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: Mesh_Venus
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

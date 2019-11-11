@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Headmask
+  m_Mask: 00000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Chameleon
+    m_Weight: 1
+  - m_Path: Chameleon/Chameleon 1
+    m_Weight: 1
+  - m_Path: Rig1
+    m_Weight: 1
+  - m_Path: Rig1/Controlers
+    m_Weight: 0
+  - m_Path: Rig1/Controlers/Hips
+    m_Weight: 0
+  - m_Path: Rig1/Hips_Root
+    m_Weight: 1
+  - m_Path: Rig1/Hips_Root/L_UpperLeg
+    m_Weight: 0
+  - m_Path: Rig1/Hips_Root/L_UpperLeg/L_Knee
+    m_Weight: 0
+  - m_Path: Rig1/Hips_Root/L_UpperLeg/L_Knee/L_Heel
+    m_Weight: 0
+  - m_Path: Rig1/Hips_Root/L_UpperLeg/L_Knee/L_Heel/L_Toe
+    m_Weight: 0
+  - m_Path: Rig1/Hips_Root/R_UpperLeg
+    m_Weight: 0
+  - m_Path: Rig1/Hips_Root/R_UpperLeg/R_Knee
+    m_Weight: 0
+  - m_Path: Rig1/Hips_Root/R_UpperLeg/R_Knee/R_Heel
+    m_Weight: 0
+  - m_Path: Rig1/Hips_Root/R_UpperLeg/R_Knee/R_Heel/R_Toe
+    m_Weight: 0
+  - m_Path: Rig1/Hips_Root/Spine_1
+    m_Weight: 1
+  - m_Path: Rig1/Hips_Root/Spine_1/Spine_2
+    m_Weight: 1
+  - m_Path: Rig1/Hips_Root/Spine_1/Spine_2/L_Sholder
+    m_Weight: 0
+  - m_Path: Rig1/Hips_Root/Spine_1/Spine_2/L_Sholder/L_elbow
+    m_Weight: 0
+  - m_Path: Rig1/Hips_Root/Spine_1/Spine_2/L_Sholder/L_elbow/L_Hand
+    m_Weight: 0
+  - m_Path: Rig1/Hips_Root/Spine_1/Spine_2/Neck
+    m_Weight: 1
+  - m_Path: Rig1/Hips_Root/Spine_1/Spine_2/Neck/HEad
+    m_Weight: 1
+  - m_Path: Rig1/Hips_Root/Spine_1/Spine_2/R_Sholder
+    m_Weight: 0
+  - m_Path: Rig1/Hips_Root/Spine_1/Spine_2/R_Sholder/R_Elbow
+    m_Weight: 0
+  - m_Path: Rig1/Hips_Root/Spine_1/Spine_2/R_Sholder/R_Elbow/R_Hand
+    m_Weight: 0
+  - m_Path: Rig1/Hips_Root/Tail_1
+    m_Weight: 0
+  - m_Path: Rig1/Hips_Root/Tail_1/Tail_2
+    m_Weight: 0
