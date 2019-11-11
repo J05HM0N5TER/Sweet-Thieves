@@ -18,8 +18,6 @@ public class Spawner : MonoBehaviour
     public int maxSpawn = 0;
     //amount that has been spawned
     int spawned = 0;
-    //is this spanwer part of a base
-    [SerializeField] bool isbase = false;
     // Start is called before the frst frame update
     void Start()
     {
@@ -33,7 +31,6 @@ public class Spawner : MonoBehaviour
         }
         
     }
-    
     public GameObject SpawnObject()
     {
         
