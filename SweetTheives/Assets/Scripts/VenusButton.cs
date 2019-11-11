@@ -12,7 +12,7 @@ public class VenusButton : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject == Player)
+        if(other.gameObject.tag == "Player")
         { 
             Collider[] hitColliders = Physics.OverlapSphere(PlayerBase.transform.position, distroyRadius);
             foreach (Collider current in hitColliders)
