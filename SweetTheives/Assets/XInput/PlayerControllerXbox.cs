@@ -1,4 +1,4 @@
-﻿/* ---Requirements---
+﻿/* ---Requirements--- is it plugged in?
  * On player / parent game object:
  * - Line renderer:
  *      ~ Positions - Size = 0
@@ -99,15 +99,23 @@ public class PlayerControllerXbox : MonoBehaviour
 	[HideInInspector] public float currentCooldown = 0.0f;
 	// Initialisation of animation stuff
 	private Animator anim;
+    // are they holding an amount of pancakes
     public bool onePancake = false;
     public bool twoPancake = false;
     public bool threePancake = false;
+    // the hand bone that they pancakes will be childed to
     [SerializeField] Transform  hand = null;
+    // what MESH will be spawned, this needs to have NOTHING but a mesh.
     [SerializeField] GameObject pancakeMesh = null;
+    // where the pancake will spawn on the character(offset from the hand)
     [HideInInspector] Vector3 holdingPosition = new Vector3(0.221f,-0.318f,0.084f);
+    //rotation offset
     public Quaternion holdingRotation;
+    // stuff to turn quaternion to vector3
     public Vector3 holdingRotationEuler;
+    // how many pancakes are connected to the player currently
     int pancakesspawned = 0;
+    //gameobjects of each pancak connected to the player.
     private GameObject heldpancake1 = null;
     private GameObject heldpancake2 = null;
     private GameObject heldpancake3 = null;
@@ -193,6 +201,7 @@ public class PlayerControllerXbox : MonoBehaviour
 			currentCooldown <= 0 /*Tongue cooldown is finished*/)
 		{
 			TongueLash();
+            anim.SetBool("tongueAttack", true);
 		}
 
 		// animation stuff
@@ -205,7 +214,7 @@ public class PlayerControllerXbox : MonoBehaviour
         {
             anim.SetBool("holdingPancakes", false);
         }
-        
+        // spawn first pancake at position 
         if (heldCollectables == 1)
         {
             onePancake = true;
@@ -219,6 +228,7 @@ public class PlayerControllerXbox : MonoBehaviour
                 onePancake = false;
             }
         }
+        // spawn second pancake with offset
         else if (heldCollectables == 2)
         {
             twoPancake = true;
@@ -232,6 +242,7 @@ public class PlayerControllerXbox : MonoBehaviour
                 twoPancake = false;
             }
         }
+        //spawn thrid pancake with offset
         else if (heldCollectables == 3)
         {
             threePancake = true;
@@ -245,6 +256,7 @@ public class PlayerControllerXbox : MonoBehaviour
                 threePancake = false;
             }
         }
+        // delete references to objects as they have been lost.
         else if(heldCollectables == 0)
         {
             Destroy(heldpancake1);
@@ -333,7 +345,8 @@ public class PlayerControllerXbox : MonoBehaviour
 				// Set tongue inactive
 				line.enabled = false;
 				line.positionCount = 0;
-				break;
+                anim.SetBool("tongueAttack", false);
+                break;
 			// If the tongue has hit a wall or other environment 
 			case HitType.ENVIRONMENT:
 				TongueEnvironmentInteraction();
