@@ -908,6 +908,7 @@ MonoBehaviour:
     type: 3}
   maxHeldCollectables: 3
   grappleAcceleration: 4000
+  tripForce: 250
   tongueWrapOn: 1
   tongueCooldown: 3
   tongueOffset: {x: 0, y: 1.7, z: 0}
@@ -918,6 +919,13 @@ MonoBehaviour:
   objectHit: {fileID: 0}
   tongueHitPoints: []
   currentCooldown: 0
+  onePancake: 0
+  twoPancake: 0
+  threePancake: 0
+  hand: {fileID: 8924020636450217817}
+  pancakeMesh: {fileID: 100000, guid: 3f74b3d772badcf48bad3312346c30a7, type: 3}
+  holdingRotation: {x: 10.01, y: 9.57, z: 10.39, w: 0}
+  holdingRotationEuler: {x: 0, y: 0, z: 0}
 --- !u!95 &8924020636440342681
 Animator:
   serializedVersion: 3
@@ -952,7 +960,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 116
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!136 &8924020636449818107
 CapsuleCollider:
   m_ObjectHideFlags: 0

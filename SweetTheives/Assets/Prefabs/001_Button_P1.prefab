@@ -222,9 +222,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 8924020636449850205, guid: cc91cffd849a41248aec2363fc87d97a, type: 3}
-  PlayerBase: {fileID: 3722396938526755714, guid: a105f08dfa5c3274bb0f6d83e1941dc2,
-    type: 3}
+  PlayerBase: {fileID: 0}
   distroyRadius: 2
+  venusAnim: {fileID: 0}
 --- !u!1 &3543018091160582614
 GameObject:
   m_ObjectHideFlags: 0

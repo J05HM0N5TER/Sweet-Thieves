@@ -285,6 +285,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3461766424087455340}
   - component: {fileID: 3461766424094935436}
+  - component: {fileID: 6290799895740051538}
   m_Layer: 0
   m_Name: 001_Button_P4
   m_TagString: Untagged
@@ -330,6 +331,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &6290799895740051538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3461766424087558732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02a9e828c12d2584eb1abfb25cba19c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Player: {fileID: 8729047065229800816, guid: bdc2c0aee54f6ad4ab9668bb5c76cdf5, type: 3}
+  PlayerBase: {fileID: 0}
+  distroyRadius: 2
+  venusAnim: {fileID: 0}
 --- !u!1 &3461766424087558734
 GameObject:
   m_ObjectHideFlags: 0
