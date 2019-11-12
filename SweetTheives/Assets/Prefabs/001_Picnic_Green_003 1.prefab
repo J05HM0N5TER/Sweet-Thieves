@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6626167863918774282}
   - component: {fileID: 6626167863915350058}
   - component: {fileID: 6626167863916481258}
-  - component: {fileID: 3666178837666863429}
+  - component: {fileID: 323480924440966005}
   m_Layer: 0
   m_Name: 001_Picnic_Green_003 1
   m_TagString: Untagged
@@ -83,19 +83,31 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &3666178837666863429
-BoxCollider:
+--- !u!114 &323480924440966005
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6626167863918679082}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: -0.11, y: 0.012127122, z: 0.13}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94ad0150ffeb3a6449a9911ba64f4f12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  points: {fileID: 0}
+  stashSize: 0
+  player: {fileID: 0}
+  spawner: {fileID: 0}
+  delay: 0
+  spawnee: {fileID: 0}
+  stopSpawning: 0
+  repeating: 0
+  spawnTime: 0
+  spawnDelay: 0
+  maxSpawn: 0
+  isbase: 0
+  spawneeHeight: 0
 --- !u!1001 &3388770426119413951
 PrefabInstance:
   m_ObjectHideFlags: 0
