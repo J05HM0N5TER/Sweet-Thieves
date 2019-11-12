@@ -14,8 +14,9 @@ public class TimerRestartGame : MonoBehaviour
     public float timer = 0.0f;
 
     public Text winner = null;
-    
-
+    private float highestStack = 0;
+    private int winningPlayer = 0;
+    private bool bullshit = false;
     [SerializeField] BaseStash player1 = null;
     [SerializeField] BaseStash player2 = null;
     [SerializeField] BaseStash player3 = null;
@@ -65,8 +66,7 @@ public class TimerRestartGame : MonoBehaviour
         if(timer == 0)
         {
             Time.timeScale = 0;
-            float highestStack = 0;
-            int winningPlayer = 0;
+            
            
             
             if(player1.stashSize >= highestStack)
@@ -90,12 +90,16 @@ public class TimerRestartGame : MonoBehaviour
                 winningPlayer = 4;
             }
             
+            if (bullshit == false)
+            {
+                winner.text = "Player " + winningPlayer + " Won!";
+                winscreen.GetComponent<Canvas>().enabled = true;
+                EventSystem.current.SetSelectedGameObject(null);
+                enabled = false;
+                bullshit = true;
+            }
 
-
-            winner.text = "Player " + winningPlayer + " Won!"; 
-            winscreen.GetComponent<Canvas>().enabled = true;
-            EventSystem.current.SetSelectedGameObject(null);
-            enabled = false;
+           
             ////lena
             //Debug.Log("loadin winnig screen");
             //SceneManager.LoadScene("WIN SCREEN");
@@ -104,7 +108,7 @@ public class TimerRestartGame : MonoBehaviour
 
             //if (XCI.GetButton(selectbutton))
             //{
-            //    Time.timeScale = 1;
+             //   Time.timeScale = 1;
             //    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             //}
             //if (XCI.GetButton(exitbutton))

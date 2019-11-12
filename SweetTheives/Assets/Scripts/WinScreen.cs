@@ -9,7 +9,7 @@ public class WinScreen : MonoBehaviour
     public void Quit()
     {
         Debug.Log("quit");
-        Application.Quit();
+        SceneManager.LoadScene(0);
     }
     public void Restart()
     {
