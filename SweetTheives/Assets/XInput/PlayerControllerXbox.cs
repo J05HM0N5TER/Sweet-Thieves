@@ -97,6 +97,8 @@ public class PlayerControllerXbox : MonoBehaviour
 
 	// What the cooldown is currently at
 	[HideInInspector] public float currentCooldown = 0.0f;
+
+
 	// Initialisation of animation stuff
 	private Animator anim;
     // are they holding an amount of pancakes
@@ -109,10 +111,8 @@ public class PlayerControllerXbox : MonoBehaviour
     [SerializeField] GameObject pancakeMesh = null;
     // where the pancake will spawn on the character(offset from the hand)
     [HideInInspector] Vector3 holdingPosition = new Vector3(0.221f,-0.318f,0.084f);
-    //rotation offset
-    public Quaternion holdingRotation;
     // stuff to turn quaternion to vector3
-    public Vector3 holdingRotationEuler;
+    private Vector3 holdingRotationEuler = new Vector3(72.284f, 0, 0);
     // how many pancakes are connected to the player currently
     int pancakesspawned = 0;
     //gameobjects of each pancak connected to the player.
@@ -120,6 +120,8 @@ public class PlayerControllerXbox : MonoBehaviour
     private GameObject heldpancake2 = null;
     private GameObject heldpancake3 = null;
 
+    //particle system
+    [SerializeField] ParticleSystem runparticles = null;
 
     // Start is called before the first frame update
     void Start()
@@ -206,6 +208,14 @@ public class PlayerControllerXbox : MonoBehaviour
 
 		// animation stuff
 		anim.SetFloat("runningSpeed", rb.velocity.magnitude);
+        if(rb.velocity.magnitude >= 0.1f)
+        {
+            runparticles.enableEmission = true;
+        }
+        if(rb.velocity.magnitude <= 0.1)
+        {
+            runparticles.enableEmission = false;
+        }
         if(heldCollectables > 0)
         {
             anim.SetBool("holdingPancakes", true);
@@ -237,7 +247,7 @@ public class PlayerControllerXbox : MonoBehaviour
                 pancakesspawned = 2;
                 heldpancake2 = Instantiate(pancakeMesh);
                 heldpancake2.transform.SetParent(hand, false);
-                heldpancake2.transform.localPosition = new Vector3(0.184f, -0.284f, -0.158f);
+                heldpancake2.transform.localPosition = new Vector3(0.207f, -0.25f, 0.229f);
                 heldpancake2.transform.localRotation = Quaternion.Euler(holdingRotationEuler);
                 twoPancake = false;
             }
@@ -251,7 +261,7 @@ public class PlayerControllerXbox : MonoBehaviour
                 pancakesspawned = 3;
                 heldpancake3 = Instantiate(pancakeMesh);
                 heldpancake3.transform.SetParent(hand, false);
-                heldpancake3.transform.localPosition =  new Vector3(0.158f, -0.276f, 0.277f);
+                heldpancake3.transform.localPosition =  new Vector3(0.226f, -0.182f, 0.383f);
                 heldpancake3.transform.localRotation = Quaternion.Euler(holdingRotationEuler);
                 threePancake = false;
             }
