@@ -102,9 +102,9 @@ public class PlayerControllerXbox : MonoBehaviour
 	// Initialisation of animation stuff
 	private Animator anim;
     // are they holding an amount of pancakes
-    public bool onePancake = false;
-    public bool twoPancake = false;
-    public bool threePancake = false;
+    private bool onePancake = false;
+    private bool twoPancake = false;
+    private bool threePancake = false;
     // the hand bone that they pancakes will be childed to
     [SerializeField] Transform  hand = null;
     // what MESH will be spawned, this needs to have NOTHING but a mesh.
@@ -211,14 +211,7 @@ public class PlayerControllerXbox : MonoBehaviour
 
 		// animation stuff
 		anim.SetFloat("runningSpeed", rb.velocity.magnitude);
-        if(rb.velocity.magnitude >= 0.1f)
-        {
-            runparticles.enableEmission = true;
-    }
-        if(rb.velocity.magnitude <= 0.1)
-        {
-            runparticles.enableEmission = false;
-        }
+       
         if(heldCollectables > 0)
         {
             anim.SetBool("holdingPancakes", true);
@@ -277,7 +270,15 @@ public class PlayerControllerXbox : MonoBehaviour
             Destroy(heldpancake3);
             pancakesspawned = 0;
         }
-       
+        if (rb.velocity.magnitude >= 0.1f)
+        {
+            runparticles.enableEmission = true;
+        }
+        if (rb.velocity.magnitude <= 0.1)
+        {
+            runparticles.enableEmission = false;
+        }
+
 
     }
 
