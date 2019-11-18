@@ -30,7 +30,7 @@ public class BaseStash : MonoBehaviour
     //amount that has been spawned
     int spawned = 0;
     //is this spawner part of a base
-    [SerializeField] bool isbase = false;
+    //[SerializeField] bool isbase = false;
 
 	public float spawneeHeight;
 
