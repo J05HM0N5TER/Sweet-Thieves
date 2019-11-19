@@ -124,6 +124,9 @@ public class PlayerControllerXbox : MonoBehaviour
     //particle system
     [SerializeField] ParticleSystem runparticles = null;
 
+    //sound stuff
+    [HideInInspector] public bool tripping = false;
+
     // Start is called before the first frame update
     void Start()
 	{
@@ -529,8 +532,10 @@ public class PlayerControllerXbox : MonoBehaviour
 	public void TripPlayer()
 	{
 		DropCollectables();
+        tripping = true;
 
-		rb.AddForce(transform.forward * tripForce, ForceMode.Impulse);
+        rb.AddForce(transform.forward * tripForce, ForceMode.Impulse);
+        tripping = false;
 	}
 
 	/// <summary>
