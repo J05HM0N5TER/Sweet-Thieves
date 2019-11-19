@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[RequireComponent(typeof(AudioSource))]
 
 // this code is to allow UI functionality 
 // it simply makes it so that there is a way to count how many pancakes 
@@ -9,10 +9,12 @@ using UnityEngine;
 
 public class BasePoint : MonoBehaviour
 {
-    
+    [HideInInspector] public bool PancakeStolen = false;
     //what stash is being referenced
     [SerializeField] BaseStash stash = null;
-    
+    AudioSource audiosource;
+    [SerializeField] AudioClip BaseRaid = null;
+
     // on colliding increase stash size 
     private void OnTriggerEnter(Collider other)
     {
@@ -31,8 +33,9 @@ public class BasePoint : MonoBehaviour
         {
             stash.stashSize -= 1;
             other.GetComponent<CapsuleCollider>().enabled = true;
+            audiosource.PlayOneShot(BaseRaid, 1.0f);
         }
             
     }
-    
+   
 }
