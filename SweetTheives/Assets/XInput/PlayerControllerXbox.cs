@@ -115,7 +115,7 @@ public class PlayerControllerXbox : MonoBehaviour
 	private Vector3 holdingRotationEuler = new Vector3(72.284f, 0, 0);
 	// how many pancakes are connected to the player currently
 	int pancakesspawned = 0;
-	// Gameobjects of each pancak connected to the player.
+	// Gameobjects of each pancake connected to the player.
 	private GameObject heldpancake1 = null;
 	private GameObject heldpancake2 = null;
 	private GameObject heldpancake3 = null;
@@ -182,21 +182,21 @@ public class PlayerControllerXbox : MonoBehaviour
 		
 		// Set the speed of the animation based on the speed the player is moving
 		anim.SetFloat("runningSpeed", Mathf.Max(Mathf.Abs(moveInput.x), Mathf.Abs(moveInput.z)));
-		
-		// The more your holding the slower you go (0.5 + (amount held / max held) / 2)%
-		float speedModifier = ((1 - ((float)heldCollectables / maxHeldCollectables) / 2) + 0.5f);
+
+		// The more your holding the slower you go (speed goes between 0.5 and 1 (the more you have the slower you go)
+		float speedModifier = 1 - (heldCollectables / maxHeldCollectables / 2);
 
 		// movement from left joystick
 		rb.velocity = (moveInput * moveSpeed * speedModifier);
 
 		// Look the direction the controller is going if there is input
 		Vector3 lookInput = new Vector3(XCI.GetAxisRaw(XboxAxis.RightStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.RightStickY, controller));
-		if (lookInput.x != 0 || lookInput.z != 0)
+		if (lookInput != Vector3.zero)
 		{
 			transform.rotation = Quaternion.LookRotation(lookInput);
 		}
 		// If there is no input on the look input then face the way the player is moving
-		else if (moveInput.x != 0 || moveInput.z != 0)
+		else if (moveInput != Vector3.zero)
 		{
 			transform.rotation = Quaternion.LookRotation(moveInput);
 		}
@@ -306,7 +306,7 @@ public class PlayerControllerXbox : MonoBehaviour
 			tongueHit = HitType.NONE;
 			tongueHitPoints.Clear();
 			tongueHitPoints.Add(Vector3.zero);
-			tongueHitPoints.Add(standardisePosition(hit.point));
+			tongueHitPoints.Add(StandardisePosition(hit.point));
 			// Set what it hit.
 			objectHit = hit.collider.gameObject;
 
@@ -453,6 +453,7 @@ public class PlayerControllerXbox : MonoBehaviour
 	/// <param name="enableAdding">Should it be adding more points for the tongue to wrap around?</param>
 	private void CheckTongueWrap(bool enableAdding = true)
 	{
+		float lookRadus = 0.1f;
 		float acceptanceModifier = 2f;
 		Vector3 pointModifier = new Vector3(0, (playerHeight / 2) + tongueFireRadus, 0);
 		RaycastHit hit;
@@ -461,7 +462,7 @@ public class PlayerControllerXbox : MonoBehaviour
 		if (Physics.CapsuleCast(
 			transform.position + pointModifier, // First point in capsule
 			transform.position - pointModifier, // Second point in capsule
-			tongueReleaseRange,
+			lookRadus,
 			(tongueHitPoints[1] - transform.position).normalized, // Direction
 			out hit, // Output
 			Vector3.Distance(transform.position, tongueHitPoints[1])
@@ -470,14 +471,14 @@ public class PlayerControllerXbox : MonoBehaviour
 		{
 			if (enableAdding)
 			{
-				tongueHitPoints.Insert(1, hit.point);
+				tongueHitPoints.Insert(1, StandardisePosition(hit.point));
 			}
 		}
 		// If you can see the next point and the one previous then remove the next one
 		else if (tongueHitPoints.Count > 2 && !Physics.CapsuleCast(
 			transform.position + pointModifier, // First point in capsule
 			transform.position - pointModifier, // Second point in capsule
-			tongueReleaseRange,
+			lookRadus,
 			(tongueHitPoints[2] - transform.position).normalized, // Direction
 			out hit, // Output
 			Vector3.Distance(transform.position, tongueHitPoints[2])
@@ -486,41 +487,6 @@ public class PlayerControllerXbox : MonoBehaviour
 		{
 			tongueHitPoints.RemoveAt(1);
 		}
-
-		//float acceptanceModifier = 5f;
-
-		//Vector3 pointModifier = new Vector3(0, (playerHeight / 2) + sphereCastRadus, 0);
-		//Vector3 firstRotation = (tongueHitPoints[1] - transform.position).normalized;
-
-		//RaycastHit hit;
-
-		//// Check if the should be unwrapping
-		//bool canUnwrap = (tongueHitPoints.Count <= 2) ? false : // Automatically false if there is only 2 point in the tongue
-		//	!Physics.Linecast(transform.position, tongueHitPoints[2], environmentLayer);
-
-		///* If the player can't directly see the next point for the tongue then
-		// * something is in the way and the tongue needs to wrap around it */
-		//bool needWrap = Physics.CapsuleCast(transform.position + pointModifier, // First point in capsule
-		//	transform.position - pointModifier, // Second point in capsule
-		//	acceptanceRange,
-		//	firstRotation, // Direction
-		//	out hit, // Output
-		//	Vector3.Distance(transform.position, tongueHitPoints[1])
-		//	- (acceptanceRange * acceptanceModifier) - sphereCastRadus, // Distance
-		//	environmentLayer); // What layers should it collide with
-
-
-		//// If it can't see the next position then add a new one
-		//if (enableAdding && needWrap && !canUnwrap)
-		//{
-		//	tongueHitPoints.Insert(1, standardisePosition(hit.point));
-		//}
-
-		//// If you can see the next point and the one previous then remove the next one
-		//else if (canUnwrap && !needWrap) 
-		//{
-		//	tongueHitPoints.RemoveAt(1);
-		//}
 	}
 
 	/// <summary>
@@ -605,12 +571,12 @@ public class PlayerControllerXbox : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Sets the Y coordinate to the same as the player
+	/// Sets the Y coordinate to the same as the height that the tongue is fired at
 	/// </summary>
 	/// <param name="newPosition">The vector that is being edited</param>
 	/// <returns>The input vector with the Y coordinate edited</returns>
-	private Vector3 standardisePosition(Vector3 newPosition)
+	private Vector3 StandardisePosition(Vector3 newPosition)
 	{
-		return new Vector3(newPosition.x, transform.position.y, newPosition.z);
+		return new Vector3(newPosition.x, transform.position.y + tongueOffset.y, newPosition.z);
 	}
 }
