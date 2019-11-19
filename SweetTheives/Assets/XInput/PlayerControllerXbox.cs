@@ -70,9 +70,9 @@ public class PlayerControllerXbox : MonoBehaviour
 	// The start draw position for the tongue offset from the player
 	[SerializeField] Vector3 tongueOffset = Vector3.zero;
 	// How close to the collision position for the tongue it has to be for it to release
-	[SerializeField] float acceptanceRange = 0.5f;
+	[SerializeField] float tongueReleaseRange = 1.5f;
 	// The radius for the sphere cast
-	[SerializeField] float sphereCastRadus = 1f;
+	[SerializeField] float tongueFireRadus = 0.1f;
 	// How many collectables is the player holding
 	public int heldCollectables = 0;
 
@@ -101,34 +101,34 @@ public class PlayerControllerXbox : MonoBehaviour
 
 	// Initialisation of animation stuff
 	private Animator anim;
-    // are they holding an amount of pancakes
-    private bool onePancake = false;
-    private bool twoPancake = false;
-    private bool threePancake = false;
-    // the hand bone that they pancakes will be childed to
-    [SerializeField] Transform  hand = null;
-    // what MESH will be spawned, this needs to have NOTHING but a mesh.
-    [SerializeField] GameObject pancakeMesh = null;
-    // where the pancake will spawn on the character(offset from the hand)
-    [HideInInspector] Vector3 holdingPosition = new Vector3(0.221f,-0.318f,0.084f);
-    // stuff to turn quaternion to vector3
-    private Vector3 holdingRotationEuler = new Vector3(72.284f, 0, 0);
-    // how many pancakes are connected to the player currently
-    int pancakesspawned = 0;
-    // Gameobjects of each pancak connected to the player.
-    private GameObject heldpancake1 = null;
-    private GameObject heldpancake2 = null;
-    private GameObject heldpancake3 = null;
+	// are they holding an amount of pancakes
+	private bool onePancake = false;
+	private bool twoPancake = false;
+	private bool threePancake = false;
+	// the hand bone that they pancakes will be childed to
+	[SerializeField] Transform hand = null;
+	// what MESH will be spawned, this needs to have NOTHING but a mesh.
+	[SerializeField] GameObject pancakeMesh = null;
+	// where the pancake will spawn on the character(offset from the hand)
+	[HideInInspector] Vector3 holdingPosition = new Vector3(0.221f, -0.318f, 0.084f);
+	// stuff to turn quaternion to vector3
+	private Vector3 holdingRotationEuler = new Vector3(72.284f, 0, 0);
+	// how many pancakes are connected to the player currently
+	int pancakesspawned = 0;
+	// Gameobjects of each pancak connected to the player.
+	private GameObject heldpancake1 = null;
+	private GameObject heldpancake2 = null;
+	private GameObject heldpancake3 = null;
 
 	private float playerHeight;
-    //particle system
-    [SerializeField] ParticleSystem runparticles = null;
+	//particle system
+	[SerializeField] ParticleSystem runparticles = null;
 
     //sound stuff
     [HideInInspector] public bool tripping = false;
 
-    // Start is called before the first frame update
-    void Start()
+	// Start is called before the first frame update
+	void Start()
 	{
 		playerHeight = GetComponent<CapsuleCollider>().bounds.size.y;
 
@@ -179,7 +179,10 @@ public class PlayerControllerXbox : MonoBehaviour
 	{
 		// Get input (put it in x and z because we are moving across those axes)
 		Vector3 moveInput = new Vector3(XCI.GetAxisRaw(XboxAxis.LeftStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.LeftStickY, controller));
-
+		
+		// Set the speed of the animation based on the speed the player is moving
+		anim.SetFloat("runningSpeed", Mathf.Max(Mathf.Abs(moveInput.x), Mathf.Abs(moveInput.z)));
+		
 		// The more your holding the slower you go (0.5 + (amount held / max held) / 2)%
 		float speedModifier = ((1 - ((float)heldCollectables / maxHeldCollectables) / 2) + 0.5f);
 
@@ -209,92 +212,92 @@ public class PlayerControllerXbox : MonoBehaviour
 			currentCooldown <= 0 /*Tongue cooldown is finished*/)
 		{
 			TongueLash();
-            anim.SetBool("tongueAttack", true);
+			anim.SetBool("tongueAttack", true);
 		}
 
 		// animation stuff
 		anim.SetFloat("runningSpeed", rb.velocity.magnitude);
-       
-        if(heldCollectables > 0)
-        {
-            anim.SetBool("holdingPancakes", true);
-        }
-        else if(heldCollectables <= 0)
-        {
-            anim.SetBool("holdingPancakes", false);
-        }
-        // spawn first pancake at position 
-        if (heldCollectables == 1)
-        {
-            onePancake = true;
-            if (onePancake && pancakesspawned <= 0)
-            {
-                pancakesspawned = 1;
-                heldpancake1 = Instantiate(pancakeMesh);
-                heldpancake1.transform.SetParent(hand, false);
-                heldpancake1.transform.localPosition = holdingPosition;
-                heldpancake1.transform.localRotation = Quaternion.Euler(holdingRotationEuler);
-                onePancake = false;
-            }
-        }
-        // spawn second pancake with offset
-        else if (heldCollectables == 2)
-        {
-            twoPancake = true;
-            if (twoPancake && pancakesspawned <= 1)
-            {
-                pancakesspawned = 2;
-                heldpancake2 = Instantiate(pancakeMesh);
-                heldpancake2.transform.SetParent(hand, false);
-                heldpancake2.transform.localPosition = new Vector3(0.207f, -0.25f, 0.229f);
-                heldpancake2.transform.localRotation = Quaternion.Euler(holdingRotationEuler);
-                twoPancake = false;
-            }
-        }
-        //spawn thrid pancake with offset
-        else if (heldCollectables == 3)
-        {
-            threePancake = true;
-            if (threePancake && pancakesspawned <= 2)
-            {
-                pancakesspawned = 3;
-                heldpancake3 = Instantiate(pancakeMesh);
-                heldpancake3.transform.SetParent(hand, false);
-                heldpancake3.transform.localPosition =  new Vector3(0.226f, -0.182f, 0.383f);
-                heldpancake3.transform.localRotation = Quaternion.Euler(holdingRotationEuler);
-                threePancake = false;
-            }
-        }
-        // delete references to objects as they have been lost.
-        else if(heldCollectables == 0)
-        {
-            Destroy(heldpancake1);
-            Destroy(heldpancake2);
-            Destroy(heldpancake3);
-            pancakesspawned = 0;
-        }
-        if (rb.velocity.magnitude >= 0.1f)
-        {
-            runparticles.enableEmission = true;
-        }
-        if (rb.velocity.magnitude <= 0.1)
-        {
-            runparticles.enableEmission = false;
-        }
+
+		if (heldCollectables > 0)
+		{
+			anim.SetBool("holdingPancakes", true);
+		}
+		else if (heldCollectables <= 0)
+		{
+			anim.SetBool("holdingPancakes", false);
+		}
+		// spawn first pancake at position 
+		if (heldCollectables == 1)
+		{
+			onePancake = true;
+			if (onePancake && pancakesspawned <= 0)
+			{
+				pancakesspawned = 1;
+				heldpancake1 = Instantiate(pancakeMesh);
+				heldpancake1.transform.SetParent(hand, false);
+				heldpancake1.transform.localPosition = holdingPosition;
+				heldpancake1.transform.localRotation = Quaternion.Euler(holdingRotationEuler);
+				onePancake = false;
+			}
+		}
+		// spawn second pancake with offset
+		else if (heldCollectables == 2)
+		{
+			twoPancake = true;
+			if (twoPancake && pancakesspawned <= 1)
+			{
+				pancakesspawned = 2;
+				heldpancake2 = Instantiate(pancakeMesh);
+				heldpancake2.transform.SetParent(hand, false);
+				heldpancake2.transform.localPosition = new Vector3(0.207f, -0.25f, 0.229f);
+				heldpancake2.transform.localRotation = Quaternion.Euler(holdingRotationEuler);
+				twoPancake = false;
+			}
+		}
+		//spawn thrid pancake with offset
+		else if (heldCollectables == 3)
+		{
+			threePancake = true;
+			if (threePancake && pancakesspawned <= 2)
+			{
+				pancakesspawned = 3;
+				heldpancake3 = Instantiate(pancakeMesh);
+				heldpancake3.transform.SetParent(hand, false);
+				heldpancake3.transform.localPosition = new Vector3(0.226f, -0.182f, 0.383f);
+				heldpancake3.transform.localRotation = Quaternion.Euler(holdingRotationEuler);
+				threePancake = false;
+			}
+		}
+		// delete references to objects as they have been lost.
+		else if (heldCollectables == 0)
+		{
+			Destroy(heldpancake1);
+			Destroy(heldpancake2);
+			Destroy(heldpancake3);
+			pancakesspawned = 0;
+		}
+		if (rb.velocity.magnitude >= 0.1f)
+		{
+			runparticles.enableEmission = true;
+		}
+		if (rb.velocity.magnitude <= 0.1)
+		{
+			runparticles.enableEmission = false;
+		}
 
 
-    }
+	}
 
 	/// <summary>
 	/// Used to calculate what the tongue should be interacting with
 	/// </summary>
 	private void TongueLash()
 	{
-		Vector3 pointModifier = new Vector3(0, (playerHeight / 2) + sphereCastRadus, 0);
+		Vector3 pointModifier = new Vector3(0, (playerHeight / 2) + tongueFireRadus, 0);
 		// Casts sphereCast. hit = The object that the circleCast hits if it hits something
 		if (Physics.CapsuleCast(transform.position + pointModifier, // First point in capsule
 			transform.position - pointModifier, // Second point in capsule
-			sphereCastRadus,
+			tongueFireRadus,
 			transform.forward, // Direction
 			out RaycastHit hit, // Output
 			300f)) // Distance (If map gets really big then this number might need to be increased)
@@ -364,8 +367,8 @@ public class PlayerControllerXbox : MonoBehaviour
 				// Set tongue inactive
 				line.enabled = false;
 				line.positionCount = 0;
-                anim.SetBool("tongueAttack", false);
-                break;
+				anim.SetBool("tongueAttack", false);
+				break;
 			// If the tongue has hit a wall or other environment 
 			case HitType.ENVIRONMENT:
 				TongueEnvironmentInteraction();
@@ -411,7 +414,7 @@ public class PlayerControllerXbox : MonoBehaviour
 		}
 
 		// Check if the tongue has fully retracted
-		if (difference.sqrMagnitude < acceptanceRange * acceptanceRange)
+		if (difference.sqrMagnitude < tongueReleaseRange * tongueReleaseRange)
 		{
 			// If there is more then one point that the tongue is attached to then remove one
 			if (tongueHitPoints.Count > 2)
@@ -451,47 +454,73 @@ public class PlayerControllerXbox : MonoBehaviour
 	private void CheckTongueWrap(bool enableAdding = true)
 	{
 		float acceptanceModifier = 2f;
-		
-		Vector3 pointModifier = new Vector3(0, (playerHeight / 2) + sphereCastRadus, 0);
-		Vector3 firstRotation = (tongueHitPoints[1] - transform.position).normalized;
-
+		Vector3 pointModifier = new Vector3(0, (playerHeight / 2) + tongueFireRadus, 0);
 		RaycastHit hit;
 
-		// Check if the tongue should be wrapping around something
-		bool canUnwrap = (tongueHitPoints.Count <= 2) ? false : // Automatically false if there is only 2 point in the tongue
-			!Physics.Raycast(transform.position, // Start position
-			(tongueHitPoints[2] - transform.position).normalized, // Direction
-			out hit, // Output (assigned but ignored)
-			Vector3.Distance(transform.position, tongueHitPoints[2])
-			- acceptanceRange / acceptanceModifier,  // Distance
-			environmentLayer); // What layers should it collide with
-
-		/* If the player can't directly see the next point for the tongue then
-		 * something is in the way and the tongue needs to wrap around it */
-		bool needWrap = Physics.CapsuleCast(transform.position + pointModifier, // First point in capsule
+		// If it can't see the next position then add a new one
+		if (Physics.CapsuleCast(
+			transform.position + pointModifier, // First point in capsule
 			transform.position - pointModifier, // Second point in capsule
-			acceptanceRange,
-			firstRotation, // Direction
+			tongueReleaseRange,
+			(tongueHitPoints[1] - transform.position).normalized, // Direction
 			out hit, // Output
 			Vector3.Distance(transform.position, tongueHitPoints[1])
-			- (acceptanceRange * acceptanceModifier) - sphereCastRadus, // Distance
-			environmentLayer); // What layers should it collide with
-
-
-		// If it can't see the next position then add a new one
-		if (needWrap && (!canUnwrap && tongueHitPoints.Count > 2))// What layers should it collide with 
+			- (tongueReleaseRange * acceptanceModifier) - tongueFireRadus, // Distance
+			environmentLayer)) // What layers should it collide with)
 		{
 			if (enableAdding)
 			{
-				tongueHitPoints.Insert(1, standardisePosition(hit.point));
+				tongueHitPoints.Insert(1, hit.point);
 			}
 		}
-
 		// If you can see the next point and the one previous then remove the next one
-		else if (tongueHitPoints.Count > 2 && canUnwrap && !needWrap) 
+		else if (tongueHitPoints.Count > 2 && !Physics.CapsuleCast(
+			transform.position + pointModifier, // First point in capsule
+			transform.position - pointModifier, // Second point in capsule
+			tongueReleaseRange,
+			(tongueHitPoints[2] - transform.position).normalized, // Direction
+			out hit, // Output
+			Vector3.Distance(transform.position, tongueHitPoints[2])
+			- (tongueReleaseRange * acceptanceModifier) - tongueFireRadus, // Distance
+			environmentLayer))
 		{
 			tongueHitPoints.RemoveAt(1);
 		}
+
+		//float acceptanceModifier = 5f;
+
+		//Vector3 pointModifier = new Vector3(0, (playerHeight / 2) + sphereCastRadus, 0);
+		//Vector3 firstRotation = (tongueHitPoints[1] - transform.position).normalized;
+
+		//RaycastHit hit;
+
+		//// Check if the should be unwrapping
+		//bool canUnwrap = (tongueHitPoints.Count <= 2) ? false : // Automatically false if there is only 2 point in the tongue
+		//	!Physics.Linecast(transform.position, tongueHitPoints[2], environmentLayer);
+
+		///* If the player can't directly see the next point for the tongue then
+		// * something is in the way and the tongue needs to wrap around it */
+		//bool needWrap = Physics.CapsuleCast(transform.position + pointModifier, // First point in capsule
+		//	transform.position - pointModifier, // Second point in capsule
+		//	acceptanceRange,
+		//	firstRotation, // Direction
+		//	out hit, // Output
+		//	Vector3.Distance(transform.position, tongueHitPoints[1])
+		//	- (acceptanceRange * acceptanceModifier) - sphereCastRadus, // Distance
+		//	environmentLayer); // What layers should it collide with
+
+
+		//// If it can't see the next position then add a new one
+		//if (enableAdding && needWrap && !canUnwrap)
+		//{
+		//	tongueHitPoints.Insert(1, standardisePosition(hit.point));
+		//}
+
+		//// If you can see the next point and the one previous then remove the next one
+		//else if (canUnwrap && !needWrap) 
+		//{
+		//	tongueHitPoints.RemoveAt(1);
+		//}
 	}
 
 	/// <summary>
@@ -534,7 +563,7 @@ public class PlayerControllerXbox : MonoBehaviour
 		DropCollectables();
         tripping = true;
 
-        rb.AddForce(transform.forward * tripForce, ForceMode.Impulse);
+		rb.AddForce(transform.forward * tripForce, ForceMode.Impulse);
         tripping = false;
 	}
 
