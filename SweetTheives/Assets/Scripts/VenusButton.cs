@@ -33,6 +33,7 @@ public class VenusButton : MonoBehaviour
                 if (current.gameObject.tag == "Player")
                 {
                     PlayerControllerXbox playercontrol = current.gameObject.GetComponent<PlayerControllerXbox>();
+                    playercontrol.DropCollectables();
                     playercontrol.ResetToSpawn();
                     
                 }

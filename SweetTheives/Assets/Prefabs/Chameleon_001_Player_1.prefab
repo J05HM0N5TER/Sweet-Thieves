@@ -921,7 +921,8 @@ MonoBehaviour:
   tongueHitPoints: []
   currentCooldown: 0
   hand: {fileID: 8924020636450217817}
-  pancakeMesh: {fileID: 100000, guid: 3f74b3d772badcf48bad3312346c30a7, type: 3}
+  pancakeMesh: {fileID: 1614046593866185857, guid: 2212a545800666046927310dded54738,
+    type: 3}
   runparticles: {fileID: 256399206882959021, guid: 466737689544dbc4b8cbac31e38f1e4d,
     type: 3}
   tripping: 0
