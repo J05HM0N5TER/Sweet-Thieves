@@ -13,21 +13,35 @@ public class TimedTrap : MonoBehaviour
 	public float attackCooldown = 0;
 	// What the current countdown is
 	private float currentCooldown = 0;
+    public float animationDelay;
+    // animation bite
+    private Animator anim = null;
+    private bool animationPlayed = false;
 
-	// Update is called once per frame
-	void Update()
+    private void Start()
+    {
+        anim = GetComponent<Animator>();
+    }
+    // Update is called once per frame
+     void Update()
 	{
 		// Countdown timer
 		currentCooldown -= Time.deltaTime;
 
-		// If countdown is completed
-		if (currentCooldown < 0)
+        if (currentCooldown - animationDelay < 0 /* && !animationPlayed*/)
+        {
+            anim.SetBool("venusBite", true);
+            StartCoroutine(Resetanimation());
+            animationPlayed = true;
+        }
+        // If countdown is completed
+        if (currentCooldown < 0)
 		{
+            animationPlayed = false;
 			// Calculate position that attack is taking place
 			Vector3 attackPoint = transform.TransformPoint(attackOffset);
-
-			// Get everything in that area
-			Collider[] inAttackRange = Physics.OverlapSphere(attackPoint, attackRadius);
+            // Get everything in that area
+            Collider[] inAttackRange = Physics.OverlapSphere(attackPoint, attackRadius);
 			foreach (Collider current in inAttackRange)
 			{
 				// If the thing is a player
@@ -41,6 +55,14 @@ public class TimedTrap : MonoBehaviour
 				}
 			}
 			currentCooldown = attackCooldown;
-		}
-	}
+            //anim.SetBool("venusBite", false);
+        }
+        
+        //anim.ResetTrigger("venusBite");
+    }
+    IEnumerator Resetanimation()
+    {
+        yield return new WaitForSeconds(1);
+        anim.SetBool("venusBite", false);
+    }
 }
