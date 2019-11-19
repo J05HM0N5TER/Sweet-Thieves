@@ -391,7 +391,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 1188792376071818833, guid: d6c1831170e41c34485571e1220cb0a1, type: 3}
-  PlayerBase: {fileID: 0}
+  PlayerBase: {fileID: 1476893370829008083, guid: 7ced5f1bc3392ae4c9e475de45614a2a,
+    type: 3}
   distroyRadius: 2
   venusAnim: {fileID: 0}
 --- !u!1 &5566689551711843983
