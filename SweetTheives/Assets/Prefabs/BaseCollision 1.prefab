@@ -221,13 +221,12 @@ MonoBehaviour:
   player: {fileID: 0}
   spawner: {fileID: 4853504485524798910}
   delay: 0
-  spawnee: {fileID: 4826921000926469563, guid: aa2dee2566e462c4b9277974696cf1fd, type: 3}
+  spawnee: {fileID: 1614046593866185857, guid: 2212a545800666046927310dded54738, type: 3}
   stopSpawning: 0
   repeating: 0
   spawnTime: 0
   spawnDelay: 2
   maxSpawn: 0
-  isbase: 0
   spawneeHeight: 2
 --- !u!1 &3722396939640647992
 GameObject:
@@ -333,4 +332,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e57ac75c0cd960549bb3d6061cd5d40d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PancakeStolen: 0
   stash: {fileID: 8654122512529208763}
+  BaseRaid: {fileID: 0}
