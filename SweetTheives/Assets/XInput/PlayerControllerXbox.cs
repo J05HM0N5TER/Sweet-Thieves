@@ -154,10 +154,14 @@ public class PlayerControllerXbox : MonoBehaviour
     private bool TongueCoolDownSoundPlayed = false;
     //audio for when the a pancake is being picked up.
     [SerializeField] AudioClip PancakePickUp = null;
+
+    [SerializeField] AudioClip venusChomp = null;
+
+    private XInputDotNetPure.PlayerIndex playernumber = 0;
 #pragma warning restore IDE0044 // Add readonly modifier
 
-	// Start is called before the first frame update
-	void Start()
+    // Start is called before the first frame update
+    void Start()
 	{
         
 		playerHeight = GetComponent<CapsuleCollider>().bounds.size.y;
@@ -201,6 +205,8 @@ public class PlayerControllerXbox : MonoBehaviour
         // Set variables on spawn point
 		SpawnPos = transform.position;
 		SpawnRot = transform.rotation;
+
+        playernumber = (XInputDotNetPure.PlayerIndex)controller - 1;
 	}
 
 	/// <summary>
@@ -236,11 +242,16 @@ public class PlayerControllerXbox : MonoBehaviour
 			}
 
 			// ---Tongue lash---
-		if (currentCooldown > 0)
+		    if (currentCooldown > 0)
 			{
 				currentCooldown -= Time.deltaTime;
-            TongueCoolDownSoundPlayed = false;
-			}
+                TongueCoolDownSoundPlayed = false;
+                
+                if (XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0 && currentCooldown < 1.3f)
+                {
+                    StartCoroutine(Vibrate());
+                }
+            }
 			if (XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0 /*Trigger is pressed*/  &&
 				tongueHit == HitType.NONE /*Tongue is not already connected to something*/ &&
 				heldCollectables < maxHeldCollectables /*The player is holding less then the max amount of collectables*/ &&
@@ -253,7 +264,8 @@ public class PlayerControllerXbox : MonoBehaviour
 		else
 		{
 			rb.velocity = Vector3.zero;
-		}
+            StartCoroutine(Vibrate());
+        }
         if (currentCooldown <= 0 && TongueCoolDownSoundPlayed == false)
         {
             audiosource.PlayOneShot(TongueCoolDownFinished, 1.0f);
@@ -322,11 +334,11 @@ public class PlayerControllerXbox : MonoBehaviour
 			pancakesspawned = 0;
 		}
         //play and stop particles
-		if (rb.velocity.magnitude >= 0.1f)
+		if (rb.velocity.magnitude > 0.1f)
 		{
             runparticles.Play();
 		}
-		if (rb.velocity.magnitude <= 0.1)
+		if (rb.velocity.magnitude < 0.1f)
 		{
             runparticles.Stop();
 		}
@@ -389,7 +401,8 @@ public class PlayerControllerXbox : MonoBehaviour
 						objectHit.transform.rotation);
 
 					tongueHit = HitType.COLLECTABLE;
-				}
+                    StartCoroutine(Vibrate());
+                }
 			}
 			// If the tongue is attached to something then activate it
 			line.enabled = tongueHit != HitType.NONE;
@@ -605,6 +618,7 @@ public class PlayerControllerXbox : MonoBehaviour
 
 		playerState = PlayerState.TRIPPED;
         audiosource.PlayOneShot(Fall, 1.0f);
+        anim.SetBool("tripped", true);
 	}
 
 	/// <summary>
@@ -669,5 +683,19 @@ public class PlayerControllerXbox : MonoBehaviour
     public void PlayPickUpSound()
     {
         audiosource.PlayOneShot(PancakePickUp, 1.0f);
+    }
+    public float vibrationTime = 0.4f;
+    public IEnumerator Vibrate()
+    {
+        XInputDotNetPure.GamePad.SetVibration(playernumber, 0.5f, 0.5f);
+        yield return new WaitForSeconds(vibrationTime);
+        XInputDotNetPure.GamePad.SetVibration(playernumber, 0f, 0f);
+        anim.SetBool("tripped", false);
+
+    }
+    public IEnumerator VenusChomp()
+    {
+        yield return new WaitForSeconds(1.27f);
+        audiosource.PlayOneShot(venusChomp, 1.0f);
     }
 }
