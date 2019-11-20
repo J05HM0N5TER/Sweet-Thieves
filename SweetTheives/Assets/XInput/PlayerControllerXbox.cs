@@ -78,6 +78,8 @@ public class PlayerControllerXbox : MonoBehaviour
 	[SerializeField] float StunnedTime;
 	// Should the tongue be able to wrap around other environment when already attached
 	[SerializeField] bool tongueWrapOn = true;
+	// How many new points it adds with the tongue wrap
+	[SerializeField] float tongueWrapSensitivity = 1f;
 	// How long you have to wait before you can fire the tongue again
 	public float tongueCooldown;
 	[SerializeField] float maxGrappleTime = 6f;
@@ -499,7 +501,6 @@ public class PlayerControllerXbox : MonoBehaviour
 	private void CheckTongueWrap(bool enableAdding = true)
 	{
 		float lookRadius = 0.1f;
-		float acceptanceModifier = 2f;
 		Vector3 pointModifier = new Vector3(0, (playerHeight / 2) + lookRadius, 0);
 		RaycastHit hit;
 
@@ -511,7 +512,7 @@ public class PlayerControllerXbox : MonoBehaviour
 			(tongueHitPoints[1] - transform.position).normalized, // Direction
 			out hit, // Output
 			Vector3.Distance(transform.position, tongueHitPoints[1])
-			- (tongueReleaseRange * acceptanceModifier) - tongueFireRadius, // Distance
+			- tongueWrapSensitivity, // Distance
 			environmentLayer)) // What layers should it collide with)
 		{
 			if (enableAdding)
@@ -527,7 +528,7 @@ public class PlayerControllerXbox : MonoBehaviour
 			(tongueHitPoints[2] - transform.position).normalized, // Direction
 			out hit, // Output
 			Vector3.Distance(transform.position, tongueHitPoints[2])
-			- (tongueReleaseRange * acceptanceModifier) - tongueFireRadius, // Distance
+			- tongueWrapSensitivity, // Distance
 			environmentLayer))
 		{
 			tongueHitPoints.RemoveAt(1);
