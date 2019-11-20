@@ -568,6 +568,7 @@ public class PlayerControllerXbox : MonoBehaviour
 	{
 		transform.position = SpawnPos;
 		transform.rotation = SpawnRot;
+		tongueHit = HitType.NONE;
 	}
 
 	/// <summary>
