@@ -17,7 +17,13 @@ public class VenusButton : MonoBehaviour
     //the venusfly trap that will be animated.
     [SerializeField] Animator venusAnim = null;
 
-   // when something collides with the button
+    PlayerControllerXbox playercontrol = null;
+
+    private void Start()
+    {
+        playercontrol = Player.GetComponent<PlayerControllerXbox>();
+    }
+    // when something collides with the button
     private void OnTriggerEnter(Collider other)
     {
         // if it is the player that owns the button
@@ -26,21 +32,23 @@ public class VenusButton : MonoBehaviour
         {
             // array of all things colliding with the base
             Collider[] hitColliders = Physics.OverlapSphere(PlayerBase.transform.position, distroyRadius);
+            
             //for each thing that is colliding with the base itterate 
             foreach (Collider current in hitColliders)
             {
                 //if one of the things is a player then respawn them
                 if (current.gameObject.tag == "Player")
                 {
-                    PlayerControllerXbox playercontrol = current.gameObject.GetComponent<PlayerControllerXbox>();
-                    playercontrol.DropCollectables();
-                    playercontrol.ResetToSpawn();
+                    PlayerControllerXbox playerChomped = current.gameObject.GetComponent<PlayerControllerXbox>();
+                    playerChomped.DropCollectables();
+                    playerChomped.ResetToSpawn();
                     
                 }
             }
             //venusAnim.SetBool("venusBite", true);
             venusAnim.SetTrigger("venusBite");
-            
+            StartCoroutine(playercontrol.VenusChomp());
+
         }
         
     }//on exit reset venus bite bool to false to go back to idle (have to do this so that the animation can finish)

@@ -53,5 +53,6 @@ public class CollectableController : MonoBehaviour
 		player.currentCooldown = player.tongueCooldown;
 		// Destroy collectable
 		Destroy(this.gameObject);
+        player.PlayPickUpSound();
 	}
 }
