@@ -913,6 +913,7 @@ MonoBehaviour:
   tripForce: 100
   StunnedTime: 0
   tongueWrapOn: 1
+  tongueWrapSensitivity: 1
   tongueCooldown: 1.5
   maxGrappleTime: 6
   tongueOffset: {x: 0, y: 1.7, z: 0}
@@ -929,9 +930,11 @@ MonoBehaviour:
   runparticles: {fileID: 256399206882959021, guid: 466737689544dbc4b8cbac31e38f1e4d,
     type: 3}
   tripping: 0
-  Fall: {fileID: 0}
+  Fall: {fileID: 8300000, guid: f2977a71650331945b8148114772dbde, type: 3}
   TongueCoolDownFinished: {fileID: 0}
-  PancakePickUp: {fileID: 0}
+  PancakePickUp: {fileID: 8300000, guid: 4edbae964aab8c348b5d2762094400bf, type: 3}
+  venusChomp: {fileID: 0}
+  vibrationTime: 0.4
 --- !u!95 &8924020636440342681
 Animator:
   serializedVersion: 3

@@ -309,7 +309,9 @@ public class PlayerControllerXbox : MonoBehaviour
 				heldpancake2.transform.localPosition = new Vector3(0.207f, -0.25f, 0.229f);
 				heldpancake2.transform.localRotation = Quaternion.Euler(holdingRotationEuler);
 				twoPancake = false;
-			}
+            
+
+            }
 		}
 		//spawn thrid pancake with offset
 		else if (heldCollectables == 3)

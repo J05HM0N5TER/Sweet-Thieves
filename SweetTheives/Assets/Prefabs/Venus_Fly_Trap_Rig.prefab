@@ -159,6 +159,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5710187147134487398}
+  - {fileID: 1586343516570162404}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -171,7 +172,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5710187147134523140}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: b51c327b40dd28d4ab97152a6d2a5def, type: 3}
+  m_Avatar: {fileID: 9000000, guid: b8ce8620a55f4ed488dd9615f3be1434, type: 3}
   m_Controller: {fileID: 9100000, guid: 8b5655824d7c6a74499452f88ef07a2a, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
@@ -1049,3 +1050,66 @@ Transform:
   m_Father: {fileID: 5710187147134487380}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1586343516570553950
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 5710187147134487396}
+    m_Modifications:
+    - target: {fileID: 100058, guid: b8ce8620a55f4ed488dd9615f3be1434, type: 3}
+      propertyPath: m_Name
+      value: Vinnie_Rig_Resized
+      objectReference: {fileID: 0}
+    - target: {fileID: 400058, guid: b8ce8620a55f4ed488dd9615f3be1434, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400058, guid: b8ce8620a55f4ed488dd9615f3be1434, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400058, guid: b8ce8620a55f4ed488dd9615f3be1434, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400058, guid: b8ce8620a55f4ed488dd9615f3be1434, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400058, guid: b8ce8620a55f4ed488dd9615f3be1434, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400058, guid: b8ce8620a55f4ed488dd9615f3be1434, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400058, guid: b8ce8620a55f4ed488dd9615f3be1434, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400058, guid: b8ce8620a55f4ed488dd9615f3be1434, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400058, guid: b8ce8620a55f4ed488dd9615f3be1434, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400058, guid: b8ce8620a55f4ed488dd9615f3be1434, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400058, guid: b8ce8620a55f4ed488dd9615f3be1434, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b8ce8620a55f4ed488dd9615f3be1434, type: 3}
+--- !u!4 &1586343516570162404 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400058, guid: b8ce8620a55f4ed488dd9615f3be1434,
+    type: 3}
+  m_PrefabInstance: {fileID: 1586343516570553950}
+  m_PrefabAsset: {fileID: 0}
