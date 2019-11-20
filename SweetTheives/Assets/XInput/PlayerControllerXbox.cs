@@ -39,17 +39,25 @@ public enum HitType : byte
 	COLLECTABLE
 }
 
+public enum PlayerState : byte
+{
+	NORMAL,
+	TRIPPED,
+	RETRACTING
+}
+
 [RequireComponent(typeof(Rigidbody), typeof(LineRenderer), typeof(Collider))]
 [RequireComponent(typeof(Animation))]
 [RequireComponent(typeof(AudioSource))]
 public class PlayerControllerXbox : MonoBehaviour
 {
+#pragma warning disable IDE0044 // Add readonly modifier
 	// What is this player (first, second, ect)
-	[SerializeField] readonly XboxController controller = XboxController.All;
+	[SerializeField] XboxController controller = XboxController.All;
 	// Max move speeds
-	[SerializeField] readonly float moveSpeed = 500;
+	[SerializeField] float moveSpeed = 500;
 	// Control to fire the tongue
-	[SerializeField] readonly XboxButton tongueButton = XboxButton.RightBumper;
+	[SerializeField] XboxButton tongueButton = XboxButton.RightBumper;
 
 	private static bool didQueryNumOfCtrlrs = false;
 
@@ -61,19 +69,24 @@ public class PlayerControllerXbox : MonoBehaviour
 
 	// The max collectables that the player can hold
 	public int maxHeldCollectables = 3;
+
 	// The amount that the grapple accelerates object every second
-	[SerializeField] readonly float grappleAcceleration = 20;
-	[SerializeField] readonly float tripForce = 250;
+	[SerializeField] float grappleAcceleration = 20;
+							   // How far the player gets thrown when tripped
+	[SerializeField] float tripForce = 250;
+	// How long does the player get stunned for when tripped
+	[SerializeField] float StunnedTime;
 	// Should the tongue be able to wrap around other environment when already attached
-	[SerializeField] readonly bool tongueWrapOn = true;
+	[SerializeField] bool tongueWrapOn = true;
 	// How long you have to wait before you can fire the tongue again
-	[SerializeField] public float tongueCooldown;
+	public float tongueCooldown;
+	[SerializeField] float maxGrappleTime = 6f;
 	// The start draw position for the tongue offset from the player
 	[SerializeField] Vector3 tongueOffset = Vector3.zero;
 	// How close to the collision position for the tongue it has to be for it to release
-	[SerializeField] readonly float tongueReleaseRange = 1.5f;
+	[SerializeField] float tongueReleaseRange = 1.5f;
 	// The radius for the sphere cast
-	[SerializeField] readonly float tongueFireRadus = 0.1f;
+	[SerializeField] float tongueFireRadius = 0.1f;
 	// How many collectables is the player holding
 	public int heldCollectables = 0;
 
@@ -98,6 +111,8 @@ public class PlayerControllerXbox : MonoBehaviour
 
 	// What the cooldown is currently at
 	[HideInInspector] public float currentCooldown = 0.0f;
+	private float currentGrappleTime = 0.0f;
+	private float currentStunnedTime = 0.0f;
 
 
 	// Initialisation of animation stuff
@@ -107,9 +122,9 @@ public class PlayerControllerXbox : MonoBehaviour
 	private bool twoPancake = false;
 	private bool threePancake = false;
 	// the hand bone that they pancakes will be childed to
-	[SerializeField] readonly Transform hand = null;
+	[SerializeField] Transform hand = null;
 	// what MESH will be spawned, this needs to have NOTHING but a mesh.
-	[SerializeField] readonly GameObject pancakeMesh = null;
+	[SerializeField] GameObject pancakeMesh = null;
 	// where the pancake will spawn on the character(offset from the hand)
 	[HideInInspector] Vector3 holdingPosition = new Vector3(0.221f, -0.318f, 0.084f);
 	// stuff to turn quaternion to vector3
@@ -128,17 +143,19 @@ public class PlayerControllerXbox : MonoBehaviour
     //sound stuff
     AudioSource audiosource;
     [HideInInspector] public bool tripping = false;
+	// What state the player is currently in
+	private PlayerState playerState = PlayerState.NORMAL;
     //sound for when the player is tripped
-    [SerializeField] readonly AudioClip Fall = null;
+    [SerializeField] AudioClip Fall = null;
     // audio and bool to play sound when tongue cooldown is finished
-    [SerializeField] readonly AudioClip TongueCoolDownFinished = null;
+    [SerializeField] AudioClip TongueCoolDownFinished = null;
     private bool TongueCoolDownSoundPlayed = false;
     //audio for when the a pancake is being picked up.
-    [SerializeField] readonly AudioClip PancakePickUp = null;
-    //
+    [SerializeField] AudioClip PancakePickUp = null;
+#pragma warning restore IDE0044 // Add readonly modifier
 
-    // Start is called before the first frame update
-    void Start()
+	// Start is called before the first frame update
+	void Start()
 	{
         
 		playerHeight = GetComponent<CapsuleCollider>().bounds.size.y;
@@ -180,7 +197,7 @@ public class PlayerControllerXbox : MonoBehaviour
         audiosource = GetComponent<AudioSource>();
         TongueCoolDownSoundPlayed = true;
         // Set variables on spawn point
-        SpawnPos = transform.position;
+		SpawnPos = transform.position;
 		SpawnRot = transform.rotation;
 	}
 
@@ -190,43 +207,50 @@ public class PlayerControllerXbox : MonoBehaviour
 	void Update()
 	{
         
-        // Get input (put it in x and z because we are moving across those axes)
-        Vector3 moveInput = new Vector3(XCI.GetAxisRaw(XboxAxis.LeftStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.LeftStickY, controller));
+		// Get input (put it in x and z because we are moving across those axes)
+		Vector3 moveInput = new Vector3(XCI.GetAxisRaw(XboxAxis.LeftStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.LeftStickY, controller));
 		
 		// Set the speed of the animation based on the speed the player is moving
 		anim.SetFloat("runningSpeed", Mathf.Max(Mathf.Abs(moveInput.x), Mathf.Abs(moveInput.z)));
 
-		// The more your holding the slower you go (speed goes between 0.5 and 1 (the more you have the slower you go)
-		float speedModifier = 1 - (heldCollectables / maxHeldCollectables / 2);
-
-		// movement from left joystick
-		rb.velocity = (moveInput * moveSpeed * speedModifier);
-
-		// Look the direction the controller is going if there is input
-		Vector3 lookInput = new Vector3(XCI.GetAxisRaw(XboxAxis.RightStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.RightStickY, controller));
-		if (lookInput != Vector3.zero)
+		if (playerState != PlayerState.TRIPPED)
 		{
-			transform.rotation = Quaternion.LookRotation(lookInput);
-		}
-		// If there is no input on the look input then face the way the player is moving
-		else if (moveInput != Vector3.zero)
-		{
-			transform.rotation = Quaternion.LookRotation(moveInput);
-		}
+			// The more your holding the slower you go (speed goes between 0.5 and 1 (the more you have the slower you go)
+			float speedModifier = 1 - (heldCollectables / maxHeldCollectables / 2);
 
-		// ---Tongue lash---
+			// movement from left joystick
+			rb.velocity = (moveInput * moveSpeed * speedModifier);
+
+			// Look the direction the controller is going if there is input
+			Vector3 lookInput = new Vector3(XCI.GetAxisRaw(XboxAxis.RightStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.RightStickY, controller));
+			if (lookInput != Vector3.zero)
+			{
+				transform.rotation = Quaternion.LookRotation(lookInput);
+			}
+			// If there is no input on the look input then face the way the player is moving
+			else if (moveInput != Vector3.zero)
+			{
+				transform.rotation = Quaternion.LookRotation(moveInput);
+			}
+
+			// ---Tongue lash---
 		if (currentCooldown > 0)
-		{
-			currentCooldown -= Time.deltaTime;
+			{
+				currentCooldown -= Time.deltaTime;
             TongueCoolDownSoundPlayed = false;
+			}
+			if (XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0 /*Trigger is pressed*/  &&
+				tongueHit == HitType.NONE /*Tongue is not already connected to something*/ &&
+				heldCollectables < maxHeldCollectables /*The player is holding less then the max amount of collectables*/ &&
+				currentCooldown <= 0 /*Tongue cooldown is finished*/)
+			{
+				TongueLash();
+				anim.SetBool("tongueAttack", true);
+			}
 		}
-		if (XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0 /*Trigger is pressed*/  &&
-			tongueHit == HitType.NONE /*Tongue is not already connected to something*/ &&
-			heldCollectables < maxHeldCollectables /*The player is holding less then the max amount of collectables*/ &&
-			currentCooldown <= 0 /*Tongue cooldown is finished*/)
+		else
 		{
-			TongueLash();
-			anim.SetBool("tongueAttack", true);
+			rb.velocity = Vector3.zero;
 		}
         if (currentCooldown <= 0 && TongueCoolDownSoundPlayed == false)
         {
@@ -311,17 +335,17 @@ public class PlayerControllerXbox : MonoBehaviour
 	/// </summary>
 	private void TongueLash()
 	{
-		Vector3 pointModifier = new Vector3(0, (playerHeight / 2) + tongueFireRadus, 0);
+		Vector3 pointModifier = new Vector3(0, (playerHeight / 2) + tongueFireRadius, 0);
 		// Casts sphereCast. hit = The object that the circleCast hits if it hits something
 		if (Physics.CapsuleCast(transform.position + pointModifier, // First point in capsule
 			transform.position - pointModifier, // Second point in capsule
-			tongueFireRadus,
+			tongueFireRadius,
 			transform.forward, // Direction
 			out RaycastHit hit, // Output
 			300f)) // Distance (If map gets really big then this number might need to be increased)
 		{
 			// Set defaults
-			tongueHit = HitType.NONE;
+			DisconnectTongue();
 			tongueHitPoints.Clear();
 			tongueHitPoints.Add(Vector3.zero);
 			tongueHitPoints.Add(StandardisePosition(hit.point));
@@ -400,6 +424,26 @@ public class PlayerControllerXbox : MonoBehaviour
 			default:
 				break;
 		}
+		switch (playerState)
+		{
+			case PlayerState.NORMAL:
+				break;
+			case PlayerState.TRIPPED:
+				currentStunnedTime += Time.deltaTime;
+				if(currentStunnedTime > StunnedTime)
+				{
+					DisconnectTongue();
+					currentStunnedTime = 0f;
+					playerState = PlayerState.NORMAL;
+				}
+				break;
+			// If the tongue is being retracted
+			case PlayerState.RETRACTING:
+				TongueRetracting();
+				break;
+			default:
+				break;
+		}
 	}
 
 	/// <summary>
@@ -407,42 +451,25 @@ public class PlayerControllerXbox : MonoBehaviour
 	/// </summary>
 	private void TongueEnvironmentInteraction()
 	{
+		currentGrappleTime += Time.deltaTime;
+
 		// Draw tongue to position hit
 		line.positionCount = tongueHitPoints.Count;
 		line.SetPositions(tongueHitPoints.ToArray());
-
-		// The separation between the player and the grapple point.
-		Vector3 difference = transform.position - tongueHitPoints[1];
-
-		bool shouldAddWrap;
+		
 		// Only move to the position that the tongue hit if the button is not pressed down
 		if (!(XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0))
 		{
-			// Move player towards tongue
-			rb.AddForce(-difference.normalized * grappleAcceleration);
-			shouldAddWrap = false;
-		}
-		else
-		{
-			shouldAddWrap = true;
+			playerState = PlayerState.RETRACTING;
 		}
 		if (tongueWrapOn)
 		{
-			CheckTongueWrap(shouldAddWrap);
+			CheckTongueWrap(!(playerState == PlayerState.RETRACTING));
 		}
-
-		// Check if the tongue has fully retracted
-		if (difference.sqrMagnitude < tongueReleaseRange * tongueReleaseRange)
+		// Check that the player hasn't had the tongue grappled too long
+		if (currentGrappleTime > maxGrappleTime)
 		{
-			// If there is more then one point that the tongue is attached to then remove one
-			if (tongueHitPoints.Count > 2)
-			{
-				tongueHitPoints.RemoveAt(1);
-			}
-			else
-			{
-				tongueHit = HitType.NONE;
-			}
+			playerState = PlayerState.RETRACTING;
 		}
 	}
 
@@ -471,20 +498,20 @@ public class PlayerControllerXbox : MonoBehaviour
 	/// <param name="enableAdding">Should it be adding more points for the tongue to wrap around?</param>
 	private void CheckTongueWrap(bool enableAdding = true)
 	{
-		float lookRadus = 0.1f;
+		float lookRadius = 0.1f;
 		float acceptanceModifier = 2f;
-		Vector3 pointModifier = new Vector3(0, (playerHeight / 2) + tongueFireRadus, 0);
+		Vector3 pointModifier = new Vector3(0, (playerHeight / 2) + lookRadius, 0);
 		RaycastHit hit;
 
 		// If it can't see the next position then add a new one
 		if (Physics.CapsuleCast(
 			transform.position + pointModifier, // First point in capsule
 			transform.position - pointModifier, // Second point in capsule
-			lookRadus,
+			lookRadius,
 			(tongueHitPoints[1] - transform.position).normalized, // Direction
 			out hit, // Output
 			Vector3.Distance(transform.position, tongueHitPoints[1])
-			- (tongueReleaseRange * acceptanceModifier) - tongueFireRadus, // Distance
+			- (tongueReleaseRange * acceptanceModifier) - tongueFireRadius, // Distance
 			environmentLayer)) // What layers should it collide with)
 		{
 			if (enableAdding)
@@ -496,14 +523,37 @@ public class PlayerControllerXbox : MonoBehaviour
 		else if (tongueHitPoints.Count > 2 && !Physics.CapsuleCast(
 			transform.position + pointModifier, // First point in capsule
 			transform.position - pointModifier, // Second point in capsule
-			lookRadus,
+			lookRadius,
 			(tongueHitPoints[2] - transform.position).normalized, // Direction
 			out hit, // Output
 			Vector3.Distance(transform.position, tongueHitPoints[2])
-			- (tongueReleaseRange * acceptanceModifier) - tongueFireRadus, // Distance
+			- (tongueReleaseRange * acceptanceModifier) - tongueFireRadius, // Distance
 			environmentLayer))
 		{
 			tongueHitPoints.RemoveAt(1);
+		}
+	}
+
+	private void TongueRetracting()
+	{
+		// The separation between the player and the grapple point.
+		Vector3 difference = transform.position - tongueHitPoints[1];
+
+		// Move player towards tongue
+		rb.AddForce(-difference.normalized * grappleAcceleration);
+		
+		// Check if the tongue has fully retracted
+		if (difference.sqrMagnitude < tongueReleaseRange * tongueReleaseRange)
+		{
+			// If there is more then one point that the tongue is attached to then remove one
+			if (tongueHitPoints.Count > 2)
+			{
+				tongueHitPoints.RemoveAt(1);
+			}
+			else
+			{
+				DisconnectTongue();
+			}
 		}
 	}
 
@@ -535,7 +585,7 @@ public class PlayerControllerXbox : MonoBehaviour
 				&& hit.collider.gameObject != gameObject) // And it is not the player that the tongue is from
 			{
 				hit.collider.GetComponent<PlayerControllerXbox>().TripPlayer();
-            }
+			}
 		}
 	}
 
@@ -549,8 +599,12 @@ public class PlayerControllerXbox : MonoBehaviour
 
 		rb.AddForce(transform.forward * tripForce, ForceMode.Impulse);
         tripping = false;
+
+		currentStunnedTime = 0f;
+
+		playerState = PlayerState.TRIPPED;
         audiosource.PlayOneShot(Fall, 1.0f);
-    }
+	}
 
 	/// <summary>
 	/// Drops all the collectibles that the player has on hand in the current position stacked.
@@ -587,7 +641,7 @@ public class PlayerControllerXbox : MonoBehaviour
 	{
 		transform.position = SpawnPos;
 		transform.rotation = SpawnRot;
-		tongueHit = HitType.NONE;
+		DisconnectTongue();
 	}
 
 	/// <summary>
@@ -598,6 +652,18 @@ public class PlayerControllerXbox : MonoBehaviour
 	private Vector3 StandardisePosition(Vector3 newPosition)
 	{
 		return new Vector3(newPosition.x, transform.position.y + tongueOffset.y, newPosition.z);
+	}
+
+	/// <summary>
+	/// For if the tongue is being disconnected from an object
+	/// </summary>
+	private void DisconnectTongue()
+	{
+		// Set tongue interaction to none to specify the tongue isn't connected to anything
+		tongueHit = HitType.NONE;
+		// If the player was retracting tongue then they no longer are
+		playerState = (playerState == PlayerState.RETRACTING) ? PlayerState.NORMAL : playerState;
+		currentGrappleTime = 0f;
 	}
     public void PlayPickUpSound()
     {
