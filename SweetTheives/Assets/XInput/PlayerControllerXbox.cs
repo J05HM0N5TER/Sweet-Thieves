@@ -41,14 +41,15 @@ public enum HitType : byte
 
 [RequireComponent(typeof(Rigidbody), typeof(LineRenderer), typeof(Collider))]
 [RequireComponent(typeof(Animation))]
+[RequireComponent(typeof(AudioSource))]
 public class PlayerControllerXbox : MonoBehaviour
 {
 	// What is this player (first, second, ect)
-	[SerializeField] XboxController controller = XboxController.All;
+	[SerializeField] readonly XboxController controller = XboxController.All;
 	// Max move speeds
-	[SerializeField] float moveSpeed = 500;
+	[SerializeField] readonly float moveSpeed = 500;
 	// Control to fire the tongue
-	[SerializeField] XboxButton tongueButton = XboxButton.RightBumper;
+	[SerializeField] readonly XboxButton tongueButton = XboxButton.RightBumper;
 
 	private static bool didQueryNumOfCtrlrs = false;
 
@@ -61,18 +62,18 @@ public class PlayerControllerXbox : MonoBehaviour
 	// The max collectables that the player can hold
 	public int maxHeldCollectables = 3;
 	// The amount that the grapple accelerates object every second
-	[SerializeField] float grappleAcceleration = 20;
-	[SerializeField] float tripForce = 250;
+	[SerializeField] readonly float grappleAcceleration = 20;
+	[SerializeField] readonly float tripForce = 250;
 	// Should the tongue be able to wrap around other environment when already attached
-	[SerializeField] bool tongueWrapOn = true;
+	[SerializeField] readonly bool tongueWrapOn = true;
 	// How long you have to wait before you can fire the tongue again
 	[SerializeField] public float tongueCooldown;
 	// The start draw position for the tongue offset from the player
 	[SerializeField] Vector3 tongueOffset = Vector3.zero;
 	// How close to the collision position for the tongue it has to be for it to release
-	[SerializeField] float tongueReleaseRange = 1.5f;
+	[SerializeField] readonly float tongueReleaseRange = 1.5f;
 	// The radius for the sphere cast
-	[SerializeField] float tongueFireRadus = 0.1f;
+	[SerializeField] readonly float tongueFireRadus = 0.1f;
 	// How many collectables is the player holding
 	public int heldCollectables = 0;
 
@@ -106,9 +107,9 @@ public class PlayerControllerXbox : MonoBehaviour
 	private bool twoPancake = false;
 	private bool threePancake = false;
 	// the hand bone that they pancakes will be childed to
-	[SerializeField] Transform hand = null;
+	[SerializeField] readonly Transform hand = null;
 	// what MESH will be spawned, this needs to have NOTHING but a mesh.
-	[SerializeField] GameObject pancakeMesh = null;
+	[SerializeField] readonly GameObject pancakeMesh = null;
 	// where the pancake will spawn on the character(offset from the hand)
 	[HideInInspector] Vector3 holdingPosition = new Vector3(0.221f, -0.318f, 0.084f);
 	// stuff to turn quaternion to vector3
@@ -125,11 +126,21 @@ public class PlayerControllerXbox : MonoBehaviour
 	[SerializeField] ParticleSystem runparticles = null;
 
     //sound stuff
+    AudioSource audiosource;
     [HideInInspector] public bool tripping = false;
+    //sound for when the player is tripped
+    [SerializeField] readonly AudioClip Fall = null;
+    // audio and bool to play sound when tongue cooldown is finished
+    [SerializeField] readonly AudioClip TongueCoolDownFinished = null;
+    private bool TongueCoolDownSoundPlayed = false;
+    //audio for when the a pancake is being picked up.
+    [SerializeField] readonly AudioClip PancakePickUp = null;
+    //
 
-	// Start is called before the first frame update
-	void Start()
+    // Start is called before the first frame update
+    void Start()
 	{
+        
 		playerHeight = GetComponent<CapsuleCollider>().bounds.size.y;
 
 		tongueHitPoints = new List<Vector3>
@@ -164,11 +175,12 @@ public class PlayerControllerXbox : MonoBehaviour
 
 			XCI.DEBUG_LogControllerNames();
 		}
-		// getting component
+		// getting component for animation and sound
 		anim = GetComponent<Animator>();
-
-		// Set variables on spawn
-		SpawnPos = transform.position;
+        audiosource = GetComponent<AudioSource>();
+        TongueCoolDownSoundPlayed = true;
+        // Set variables on spawn point
+        SpawnPos = transform.position;
 		SpawnRot = transform.rotation;
 	}
 
@@ -177,8 +189,9 @@ public class PlayerControllerXbox : MonoBehaviour
 	/// </summary>
 	void Update()
 	{
-		// Get input (put it in x and z because we are moving across those axes)
-		Vector3 moveInput = new Vector3(XCI.GetAxisRaw(XboxAxis.LeftStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.LeftStickY, controller));
+        
+        // Get input (put it in x and z because we are moving across those axes)
+        Vector3 moveInput = new Vector3(XCI.GetAxisRaw(XboxAxis.LeftStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.LeftStickY, controller));
 		
 		// Set the speed of the animation based on the speed the player is moving
 		anim.SetFloat("runningSpeed", Mathf.Max(Mathf.Abs(moveInput.x), Mathf.Abs(moveInput.z)));
@@ -202,9 +215,10 @@ public class PlayerControllerXbox : MonoBehaviour
 		}
 
 		// ---Tongue lash---
-		if (currentCooldown >= -0.0001f)
+		if (currentCooldown > 0)
 		{
 			currentCooldown -= Time.deltaTime;
+            TongueCoolDownSoundPlayed = false;
 		}
 		if (XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0 /*Trigger is pressed*/  &&
 			tongueHit == HitType.NONE /*Tongue is not already connected to something*/ &&
@@ -214,6 +228,11 @@ public class PlayerControllerXbox : MonoBehaviour
 			TongueLash();
 			anim.SetBool("tongueAttack", true);
 		}
+        if (currentCooldown <= 0 && TongueCoolDownSoundPlayed == false)
+        {
+            audiosource.PlayOneShot(TongueCoolDownFinished, 1.0f);
+            TongueCoolDownSoundPlayed = true;
+        }
 
 		// animation stuff
 		anim.SetFloat("runningSpeed", rb.velocity.magnitude);
@@ -276,16 +295,15 @@ public class PlayerControllerXbox : MonoBehaviour
 			Destroy(heldpancake3);
 			pancakesspawned = 0;
 		}
+        //play and stop particles
 		if (rb.velocity.magnitude >= 0.1f)
 		{
-			runparticles.enableEmission = true;
+            runparticles.Play();
 		}
 		if (rb.velocity.magnitude <= 0.1)
 		{
-			runparticles.enableEmission = false;
+            runparticles.Stop();
 		}
-
-
 	}
 
 	/// <summary>
@@ -318,7 +336,7 @@ public class PlayerControllerXbox : MonoBehaviour
 				currentCooldown = tongueCooldown;
 
 			}
-			// If the wall has hit a collectable
+			// If the tongue has hit a collectable
 			else if ((collectableLayer.value & (1 << objectHit.layer)) != 0)
 			{
 				CollectableController collectable = objectHit.GetComponent<CollectableController>();
@@ -517,7 +535,7 @@ public class PlayerControllerXbox : MonoBehaviour
 				&& hit.collider.gameObject != gameObject) // And it is not the player that the tongue is from
 			{
 				hit.collider.GetComponent<PlayerControllerXbox>().TripPlayer();
-			}
+            }
 		}
 	}
 
@@ -531,7 +549,8 @@ public class PlayerControllerXbox : MonoBehaviour
 
 		rb.AddForce(transform.forward * tripForce, ForceMode.Impulse);
         tripping = false;
-	}
+        audiosource.PlayOneShot(Fall, 1.0f);
+    }
 
 	/// <summary>
 	/// Drops all the collectibles that the player has on hand in the current position stacked.
@@ -580,4 +599,8 @@ public class PlayerControllerXbox : MonoBehaviour
 	{
 		return new Vector3(newPosition.x, transform.position.y + tongueOffset.y, newPosition.z);
 	}
+    public void PlayPickUpSound()
+    {
+        audiosource.PlayOneShot(PancakePickUp, 1.0f);
+    }
 }
