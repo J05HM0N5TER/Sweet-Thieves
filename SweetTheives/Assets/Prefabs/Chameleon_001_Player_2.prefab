@@ -686,8 +686,8 @@ MonoBehaviour:
   tongueWrapOn: 1
   tongueCooldown: 3
   tongueOffset: {x: 0, y: 1.7, z: 0}
-  acceptanceRange: 1.5
-  sphereCastRadus: 1
+  tongueReleaseRange: 2
+  tongueFireRadus: 0.1
   heldCollectables: 0
   tongueHit: 0
   objectHit: {fileID: 0}
@@ -1184,11 +1184,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 623986500554644211}
     m_Modifications:
-    - target: {fileID: 4267223703441007116, guid: 5a934f3d85991a246994dcc79b4b5660,
-        type: 3}
-      propertyPath: m_Name
-      value: cursor
-      objectReference: {fileID: 0}
     - target: {fileID: 4267223703441007123, guid: 5a934f3d85991a246994dcc79b4b5660,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1244,12 +1239,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4267223703441007120, guid: 5a934f3d85991a246994dcc79b4b5660,
+    - target: {fileID: 4267223703441007116, guid: 5a934f3d85991a246994dcc79b4b5660,
+        type: 3}
+      propertyPath: m_Name
+      value: cursor
+      objectReference: {fileID: 0}
+    - target: {fileID: 4267223703441007119, guid: 5a934f3d85991a246994dcc79b4b5660,
         type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 4267223703441007119, guid: 5a934f3d85991a246994dcc79b4b5660,
+    - target: {fileID: 4267223703441007120, guid: 5a934f3d85991a246994dcc79b4b5660,
         type: 3}
       propertyPath: m_Mesh
       value: 

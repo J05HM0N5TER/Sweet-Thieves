@@ -123,6 +123,12 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1652330310099408450, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
+        type: 3}
+      propertyPath: spawnee
+      value: 
+      objectReference: {fileID: 1614046593866185857, guid: 2212a545800666046927310dded54738,
+        type: 3}
     - target: {fileID: 3245896270224771357, guid: 86c43e5eca5a3ef4c9174290c086cd4f,
         type: 3}
       propertyPath: stash

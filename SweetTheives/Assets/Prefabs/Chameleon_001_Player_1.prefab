@@ -914,7 +914,7 @@ MonoBehaviour:
   tongueWrapOn: 1
   tongueCooldown: 1.5
   tongueOffset: {x: 0, y: 1.7, z: 0}
-  tongueReleaseRange: 1.5
+  tongueReleaseRange: 2
   tongueFireRadus: 0.1
   heldCollectables: 0
   tongueHit: 0
