@@ -31,7 +31,7 @@ public class LightFlicker : MonoBehaviour
     {
 
         // Player is full
-        if (playerController.maxHeldCollectables == playerController.heldCollectables)
+        if (playerController.heldCollectables >0) //playerController.maxHeldCollectables == playerController.heldCollectables)
         {
             // Set timer
             currentTimer += Time.deltaTime;
