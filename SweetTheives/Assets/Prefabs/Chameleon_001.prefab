@@ -176,27 +176,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: 0
   moveSpeed: 10
-  tongueButton: 9
   environmentLayer:
     serializedVersion: 2
     m_Bits: 512
   collectableLayer:
     serializedVersion: 2
     m_Bits: 1024
-  collectablePrefab: {fileID: 3491059977982518338, guid: 1288e3b9f0d5ab142b655e2fbe6d8928,
+  collectablePrefab: {fileID: 4826921000926469563, guid: aa2dee2566e462c4b9277974696cf1fd,
     type: 3}
   maxHeldCollectables: 3
   grappleAcceleration: 4000
+  tripForce: 250
+  StunnedTime: 0
   tongueWrapOn: 1
+  tongueWrapSensitivity: 1
   tongueCooldown: 3
+  maxGrappleTime: 6
   tongueOffset: {x: 0, y: 1.7, z: 0}
-  acceptanceRange: 0.5
-  sphereCastRadus: 1
+  tongueReleaseRange: 1.5
+  tongueFireRadius: 0.1
   heldCollectables: 0
   tongueHit: 0
   objectHit: {fileID: 0}
   tongueHitPoints: []
   currentCooldown: 0
+  hand: {fileID: 0}
+  displayCollectableMesh: {fileID: 1614046593866185857, guid: 2212a545800666046927310dded54738,
+    type: 3}
+  runparticles: {fileID: 0}
+  tripping: 0
+  Fall: {fileID: 0}
+  TongueCoolDownFinished: {fileID: 0}
+  PancakePickUp: {fileID: 0}
+  venusChomp: {fileID: 0}
+  vibrationTime: 0.4
 --- !u!95 &8765014768917279597
 Animator:
   serializedVersion: 3

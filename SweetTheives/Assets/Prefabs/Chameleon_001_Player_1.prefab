@@ -900,7 +900,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: 0
   moveSpeed: 6
-  tongueButton: 9
   environmentLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -926,7 +925,7 @@ MonoBehaviour:
   tongueHitPoints: []
   currentCooldown: 0
   hand: {fileID: 8924020636450217817}
-  pancakeMesh: {fileID: 1614046593866185857, guid: 2212a545800666046927310dded54738,
+  displayCollectableMesh: {fileID: 1614046593866185857, guid: 2212a545800666046927310dded54738,
     type: 3}
   runparticles: {fileID: 3566073034554004284}
   tripping: 0
@@ -1288,11 +1287,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8924020636450217853}
     m_Modifications:
-    - target: {fileID: 7550043634859109337, guid: 466737689544dbc4b8cbac31e38f1e4d,
-        type: 3}
-      propertyPath: m_Name
-      value: Particle System
-      objectReference: {fileID: 0}
     - target: {fileID: 4675204546497843103, guid: 466737689544dbc4b8cbac31e38f1e4d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1347,6 +1341,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 73.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 7550043634859109337, guid: 466737689544dbc4b8cbac31e38f1e4d,
+        type: 3}
+      propertyPath: m_Name
+      value: Particle System
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 466737689544dbc4b8cbac31e38f1e4d, type: 3}

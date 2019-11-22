@@ -56,8 +56,6 @@ public class PlayerControllerXbox : MonoBehaviour
 	[SerializeField] XboxController controller = XboxController.All;
 	// Max move speeds
 	[SerializeField] float moveSpeed = 500;
-	// Control to fire the tongue
-	[SerializeField] XboxButton tongueButton = XboxButton.RightBumper;
 
 	private static bool didQueryNumOfCtrlrs = false;
 
@@ -72,10 +70,10 @@ public class PlayerControllerXbox : MonoBehaviour
 
 	// The amount that the grapple accelerates object every second
 	[SerializeField] float grappleAcceleration = 20;
-							   // How far the player gets thrown when tripped
+	// How far the player gets thrown when tripped
 	[SerializeField] float tripForce = 250;
 	// How long does the player get stunned for when tripped
-	[SerializeField] float StunnedTime;
+	[SerializeField] float StunnedTime = 1f;
 	// Should the tongue be able to wrap around other environment when already attached
 	[SerializeField] bool tongueWrapOn = true;
 	// How many new points it adds with the tongue wrap
@@ -113,58 +111,59 @@ public class PlayerControllerXbox : MonoBehaviour
 
 	// What the cooldown is currently at
 	[HideInInspector] public float currentCooldown = 0.0f;
+
+	// How long the player has been grappled to something
 	private float currentGrappleTime = 0.0f;
+	// How long the player has been stunned for
 	private float currentStunnedTime = 0.0f;
 
 
 	// Initialisation of animation stuff
 	private Animator anim;
 	// are they holding an amount of pancakes
-	private bool onePancake = false;
-	private bool twoPancake = false;
-	private bool threePancake = false;
 	// the hand bone that they pancakes will be childed to
 	[SerializeField] Transform hand = null;
-	// what MESH will be spawned, this needs to have NOTHING but a mesh.
-	[SerializeField] GameObject pancakeMesh = null;
-	// where the pancake will spawn on the character(offset from the hand)
-	[HideInInspector] Vector3 holdingPosition = new Vector3(0.221f, -0.318f, 0.084f);
-	// stuff to turn quaternion to vector3
-	private Vector3 holdingRotationEuler = new Vector3(72.284f, 0, 0);
-	// how many pancakes are connected to the player currently
-	int pancakesspawned = 0;
-	// Gameobjects of each pancake connected to the player.
-	private GameObject heldpancake1 = null;
-	private GameObject heldpancake2 = null;
-	private GameObject heldpancake3 = null;
+	/* what MESH will be spawned, this needs to have a game object 
+		  with a mesh filter and renderer and nothing else.*/
+	[SerializeField] GameObject displayCollectableMesh = null;
+
+	// All of the display collectables
+	private List<GameObject> displayCollectables = new List<GameObject>();
+	// The height of the display collectables mesh (used to stack correctly)
+	private float displayCollectableHeight;
 
 	private float playerHeight;
 	//particle system
 	[SerializeField] ParticleSystem runparticles = null;
 
-    //sound stuff
-    AudioSource audiosource;
-    [HideInInspector] public bool tripping = false;
+	//sound stuff
+	AudioSource audiosource;
+	[HideInInspector] public bool tripping = false;
 	// What state the player is currently in
 	private PlayerState playerState = PlayerState.NORMAL;
-    //sound for when the player is tripped
-    [SerializeField] AudioClip Fall = null;
-    // audio and bool to play sound when tongue cooldown is finished
-    [SerializeField] AudioClip TongueCoolDownFinished = null;
-    private bool TongueCoolDownSoundPlayed = false;
-    //audio for when the a pancake is being picked up.
-    [SerializeField] AudioClip PancakePickUp = null;
+	//sound for when the player is tripped
+	[SerializeField] AudioClip Fall = null;
+	// audio and bool to play sound when tongue cooldown is finished
+	[SerializeField] AudioClip TongueCoolDownFinished = null;
+	private bool TongueCoolDownSoundPlayed = false;
+	//audio for when the a pancake is being picked up.
+	[SerializeField] AudioClip PancakePickUp = null;
 
-    [SerializeField] AudioClip venusChomp = null;
+	[SerializeField] AudioClip venusChomp = null;
 
-    private XInputDotNetPure.PlayerIndex playernumber = 0;
+	// where the pancake will spawn on the character(offset from the hand)
+	[HideInInspector] Vector3 holdingPosition = new Vector3(0.221f, -0.318f, 0.084f);// = new Vector3(0.221f, -0.318f, 0.084f);
+
+	private XInputDotNetPure.PlayerIndex playernumber = 0;
 #pragma warning restore IDE0044 // Add readonly modifier
 
-    // Start is called before the first frame update
-    void Start()
+	// Start is called before the first frame update
+	void Start()
 	{
-        
-		playerHeight = GetComponent<CapsuleCollider>().bounds.size.y;
+		// Get the height of the pancake mesh height
+		displayCollectableHeight = displayCollectableMesh.GetComponent<MeshFilter>().sharedMesh.bounds.size.y * displayCollectableMesh.transform.localScale.y;
+
+		playerHeight = GetComponent<CapsuleCollider>().bounds.size.y * transform.localScale.y;
 
 		tongueHitPoints = new List<Vector3>
 		{
@@ -200,13 +199,13 @@ public class PlayerControllerXbox : MonoBehaviour
 		}
 		// getting component for animation and sound
 		anim = GetComponent<Animator>();
-        audiosource = GetComponent<AudioSource>();
-        TongueCoolDownSoundPlayed = true;
-        // Set variables on spawn point
+		audiosource = GetComponent<AudioSource>();
+		TongueCoolDownSoundPlayed = true;
+		// Set variables on spawn point
 		SpawnPos = transform.position;
 		SpawnRot = transform.rotation;
 
-        playernumber = (XInputDotNetPure.PlayerIndex)controller - 1;
+		playernumber = (XInputDotNetPure.PlayerIndex)controller - 1;
 	}
 
 	/// <summary>
@@ -214,10 +213,10 @@ public class PlayerControllerXbox : MonoBehaviour
 	/// </summary>
 	void Update()
 	{
-        
+
 		// Get input (put it in x and z because we are moving across those axes)
 		Vector3 moveInput = new Vector3(XCI.GetAxisRaw(XboxAxis.LeftStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.LeftStickY, controller));
-		
+
 		// Set the speed of the animation based on the speed the player is moving
 		anim.SetFloat("runningSpeed", Mathf.Max(Mathf.Abs(moveInput.x), Mathf.Abs(moveInput.z)));
 
@@ -242,16 +241,16 @@ public class PlayerControllerXbox : MonoBehaviour
 			}
 
 			// ---Tongue lash---
-		    if (currentCooldown > 0)
+			if (currentCooldown > 0)
 			{
 				currentCooldown -= Time.deltaTime;
-                TongueCoolDownSoundPlayed = false;
-                
-                if (XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0 && currentCooldown < 1.3f)
-                {
-                    StartCoroutine(Vibrate());
-                }
-            }
+				TongueCoolDownSoundPlayed = false;
+
+				if (XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0 && currentCooldown < 1.3f)
+				{
+					StartCoroutine(Vibrate());
+				}
+			}
 			if (XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0 /*Trigger is pressed*/  &&
 				tongueHit == HitType.NONE /*Tongue is not already connected to something*/ &&
 				heldCollectables < maxHeldCollectables /*The player is holding less then the max amount of collectables*/ &&
@@ -264,13 +263,13 @@ public class PlayerControllerXbox : MonoBehaviour
 		else
 		{
 			rb.velocity = Vector3.zero;
-            StartCoroutine(Vibrate());
-        }
-        if (currentCooldown <= 0 && TongueCoolDownSoundPlayed == false)
-        {
-            audiosource.PlayOneShot(TongueCoolDownFinished, 1.0f);
-            TongueCoolDownSoundPlayed = true;
-        }
+			StartCoroutine(Vibrate());
+		}
+		if (currentCooldown <= 0 && TongueCoolDownSoundPlayed == false)
+		{
+			audiosource.PlayOneShot(TongueCoolDownFinished, 1.0f);
+			TongueCoolDownSoundPlayed = true;
+		}
 
 		// animation stuff
 		anim.SetFloat("runningSpeed", rb.velocity.magnitude);
@@ -283,66 +282,41 @@ public class PlayerControllerXbox : MonoBehaviour
 		{
 			anim.SetBool("holdingPancakes", false);
 		}
-		// spawn first pancake at position 
-		if (heldCollectables == 1)
-		{
-			onePancake = true;
-			if (onePancake && pancakesspawned <= 0)
-			{
-				pancakesspawned = 1;
-				heldpancake1 = Instantiate(pancakeMesh);
-				heldpancake1.transform.SetParent(hand, false);
-				heldpancake1.transform.localPosition = holdingPosition;
-				heldpancake1.transform.localRotation = Quaternion.Euler(holdingRotationEuler);
-				onePancake = false;
-			}
-		}
-		// spawn second pancake with offset
-		else if (heldCollectables == 2)
-		{
-			twoPancake = true;
-			if (twoPancake && pancakesspawned <= 1)
-			{
-				pancakesspawned = 2;
-				heldpancake2 = Instantiate(pancakeMesh);
-				heldpancake2.transform.SetParent(hand, false);
-				heldpancake2.transform.localPosition = new Vector3(0.207f, -0.25f, 0.229f);
-				heldpancake2.transform.localRotation = Quaternion.Euler(holdingRotationEuler);
-				twoPancake = false;
-            
 
-            }
-		}
-		//spawn thrid pancake with offset
-		else if (heldCollectables == 3)
+		// Add any display collectables if not enough
+		for (int i = displayCollectables.Count; i < heldCollectables; i++)
 		{
-			threePancake = true;
-			if (threePancake && pancakesspawned <= 2)
-			{
-				pancakesspawned = 3;
-				heldpancake3 = Instantiate(pancakeMesh);
-				heldpancake3.transform.SetParent(hand, false);
-				heldpancake3.transform.localPosition = new Vector3(0.226f, -0.182f, 0.383f);
-				heldpancake3.transform.localRotation = Quaternion.Euler(holdingRotationEuler);
-				threePancake = false;
-			}
+			// Add new display collectable
+			displayCollectables.Add(Instantiate(displayCollectableMesh));
+			// Child to the had so it looks like the player is holding it
+			displayCollectables[i].transform.SetParent(hand, false);
+			// For calculating the position on stack to display
+			Vector3 newPosition = holdingPosition;
+			// Add height for stacking to z position because of wierd rotation of hand
+			newPosition.z += (displayCollectableHeight + 0.05f) * i;
+			// Compensate for wierd rotation of hand stacking things diagonally
+			newPosition.y += 0.1f * i;
+			displayCollectables[i].transform.localPosition = newPosition;
+			// Compensate for wierd hand rotation
+			displayCollectables[i].transform.localRotation = Quaternion.Euler(new Vector3(70, 0, 0));
 		}
-		// delete references to objects as they have been lost.
-		else if (heldCollectables == 0)
+
+		// Remove any display collectables if too many
+		for (int i = displayCollectables.Count; i > heldCollectables; i--)
 		{
-			Destroy(heldpancake1);
-			Destroy(heldpancake2);
-			Destroy(heldpancake3);
-			pancakesspawned = 0;
+			GameObject temp = displayCollectables[i - 1];
+			displayCollectables.Remove(temp);
+			Destroy(temp);
 		}
-        //play and stop particles
+
+		//play and stop particles
 		if (rb.velocity.magnitude > 0.1f)
 		{
-            runparticles.Play();
+			runparticles.Play();
 		}
 		if (rb.velocity.magnitude < 0.1f)
 		{
-            runparticles.Stop();
+			runparticles.Stop();
 		}
 	}
 
@@ -403,8 +377,8 @@ public class PlayerControllerXbox : MonoBehaviour
 						objectHit.transform.rotation);
 
 					tongueHit = HitType.COLLECTABLE;
-                    StartCoroutine(Vibrate());
-                }
+					StartCoroutine(Vibrate());
+				}
 			}
 			// If the tongue is attached to something then activate it
 			line.enabled = tongueHit != HitType.NONE;
@@ -447,7 +421,7 @@ public class PlayerControllerXbox : MonoBehaviour
 				break;
 			case PlayerState.TRIPPED:
 				currentStunnedTime += Time.deltaTime;
-				if(currentStunnedTime > StunnedTime)
+				if (currentStunnedTime > StunnedTime)
 				{
 					DisconnectTongue();
 					currentStunnedTime = 0f;
@@ -473,7 +447,7 @@ public class PlayerControllerXbox : MonoBehaviour
 		// Draw tongue to position hit
 		line.positionCount = tongueHitPoints.Count;
 		line.SetPositions(tongueHitPoints.ToArray());
-		
+
 		// Only move to the position that the tongue hit if the button is not pressed down
 		if (!(XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0))
 		{
@@ -499,14 +473,9 @@ public class PlayerControllerXbox : MonoBehaviour
 		line.positionCount = tongueHitPoints.Count;
 		line.SetPositions(tongueHitPoints.ToArray());
 
-		// Only move the collectable to the player if the button is not pressed down
-		if (!XCI.GetButton(tongueButton, controller))
-		{
-			// Move collectable towards player
-			Vector3 towardsPlayer = (transform.position - objectHit.transform.position).normalized;
-
-			objectHit.GetComponent<Rigidbody>().AddForce(grappleAcceleration * towardsPlayer);
-		}
+		// Move collectable towards player
+		Vector3 towardsPlayer = (transform.position - objectHit.transform.position).normalized;
+		objectHit.GetComponent<Rigidbody>().AddForce(grappleAcceleration * towardsPlayer);
 	}
 
 	/// <summary>
@@ -557,7 +526,7 @@ public class PlayerControllerXbox : MonoBehaviour
 
 		// Move player towards tongue
 		rb.AddForce(-difference.normalized * grappleAcceleration);
-		
+
 		// Check if the tongue has fully retracted
 		if (difference.sqrMagnitude < tongueReleaseRange * tongueReleaseRange)
 		{
@@ -611,16 +580,16 @@ public class PlayerControllerXbox : MonoBehaviour
 	public void TripPlayer()
 	{
 		DropCollectables();
-        tripping = true;
+		tripping = true;
 
 		rb.AddForce(transform.forward * tripForce, ForceMode.Impulse);
-        tripping = false;
+		tripping = false;
 
 		currentStunnedTime = 0f;
 
 		playerState = PlayerState.TRIPPED;
-        audiosource.PlayOneShot(Fall, 1.0f);
-        anim.SetBool("tripped", true);
+		audiosource.PlayOneShot(Fall, 1.0f);
+		anim.SetBool("tripped", true);
 	}
 
 	/// <summary>
@@ -682,22 +651,22 @@ public class PlayerControllerXbox : MonoBehaviour
 		playerState = (playerState == PlayerState.RETRACTING) ? PlayerState.NORMAL : playerState;
 		currentGrappleTime = 0f;
 	}
-    public void PlayPickUpSound()
-    {
-        audiosource.PlayOneShot(PancakePickUp, 1.0f);
-    }
-    public float vibrationTime = 0.4f;
-    public IEnumerator Vibrate()
-    {
-        XInputDotNetPure.GamePad.SetVibration(playernumber, 0.5f, 0.5f);
-        yield return new WaitForSeconds(vibrationTime);
-        XInputDotNetPure.GamePad.SetVibration(playernumber, 0f, 0f);
-        anim.SetBool("tripped", false);
+	public void PlayPickUpSound()
+	{
+		audiosource.PlayOneShot(PancakePickUp, 1.0f);
+	}
+	public float vibrationTime = 0.4f;
+	public IEnumerator Vibrate()
+	{
+		XInputDotNetPure.GamePad.SetVibration(playernumber, 0.5f, 0.5f);
+		yield return new WaitForSeconds(vibrationTime);
+		XInputDotNetPure.GamePad.SetVibration(playernumber, 0f, 0f);
+		anim.SetBool("tripped", false);
 
-    }
-    public IEnumerator VenusChomp()
-    {
-        yield return new WaitForSeconds(1.27f);
-        audiosource.PlayOneShot(venusChomp, 1.0f);
-    }
+	}
+	public IEnumerator VenusChomp()
+	{
+		yield return new WaitForSeconds(1.27f);
+		audiosource.PlayOneShot(venusChomp, 1.0f);
+	}
 }
