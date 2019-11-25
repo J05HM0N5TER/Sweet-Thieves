@@ -20,22 +20,32 @@ public class TimerRestartGame : MonoBehaviour
 	public Text winnerText = null;
 	// The array of all the players
 	private BaseStash[] playerBases = new BaseStash[4];
-
+    //array of winning players
 	public List<GameObject> winningPlayers = new List<GameObject>();
 
 	// The canvas that is being displayed when the timer is up
 	[SerializeField] Canvas winscreen = null;
 
 	private bool finnished = false;
+    //public GameObject WinPanel;
+    //public GameObject LosePanel;
+    public Image[] Losers;
+    public Image[] Winners;
+    //public Image BlueL;
+    //public Image RedL;
+    //public Image GreenL;
+    //public Image YellowL;
 
-	// Start is called before the first frame update
-	void Start()
+    //public Image BlueW;
+    //public Image RedW;
+    //public Image GreenW;
+    //public Image YellowW;
+
+
+    // Start is called before the first frame update
+    void Start()
 	{
-		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-		for (int i = 0; i < players.Length; i++)
-		{
-			playerBases[i] = players[i].GetComponent<PlayerControllerXbox>().GetBase().GetComponent<BaseStash>();
-		}
+        playerBases = FindObjectsOfType<BaseStash>();
 
 		winscreen.GetComponent<Canvas>().enabled = false;
 	}
@@ -92,27 +102,45 @@ public class TimerRestartGame : MonoBehaviour
 					winningPlayers.Clear();
 					// Set to current player
 					winningPlayers.Add(playerBases[i].player.gameObject);
+                 //  LosePanel.SetActive(false);
+                  //  WinPanel.SetActive(true);
+                    
 				}
 				else if (playerBases[i].stashSize == highestStack)
 				{
 					// Add current player to the list of winners
 					winningPlayers.Add(playerBases[i].player.gameObject);
+
 				}
 			}
-
+            
 			// Create what to write as the winner/s
 			string winString = "";
+            
 			for (int i = 0; i < winningPlayers.Count; i++)
 			{
 				if (i == 0)
 				{
 					winString = winningPlayers[i].name;
+                    
 				}
 				else
 				{
 					winString += " & " + winningPlayers[i].name;
 				}
 			}
+
+            for(int i = 0; i < winningPlayers.Count; i++)
+            {
+
+                int thisWinner =  winningPlayers[i].GetComponent<PlayerControllerXbox>().PortraitIndex;
+
+                Losers[thisWinner].gameObject.SetActive(false);
+
+                Winners[thisWinner].gameObject.SetActive(true);
+
+            }
+       
 
 			// Set text to show who won
 			winnerText.text = winString + " Won!";

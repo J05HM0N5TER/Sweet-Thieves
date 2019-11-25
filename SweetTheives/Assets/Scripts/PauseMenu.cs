@@ -8,7 +8,7 @@ public class PauseMenu : MonoBehaviour
     public static bool isGamePaused = false;
     public GameObject PauseMenuUI;
 
-
+    //the defualt button script must be on the panel and the buttons must be explicit 
     // Update is called once per frame
     void Update()
     {

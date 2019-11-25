@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class WinScreen : MonoBehaviour
 {
-  
+    
     public void Quit()
     {
         Debug.Log("quit");

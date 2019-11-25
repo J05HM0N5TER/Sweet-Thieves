@@ -52,7 +52,9 @@ public enum PlayerState : byte
 public class PlayerControllerXbox : MonoBehaviour
 {
 #pragma warning disable IDE0044 // Add readonly modifier
-	// What is this player (first, second, ect)
+    // What is this player (first, second, ect)
+    //the order the winner for UI appear starts at 0
+    public int PortraitIndex;
 	[SerializeField] XboxController controller = XboxController.All;
 	// Max move speeds
 	[SerializeField] float moveSpeed = 500;
@@ -159,7 +161,7 @@ public class PlayerControllerXbox : MonoBehaviour
     [SerializeField] AudioClip bellSound = null;
     [SerializeField] AudioClip stolenSound = null;
 
-    private XInputDotNetPure.PlayerIndex playernumber = 0;
+    [HideInInspector] public XInputDotNetPure.PlayerIndex playernumber = 0;
     public float chompDelay = 1.0f;
 #pragma warning restore IDE0044 // Add readonly modifier
 

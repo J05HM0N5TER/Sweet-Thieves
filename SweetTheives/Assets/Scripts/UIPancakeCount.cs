@@ -23,7 +23,7 @@ public class UIPancakeCount : MonoBehaviour
         int maxPancake = playerscripter.maxHeldCollectables;
         int heldPancakeCount = playerscripter.heldCollectables;
     
-        pancakes.fillAmount = heldPancakeCount / (float)maxPancake;
+        pancakeCount.fillAmount = heldPancakeCount / (float)maxPancake;
       
     }
 }
