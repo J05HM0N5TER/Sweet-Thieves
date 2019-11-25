@@ -48,10 +48,12 @@ public class TimedTrap : MonoBehaviour
 				if (current.tag == "Player")
 				{
 					PlayerControllerXbox player = current.GetComponent<PlayerControllerXbox>();
-					// Get the player to drop all collectables
-					player.DropCollectables();
-					// And send them back to spawn
-					player.ResetToSpawn();
+					//// Get the player to drop all collectables
+					//player.DropCollectables();
+					//// And send them back to spawn
+					//player.ResetToSpawn();
+					// Trip the player
+					player.TripPlayer();
 				}
 			}
 			currentCooldown = attackCooldown;
