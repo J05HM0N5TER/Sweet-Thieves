@@ -19,33 +19,37 @@ public class LightFlicker : MonoBehaviour
 	private bool firstTime = true;
 	private bool playerFull = false;
 	private int currentAmountFlickerd = 0;
+    private Light light;
 
 	void Start()
 	{
 		playerController = player.GetComponent<PlayerControllerXbox>();
 		baseStashAmount = Base.GetComponent<BaseStash>();
+        light = GetComponent<Light>();
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
 
+        currentTimer += Time.deltaTime;
 		// Player is holding pancakes
-		if (playerController.heldCollectables > 0 && currentTimer > flickerTime && (currentAmountFlickerd < amountFlicker || firstTime))
+		if (playerController.heldCollectables > 0 && (currentAmountFlickerd < amountFlicker || firstTime))
 		{
-			// Set timer
-			currentTimer += Time.deltaTime;
-			playerFull = true;
-			// If timer is up or its the first time (where it will do it constantly)
-			currentAmountFlickerd++;
-			Light temp = gameObject.GetComponent<Light>();
-			temp.enabled = !temp.enabled;
-			currentTimer = 0f;
+            // Set timer
+            playerFull = true;
+            if (currentTimer > flickerTime)
+            {
+                // If timer is up or its the first time (where it will do it constantly)
+                currentAmountFlickerd++;
+                light.enabled = !light.enabled;
+                currentTimer = 0f;
+            }
 		}
-		else
+		else if (currentTimer > flickerTime)
 		{
 			// If the player dropped them off
-			if (playerFull)
+			if (playerFull && playerController.heldCollectables == 0)
 			{
 				firstTime = false;
 				currentAmountFlickerd = 0;
@@ -53,11 +57,11 @@ public class LightFlicker : MonoBehaviour
 			// Light on when no pancakes at base
 			if (baseStashAmount.stashSize < 1)
 			{
-				gameObject.GetComponent<Light>().enabled = false;
+				light.enabled = false;
 			}
 			else
 			{
-				gameObject.GetComponent<Light>().enabled = true;
+				light.enabled = true;
 			}
 		}
 	}
