@@ -174,8 +174,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 814b8a19727f66a4f872f6000d10d6ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PortraitIndex: 0
   controller: 0
   moveSpeed: 10
+  tongueButton: 9
   environmentLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -200,7 +202,7 @@ MonoBehaviour:
   objectHit: {fileID: 0}
   tongueHitPoints: []
   currentCooldown: 0
-  hand: {fileID: 0}
+  hand: {fileID: 8765014768924433581}
   displayCollectableMesh: {fileID: 1614046593866185857, guid: 2212a545800666046927310dded54738,
     type: 3}
   runparticles: {fileID: 0}
@@ -208,8 +210,12 @@ MonoBehaviour:
   Fall: {fileID: 0}
   TongueCoolDownFinished: {fileID: 0}
   PancakePickUp: {fileID: 0}
-  venusChomp: {fileID: 0}
   vibrationTime: 0.4
+  venusChomp: {fileID: 0}
+  bellSound: {fileID: 0}
+  stolenSound: {fileID: 0}
+  playernumber: 0
+  chompDelay: 1
 --- !u!95 &8765014768917279597
 Animator:
   serializedVersion: 3
