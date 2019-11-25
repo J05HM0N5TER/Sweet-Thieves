@@ -84,6 +84,8 @@ public class TimerRestartGame : MonoBehaviour
 		// If timer is finished
 		if (timer <= 0)
 		{
+			// Stop all vibrations
+			XCI.StopVibration(XboxController.All);
 
 			// stop time
 			Time.timeScale = 0;
@@ -110,7 +112,6 @@ public class TimerRestartGame : MonoBehaviour
 				{
 					// Add current player to the list of winners
 					winningPlayers.Add(playerBases[i].player.gameObject);
-
 				}
 			}
             
@@ -122,7 +123,6 @@ public class TimerRestartGame : MonoBehaviour
 				if (i == 0)
 				{
 					winString = winningPlayers[i].name;
-                    
 				}
 				else
 				{
@@ -130,15 +130,14 @@ public class TimerRestartGame : MonoBehaviour
 				}
 			}
 
+			// Set the image for the winner
             for(int i = 0; i < winningPlayers.Count; i++)
             {
-
                 int thisWinner =  winningPlayers[i].GetComponent<PlayerControllerXbox>().PortraitIndex;
 
                 Losers[thisWinner].gameObject.SetActive(false);
 
                 Winners[thisWinner].gameObject.SetActive(true);
-
             }
        
 
