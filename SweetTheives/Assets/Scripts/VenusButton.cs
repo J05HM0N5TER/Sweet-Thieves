@@ -48,7 +48,7 @@ public class VenusButton : MonoBehaviour
             //venusAnim.SetBool("venusBite", true);
             venusAnim.SetTrigger("venusBite");
             StartCoroutine(playercontrol.VenusChomp());
-
+            playercontrol.PlayBellSound();
         }
         
     }//on exit reset venus bite bool to false to go back to idle (have to do this so that the animation can finish)

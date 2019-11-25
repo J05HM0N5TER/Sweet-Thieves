@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f63e54abf98227a4ba45a02e4c125eed
+guid: 1946e61fe0834a7438bce23bcea08f33
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -29,12 +29,10 @@ ModelImporter:
     100046: joint10
     100048: joint9
     100050: Joints
-    100052: left
-    100054: Mesh
-    100056: Mesh_Venus
-    100058: Stuff
-    100060: Venus
-    100062: //RootNode
+    100052: Mesh
+    100054: Mesh_Venus
+    100056: Stuff
+    100058: //RootNode
     400000: Controls
     400002: Ctrl_Bottom
     400004: Ctrl_BottomJaw
@@ -61,13 +59,10 @@ ModelImporter:
     400046: joint10
     400048: joint9
     400050: Joints
-    400052: left
-    400054: Mesh
-    400056: Mesh_Venus
-    400058: Stuff
-    400060: Venus
-    400062: //RootNode
-    2000000: left
+    400052: Mesh
+    400054: Mesh_Venus
+    400056: Stuff
+    400058: //RootNode
     2100000: Teeth
     2100002: Mouth_Ext
     2100004: Mouth_In
@@ -76,7 +71,7 @@ ModelImporter:
     2100010: Stem
     2100012: Base_Frill
     4300000: Mesh_Venus
-    7400000: Idle
+    7400000: Take 001
     9500000: //RootNode
     13700000: Mesh_Venus
   externalObjects: {}
@@ -106,35 +101,7 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations:
-    - serializedVersion: 16
-      name: Idle
-      takeName: Take 001
-      firstFrame: 1
-      lastFrame: 56
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+    clipAnimations: []
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -170,7 +137,7 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   importAnimation: 1
-  copyAvatar: 1
+  copyAvatar: 0
   humanDescription:
     serializedVersion: 2
     human: []
@@ -186,8 +153,7 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: b8ce8620a55f4ed488dd9615f3be1434,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
   humanoidOversampling: 1
   additionalBone: 0

@@ -15,7 +15,7 @@ public class BasePoint : MonoBehaviour
 
     // for playing sound when pancake is stolen
     private AudioSource audiosource;
-    [SerializeField] readonly AudioClip BaseRaid = null;
+    [SerializeField] AudioClip BaseRaid = null;
     private void Start()
     {
         audiosource = GetComponent<AudioSource>();

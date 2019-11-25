@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b8ce8620a55f4ed488dd9615f3be1434
+guid: 5f3bc12da549bc043997959a7a080cab
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -63,15 +63,15 @@ ModelImporter:
     400054: Mesh_Venus
     400056: Stuff
     400058: //RootNode
-    2100000: Teeth
-    2100002: Mouth_Ext
-    2100004: Mouth_In
-    2100006: lambert1
-    2100008: Frill
-    2100010: Stem
-    2100012: Base_Frill
+    2100000: Teeth1
+    2100002: Mouth_Ext1
+    2100004: Mouth_In1
+    2100006: lambert3
+    2100008: Frill1
+    2100010: Stem1
+    2100012: Base_Frill1
     4300000: Mesh_Venus
-    7400000: Take 001
+    7400000: Bite
     9500000: //RootNode
     13700000: Mesh_Venus
   externalObjects: {}
@@ -93,7 +93,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
-    importConstraints: 0
+    importConstraints: 1
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -101,7 +101,35 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Bite
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 70
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -137,7 +165,7 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   importAnimation: 1
-  copyAvatar: 0
+  copyAvatar: 1
   humanDescription:
     serializedVersion: 2
     human: []
@@ -153,7 +181,8 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 1946e61fe0834a7438bce23bcea08f33,
+    type: 3}
   animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
