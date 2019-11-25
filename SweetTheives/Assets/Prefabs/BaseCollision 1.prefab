@@ -239,9 +239,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 961dfbd8e9b62de46a3785eab0585085, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.152
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -431,3 +431,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PancakeStolen: 0
   stash: {fileID: 8654122512529208763}
+  BaseRaid: {fileID: 0}
