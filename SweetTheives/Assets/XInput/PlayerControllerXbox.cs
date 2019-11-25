@@ -628,7 +628,8 @@ public class PlayerControllerXbox : MonoBehaviour
 
 		playerState = PlayerState.TRIPPED;
         audiosource.PlayOneShot(Fall, 1.0f);
-        anim.SetBool("tripped", true);
+        StartCoroutine(PlayTripPlayerAnim());
+        
 	}
 
 	/// <summary>
@@ -715,5 +716,13 @@ public class PlayerControllerXbox : MonoBehaviour
     public void PlayBellSound()
     { 
         audiosource.PlayOneShot(bellSound, 1.0f);
+    }
+    public IEnumerator PlayTripPlayerAnim()
+    {
+        anim.SetLayerWeight(1, 0);
+        anim.SetBool("tripped", true);
+        yield return new WaitForSeconds(1.0f);
+        anim.SetBool("tripped", false);
+        anim.SetLayerWeight(1, 1);
     }
 }

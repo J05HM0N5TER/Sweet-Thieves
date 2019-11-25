@@ -97,6 +97,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: holdingPancakes
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: tripped
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102785722564122724}
   m_Solo: 0
@@ -147,6 +150,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 3
     m_ConditionEvent: runningSpeed
     m_EventTreshold: 0.1
+  - m_ConditionMode: 2
+    m_ConditionEvent: tripped
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102972043393595440}
   m_Solo: 0
@@ -303,6 +309,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: holdingPancakes
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: tripped
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102358002316817268}
   m_Solo: 0
@@ -331,6 +340,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: holdingPancakes
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: tripped
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102785722564122724}
   m_Solo: 0
@@ -358,6 +370,9 @@ AnimatorStateTransition:
     m_EventTreshold: 0.1
   - m_ConditionMode: 2
     m_ConditionEvent: holdingPancakes
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: tripped
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102242793268839038}
@@ -431,6 +446,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: holdingPancakes
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: tripped
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102972043393595440}
   m_Solo: 0
@@ -484,6 +502,12 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: holdingPancakes
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: tripped
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: tripped
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102358002316817268}
   m_Solo: 0
@@ -509,6 +533,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 4
     m_ConditionEvent: runningSpeed
     m_EventTreshold: 0.1
+  - m_ConditionMode: 2
+    m_ConditionEvent: tripped
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102242793268839038}
   m_Solo: 0
@@ -536,6 +563,9 @@ AnimatorStateTransition:
     m_EventTreshold: 0.1
   - m_ConditionMode: 2
     m_ConditionEvent: holdingPancakes
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: tripped
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102972043393595440}
@@ -565,9 +595,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 1.0276127
+  m_TransitionDuration: 0.32859957
   m_TransitionOffset: 0
-  m_ExitTime: 0.3611937
+  m_ExitTime: 0.2521733
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -619,7 +649,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 69ffe242022b41d4dbe6ef2450a57475, type: 3}
+  m_Motion: {fileID: 7400000, guid: 17c0afe113ebbb042bc63d9890376d13, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -646,7 +676,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: a8740c7864abb214184310a133fb5dfd, type: 3}
+  m_Motion: {fileID: 7400000, guid: bd1164eb4e816194b8c5f1dee65b498f, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -840,16 +870,16 @@ AnimatorStateMachine:
     m_Position: {x: 24, y: 84, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102972043393595440}
-    m_Position: {x: 348, y: 456, z: 0}
+    m_Position: {x: 252, y: 444, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102785722564122724}
-    m_Position: {x: -240, y: 456, z: 0}
+    m_Position: {x: -228, y: 444, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102358002316817268}
-    m_Position: {x: 48, y: 312, z: 0}
+    m_Position: {x: 24, y: 312, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102080548884030450}
-    m_Position: {x: 528, y: 336, z: 0}
+    m_Position: {x: 528, y: 348, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102039820443536146}
     m_Position: {x: 528, y: 240, z: 0}
