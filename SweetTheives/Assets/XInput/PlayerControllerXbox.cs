@@ -99,7 +99,7 @@ public class PlayerControllerXbox : MonoBehaviour
 	// What the kind of interaction does the tongue have with the hit
 	[HideInInspector] public HitType tongueHit = HitType.NONE;
 	// The object that the tongue hit
-	[HideInInspector] public GameObject objectHit = null;
+	 public GameObject objectHit = null;
 
 
 	/* The positions that the players tongue is attached to in the environment
@@ -160,6 +160,7 @@ public class PlayerControllerXbox : MonoBehaviour
     [SerializeField] AudioClip stolenSound = null;
 
     private XInputDotNetPure.PlayerIndex playernumber = 0;
+    public float chompDelay = 1.0f;
 #pragma warning restore IDE0044 // Add readonly modifier
 
     // Start is called before the first frame update
@@ -705,7 +706,7 @@ public class PlayerControllerXbox : MonoBehaviour
     }
     public IEnumerator VenusChomp()
     {
-        yield return new WaitForSeconds(1.27f);
+        yield return new WaitForSeconds(chompDelay);
         audiosource.PlayOneShot(venusChomp, 1.0f);
     }
     public void PlayStolenSound()
