@@ -21,7 +21,9 @@ public class SceneLoader : MonoBehaviour
         if (XCI.GetButton(selectbutton))
         {
             // this will add scences in the same order you put it in build settings
-            SceneManager.LoadScene(Random.Range(1,2));
+            int index = Random.Range(1, 2);
+            SceneManager.LoadScene(index);
+            //SceneManager.LoadScene(Random.Range(1,2));
         }
     }
     public void Update()
