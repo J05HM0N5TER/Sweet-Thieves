@@ -121,10 +121,6 @@ public class PlayerControllerXbox : MonoBehaviour
 
 	// Initialisation of animation stuff
 	private Animator anim;
-	// are they holding an amount of pancakes
-	private bool onePancake = false;
-	private bool twoPancake = false;
-	private bool threePancake = false;
 	// the hand bone that they pancakes will be childed to
 	[SerializeField] Transform hand = null;
 	/* what MESH will be spawned, this needs to have a game object 
@@ -140,6 +136,7 @@ public class PlayerControllerXbox : MonoBehaviour
 	private float playerHeight;
 	//particle system
 	[SerializeField] ParticleSystem runparticles = null;
+	[SerializeField] ParticleSystem tripParticles = null;
 
 	//sound stuff
 	AudioSource audiosource;
@@ -593,10 +590,23 @@ public class PlayerControllerXbox : MonoBehaviour
 
 		currentStunnedTime = 0f;
 
+		// Set the player to tripped
 		playerState = PlayerState.TRIPPED;
+		// Play the dirt particles for the trip
+		StartCoroutine(PlayTripParticles());
+		// Play sound
 		audiosource.PlayOneShot(Fall, 1.0f);
+		// Play animation
 		StartCoroutine(PlayTripPlayerAnim());
 
+	}
+
+	public IEnumerator PlayTripParticles()
+	{
+		tripParticles.time = 0f;
+		tripParticles.Play();
+		yield return new WaitForSeconds(2);
+		tripParticles.Stop();
 	}
 
 	/// <summary>
