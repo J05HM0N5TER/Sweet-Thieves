@@ -12,12 +12,12 @@ public class Cedits : MonoBehaviour
     [SerializeField] Canvas teachers = null;
     [SerializeField] Canvas CodenameLemon = null;
     [SerializeField] float delay = 5.0f;
-
+    private bool creditsPlayed = false;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        creditsPlayed = false;
     }
     private void Awake()
     {
@@ -26,10 +26,16 @@ public class Cedits : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        StartCoroutine(itterateThroughCavases());
+        while(creditsPlayed == false)
+        {
+            StartCoroutine(itterateThroughCavases());
+            creditsPlayed = true;
+        }
+        
     }
     private IEnumerator itterateThroughCavases()
     {
+        
         designers.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(delay);
@@ -61,5 +67,9 @@ public class Cedits : MonoBehaviour
 
         teachers.gameObject.SetActive(false);
         CodenameLemon.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(7);
+        CodenameLemon.gameObject.SetActive(false);
+        creditsPlayed = false;
     }
 }
