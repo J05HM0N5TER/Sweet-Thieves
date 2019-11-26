@@ -18,10 +18,10 @@ public class SceneLoader : MonoBehaviour
     //}
     public void PlayGame()
     {
-        if (XCI.GetButton(selectbutton))
+        //if (XCI.GetButton(selectbutton, XboxController.First))
         {
             // this will add scences in the same order you put it in build settings
-            int index = Random.Range(1, 2);
+            int index = Random.Range(1, 3);
             SceneManager.LoadScene(index);
             //SceneManager.LoadScene(Random.Range(1,2));
         }

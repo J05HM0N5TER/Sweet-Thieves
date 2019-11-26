@@ -84,6 +84,8 @@ public class TimerRestartGame : MonoBehaviour
 		// If timer is finished
 		if (timer <= 0)
 		{
+
+
 			// Stop all vibrations
 			XCI.StopVibration(XboxController.All);
 
@@ -142,8 +144,8 @@ public class TimerRestartGame : MonoBehaviour
 
 
             // Set text to show who won
-            winscreen.GetComponent<Canvas>().enabled = true;
-            //winscreen.gameObject.SetActive(true);
+            //winscreen.GetComponent<Canvas>().enabled = true;
+            winscreen.gameObject.SetActive(true);
 			EventSystem.current.SetSelectedGameObject(null);
             //winnerText.text = winString + " Won!";
             finnished = true;
