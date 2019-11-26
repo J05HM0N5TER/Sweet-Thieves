@@ -47,7 +47,7 @@ public class TimerRestartGame : MonoBehaviour
 	{
         playerBases = FindObjectsOfType<BaseStash>();
 
-		winscreen.GetComponent<Canvas>().enabled = false;
+		//winscreen.GetComponent<Canvas>().enabled = false;
 	}
 
 	// Update is called once per frame
@@ -139,13 +139,14 @@ public class TimerRestartGame : MonoBehaviour
 
                 Winners[thisWinner].gameObject.SetActive(true);
             }
-       
 
-			// Set text to show who won
-			winnerText.text = winString + " Won!";
-			winscreen.GetComponent<Canvas>().enabled = true;
+
+            // Set text to show who won
+            winscreen.GetComponent<Canvas>().enabled = true;
+            //winscreen.gameObject.SetActive(true);
 			EventSystem.current.SetSelectedGameObject(null);
-			finnished = true;
+            //winnerText.text = winString + " Won!";
+            finnished = true;
 		}
 	}
 }

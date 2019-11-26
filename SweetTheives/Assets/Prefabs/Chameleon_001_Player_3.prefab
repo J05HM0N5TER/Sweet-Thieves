@@ -639,8 +639,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 814b8a19727f66a4f872f6000d10d6ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PortraitIndex: 1
   controller: 0
   moveSpeed: 6
+  tongueButton: 9
   environmentLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -673,8 +675,12 @@ MonoBehaviour:
   Fall: {fileID: 8300000, guid: f2977a71650331945b8148114772dbde, type: 3}
   TongueCoolDownFinished: {fileID: 0}
   PancakePickUp: {fileID: 8300000, guid: 4edbae964aab8c348b5d2762094400bf, type: 3}
-  venusChomp: {fileID: 8300000, guid: 4babb43ce3f23e242870c66b584fe593, type: 3}
   vibrationTime: 0.4
+  venusChomp: {fileID: 8300000, guid: 4babb43ce3f23e242870c66b584fe593, type: 3}
+  bellSound: {fileID: 0}
+  stolenSound: {fileID: 0}
+  playernumber: 0
+  chompDelay: 1
 --- !u!95 &1188792376079252885
 Animator:
   serializedVersion: 3
