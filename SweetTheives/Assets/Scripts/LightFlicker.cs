@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Light))]
 public class LightFlicker : MonoBehaviour
 {
 	public GameObject player;
@@ -19,13 +20,13 @@ public class LightFlicker : MonoBehaviour
 	private bool firstTime = true;
 	private bool playerFull = false;
 	private int currentAmountFlickerd = 0;
-    private Light light;
+    private Light flickeringLight = null;
 
 	void Start()
 	{
 		playerController = player.GetComponent<PlayerControllerXbox>();
 		baseStashAmount = Base.GetComponent<BaseStash>();
-        light = GetComponent<Light>();
+        flickeringLight = GetComponent<Light>();
 	}
 
 	// Update is called once per frame
@@ -33,7 +34,7 @@ public class LightFlicker : MonoBehaviour
 	{
 
         currentTimer += Time.deltaTime;
-		// Player is holding pancakes
+		// If the light should be flickering
 		if (playerController.heldCollectables > 0 && (currentAmountFlickerd < amountFlicker || firstTime))
 		{
             // Set timer
@@ -42,10 +43,11 @@ public class LightFlicker : MonoBehaviour
             {
                 // If timer is up or its the first time (where it will do it constantly)
                 currentAmountFlickerd++;
-                light.enabled = !light.enabled;
+                flickeringLight.enabled = !flickeringLight.enabled;
                 currentTimer = 0f;
             }
 		}
+		// If the light shouldn't be flickering
 		else if (currentTimer > flickerTime)
 		{
 			// If the player dropped them off
@@ -54,14 +56,14 @@ public class LightFlicker : MonoBehaviour
 				firstTime = false;
 				currentAmountFlickerd = 0;
 			}
-			// Light on when no pancakes at base
+			// Light on when pancakes at base
 			if (baseStashAmount.stashSize < 1)
 			{
-				light.enabled = false;
+				flickeringLight.enabled = false;
 			}
 			else
 			{
-				light.enabled = true;
+				flickeringLight.enabled = true;
 			}
 		}
 	}
