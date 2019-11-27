@@ -162,7 +162,6 @@ public class PlayerControllerXbox : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-
 		playerHeight = GetComponent<CapsuleCollider>().bounds.size.y;
 
 		tongueHitPoints = new List<Vector3>
@@ -172,8 +171,7 @@ public class PlayerControllerXbox : MonoBehaviour
 
 		// Only draws tongue if there is a line renderer on the game object
 		line = GetComponent<LineRenderer>();
-		line.enabled = true;
-		line.useWorldSpace = true;
+		line.positionCount = 0; ;
 
 		rb = gameObject.GetComponent<Rigidbody>();
 
@@ -240,36 +238,31 @@ public class PlayerControllerXbox : MonoBehaviour
 				transform.rotation = Quaternion.LookRotation(moveInput);
 			}
 
-			// ---Tongue lash---
-			if (currentCooldown > 0)
+			// If the player pressed down the button to fire the tongue
+			if (XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0 /*Trigger is pressed*/)
 			{
-				currentCooldown -= Time.deltaTime;
-				TongueCoolDownSoundPlayed = false;
-				// vibrate when button to shkoot is pressed but still cooling down 
-				if (XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0 && currentCooldown < 1.3f)
+				// If they are allowed to shoot the tongue
+				if (tongueHit == HitType.NONE /*Tongue is not already connected to something*/ &&
+				heldCollectables < maxHeldCollectables /*The player is holding less then the max amount of collectables*/ &&
+				currentCooldown <= 0 /*Tongue cooldown is finished*/)
+				{
+					TongueLash();
+					anim.SetBool("tongueAttack", true);
+				}
+				// If they tried to fire the tongue but wasn't allowed
+				else
 				{
 					StartCoroutine(Vibrate());
 				}
 			}
-			if (XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0 /*Trigger is pressed*/  &&
-				tongueHit == HitType.NONE /*Tongue is not already connected to something*/ &&
-				heldCollectables < maxHeldCollectables /*The player is holding less then the max amount of collectables*/ &&
-				currentCooldown <= 0 /*Tongue cooldown is finished*/)
-			{
-				TongueLash();
-				anim.SetBool("tongueAttack", true);
-			}
-			// vibrate when max pancakes is held and trying to use tongue
-			if (XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0 && heldCollectables == maxHeldCollectables)
-			{
-				StartCoroutine(Vibrate());
-			}
 		}
+		// If they are tripped vibrate the controller
 		else
 		{
 			rb.velocity = Vector3.zero;
 			StartCoroutine(Vibrate());
 		}
+		// If the cooldown if finished then play the indicator sound
 		if (currentCooldown <= 0 && TongueCoolDownSoundPlayed == false)
 		{
 			audiosource.PlayOneShot(TongueCoolDownFinished, 1.0f);
@@ -279,11 +272,12 @@ public class PlayerControllerXbox : MonoBehaviour
 		// animation stuff
 		anim.SetFloat("runningSpeed", rb.velocity.magnitude);
 
+		// If they are holding collectables then show that animation
 		if (heldCollectables > 0)
 		{
 			anim.SetBool("holdingPancakes", true);
 		}
-		else if (heldCollectables <= 0)
+		else
 		{
 			anim.SetBool("holdingPancakes", false);
 		}
@@ -297,10 +291,11 @@ public class PlayerControllerXbox : MonoBehaviour
 			displayCollectables[i].transform.SetParent(hand, false);
 			// For calculating the position on stack to display
 			Vector3 newPosition = holdingPosition;
-			// Add height for stacking to z position because of wierd rotation of hand
+			// Add height for stacking to z position because of weird rotation of hand
 			newPosition.z += (displayCollectableHeight + 0.05f) * i;
+			// Set the new position
 			displayCollectables[i].transform.localPosition = newPosition;
-			// Compensate for wierd hand rotation
+			// Compensate for weird hand rotation
 			displayCollectables[i].transform.localRotation = Quaternion.Euler(new Vector3(70, 0, 0));
 		}
 
@@ -308,16 +303,18 @@ public class PlayerControllerXbox : MonoBehaviour
 		for (int i = displayCollectables.Count; i > heldCollectables; i--)
 		{
 			GameObject temp = displayCollectables[i - 1];
+			// Remove from array
 			displayCollectables.Remove(temp);
+			// Remove from scene
 			Destroy(temp);
 		}
 
-		//play and stop particles
+		// Play the particles for running if the player is moving
 		if (rb.velocity.magnitude > 0.1f)
 		{
 			runparticles.Play();
 		}
-		if (rb.velocity.magnitude < 0.1f)
+		else
 		{
 			runparticles.Stop();
 		}
@@ -328,20 +325,25 @@ public class PlayerControllerXbox : MonoBehaviour
 	/// </summary>
 	private void TongueLash()
 	{
+		// Used to calculate the Capsule for the CapsuleCast
 		Vector3 pointModifier = new Vector3(0, (playerHeight / 2) + tongueFireRadius, 0);
 		// Casts sphereCast. hit = The object that the circleCast hits if it hits something
 		if (Physics.CapsuleCast(transform.position + pointModifier, // First point in capsule
 			transform.position - pointModifier, // Second point in capsule
-			tongueFireRadius,
+			tongueFireRadius, // Radius of Capsule
 			transform.forward, // Direction
 			out RaycastHit hit, // Output
 			300f)) // Distance (If map gets really big then this number might need to be increased)
 		{
 			// Set defaults
 			currentGrappleTime = 0f;
+			// Reset player state and tongue hit
 			DisconnectTongue();
+			// Remove any existing points in tongue
 			tongueHitPoints.Clear();
+			// Set the first position to zero because it's calculated in update
 			tongueHitPoints.Add(Vector3.zero);
+			// Set where the tongue has hit
 			tongueHitPoints.Add(StandardisePosition(hit.point));
 			// Set what it hit.
 			objectHit = hit.collider.gameObject;
@@ -357,7 +359,9 @@ public class PlayerControllerXbox : MonoBehaviour
 			// If the tongue has hit a collectable
 			else if ((collectableLayer.value & (1 << objectHit.layer)) != 0)
 			{
+				// Get the script from the collectable
 				CollectableController collectable = objectHit.GetComponent<CollectableController>();
+				// If the collectable is a stack then grab only one
 				if (collectable.stackSize > 1)
 				{
 					collectable.stackSize--;
@@ -366,6 +370,7 @@ public class PlayerControllerXbox : MonoBehaviour
 						objectHit.transform.rotation);
 				}
 				tongueHit = HitType.COLLECTABLE;
+				// Freeze the rotation of the collectable to make pulling more smooth
 				objectHit.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
 			}
 			// If you hit another player
@@ -375,13 +380,17 @@ public class PlayerControllerXbox : MonoBehaviour
 				// If the player has something to steal
 				if (player.heldCollectables > 0)
 				{
+					// Remove one from how many they are holding
 					player.heldCollectables--;
+					// Create new collectable at position of player
 					objectHit = Instantiate(collectablePrefab,
 						objectHit.transform.position,
 						objectHit.transform.rotation);
 
 					tongueHit = HitType.COLLECTABLE;
+					// Vibrate their controller
 					player.StartCoroutine(Vibrate());
+					// Play sound for when collectable is stolen
 					player.PlayStolenSound();
 				}
 			}
@@ -398,6 +407,7 @@ public class PlayerControllerXbox : MonoBehaviour
 		// Where the start of the tongue is drawn
 		tongueHitPoints[0] = transform.TransformPoint(tongueOffset);
 
+		// Interaction for the tongue
 		switch (tongueHit)
 		{
 			// If the tongue isn't attached to anything then don't do anything
@@ -420,16 +430,24 @@ public class PlayerControllerXbox : MonoBehaviour
 			default:
 				break;
 		}
+
+		// Interaction for what state the player is in
 		switch (playerState)
 		{
 			case PlayerState.NORMAL:
 				break;
+			// If the player has been tripped
 			case PlayerState.TRIPPED:
+				// Timer
 				currentStunnedTime += Time.deltaTime;
+				// Disconnect the tongue
+				DisconnectTongue();
+				// If the player has been stunned for enough time
 				if (currentStunnedTime > StunnedTime)
 				{
-					DisconnectTongue();
+					// Reset timer
 					currentStunnedTime = 0f;
+					// Set the player to no longer tripping
 					playerState = PlayerState.NORMAL;
 				}
 				break;
@@ -458,6 +476,7 @@ public class PlayerControllerXbox : MonoBehaviour
 		{
 			playerState = PlayerState.RETRACTING;
 		}
+		// Deal with tongue wrapping
 		if (tongueWrapOn)
 		{
 			CheckTongueWrap(!(playerState == PlayerState.RETRACTING));
@@ -474,10 +493,13 @@ public class PlayerControllerXbox : MonoBehaviour
 	/// </summary>
 	private void TongueCollectableInteraction()
 	{
+		// Timer
 		currentGrappleTime += Time.deltaTime;
 
+		// If the tongue has taken too long to retract
 		if (currentGrappleTime > maxGrappleTime)
 		{
+			// Disconnect the tongue from collectable
 			tongueHit = HitType.NONE;
 			currentGrappleTime = 0f;
 		}
@@ -537,6 +559,7 @@ public class PlayerControllerXbox : MonoBehaviour
 	/// </summary>
 	private void TongueRetracting()
 	{
+		// Timer
 		currentGrappleTime += Time.deltaTime;
 
 		// The separation between the player and the grapple point.
@@ -553,6 +576,7 @@ public class PlayerControllerXbox : MonoBehaviour
 			{
 				tongueHitPoints.RemoveAt(1);
 			}
+			// If there is only one point in the tongue then disconnect form environment
 			else
 			{
 				DisconnectTongue();
@@ -565,8 +589,10 @@ public class PlayerControllerXbox : MonoBehaviour
 	/// </summary>
 	private void CheckIfTripping()
 	{
+		// For every point in the tongue
 		for (int i = 0; i < tongueHitPoints.Count - 1; i++)
 		{
+			// Check if there is any player in the way to the next point in the tongue
 			if (Physics.Linecast(tongueHitPoints[i], tongueHitPoints[i + 1], out RaycastHit hit) // If the linecast has hit something
 				&& hit.collider.tag == "Player" // The linecast hit a player
 				&& hit.collider.gameObject != gameObject) // And it is not the player that the tongue is from
@@ -588,6 +614,7 @@ public class PlayerControllerXbox : MonoBehaviour
 		rb.AddForce(transform.forward * tripForce, ForceMode.Impulse);
 		tripping = false;
 
+		// Reset the timer for how long they have been stunned for
 		currentStunnedTime = 0f;
 
 		// Set the player to tripped
@@ -601,35 +628,33 @@ public class PlayerControllerXbox : MonoBehaviour
 
 	}
 
-	public IEnumerator PlayTripParticles()
-	{
-		tripParticles.time = 0f;
-		tripParticles.Play();
-		yield return new WaitForSeconds(2);
-		tripParticles.Stop();
-	}
-
 	/// <summary>
 	/// Drops all the collectibles that the player has on hand in the current position stacked.
 	/// </summary>
 	public void DropCollectables()
 	{
+		// If the player isn't holding anything then there is nothing to drop
 		if (heldCollectables == 0)
 		{
 			return;
 		}
+		// If there is one then drop it
 		else if (heldCollectables == 1)
 		{
 			Instantiate(collectablePrefab, transform.position, transform.rotation);
 		}
+		// If there is more then one then stack when dropped
 		else
 		{
 			// Get the collectable height to stack on spawn
 			float collectableHeight = collectablePrefab.GetComponent<CapsuleCollider>().bounds.size.y + 0.05f;
 
+			// For every collectable
 			for (int i = 0; i < heldCollectables; i++)
 			{
-				Instantiate(collectablePrefab, new Vector3(gameObject.transform.position.x, i * collectableHeight, gameObject.transform.position.z), transform.rotation);
+				// Spawn and stack
+				Instantiate(collectablePrefab, new Vector3(gameObject.transform.position.x, i * collectableHeight,
+					gameObject.transform.position.z), transform.rotation);
 			}
 		}
 
@@ -644,6 +669,7 @@ public class PlayerControllerXbox : MonoBehaviour
 	{
 		transform.position = SpawnPos;
 		transform.rotation = SpawnRot;
+		// Disconnect tongue to that doesn't have problems with tongue stuck on other side of map
 		DisconnectTongue();
 	}
 
@@ -670,7 +696,19 @@ public class PlayerControllerXbox : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Plays the sound for when the player picks up a collectable
+	/// Plays the dirt particle effect for when the player trips over
+	/// </summary>
+	/// <returns>Used for the WaitForSeconds function</returns>
+	public IEnumerator PlayTripParticles()
+	{
+		tripParticles.time = 0f;
+		tripParticles.Play();
+		yield return new WaitForSeconds(2);
+		tripParticles.Stop();
+	}
+
+	/// <summary>
+	/// Plays the sound for when the player picks up a collectible
 	/// </summary>
 	public void PlayPickUpSound()
 	{
@@ -690,7 +728,7 @@ public class PlayerControllerXbox : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Plays the animation for the venus 
+	/// Plays the animation for the Trap 
 	/// </summary>
 	/// <returns>Used for the WaitForSeconds function</returns>
 	public IEnumerator VenusChomp()
