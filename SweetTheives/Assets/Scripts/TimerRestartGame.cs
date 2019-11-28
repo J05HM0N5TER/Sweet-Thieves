@@ -20,32 +20,22 @@ public class TimerRestartGame : MonoBehaviour
 	public Text winnerText = null;
 	// The array of all the players
 	private BaseStash[] playerBases = new BaseStash[4];
-    //array of winning players
+	//array of winning players
 	public List<GameObject> winningPlayers = new List<GameObject>();
 
 	// The canvas that is being displayed when the timer is up
 	[SerializeField] Canvas winscreen = null;
 
 	private bool finnished = false;
-    //public GameObject WinPanel;
-    //public GameObject LosePanel;
-    public Image[] Losers;
-    public Image[] Winners;
-    //public Image BlueL;
-    //public Image RedL;
-    //public Image GreenL;
-    //public Image YellowL;
+	// The images for the losers
+	public Image[] Losers;
+	// The images for the winners
+	public Image[] Winners;
 
-    //public Image BlueW;
-    //public Image RedW;
-    //public Image GreenW;
-    //public Image YellowW;
-
-
-    // Start is called before the first frame update
-    void Start()
+	// Start is called before the first frame update
+	void Start()
 	{
-        playerBases = FindObjectsOfType<BaseStash>();
+		playerBases = FindObjectsOfType<BaseStash>();
 
 		//winscreen.GetComponent<Canvas>().enabled = false;
 	}
@@ -84,14 +74,13 @@ public class TimerRestartGame : MonoBehaviour
 		// If timer is finished
 		if (timer <= 0)
 		{
-
-
 			// Stop all vibrations
 			XCI.StopVibration(XboxController.All);
 
 			// stop time
 			Time.timeScale = 0;
 
+			// The highest score
 			int highestStack = int.MinValue;
 
 			// Loop though all the players and find the winner/s
@@ -106,9 +95,9 @@ public class TimerRestartGame : MonoBehaviour
 					winningPlayers.Clear();
 					// Set to current player
 					winningPlayers.Add(playerBases[i].player.gameObject);
-                 //  LosePanel.SetActive(false);
-                  //  WinPanel.SetActive(true);
-                    
+					//  LosePanel.SetActive(false);
+					//  WinPanel.SetActive(true);
+
 				}
 				else if (playerBases[i].stashSize == highestStack)
 				{
@@ -116,16 +105,19 @@ public class TimerRestartGame : MonoBehaviour
 					winningPlayers.Add(playerBases[i].player.gameObject);
 				}
 			}
-            
+
 			// Create what to write as the winner/s
 			string winString = "";
-            
+
+			// Construct winner string
 			for (int i = 0; i < winningPlayers.Count; i++)
 			{
+				// First winner
 				if (i == 0)
 				{
 					winString = winningPlayers[i].name;
 				}
+				// Any following winners
 				else
 				{
 					winString += " & " + winningPlayers[i].name;
@@ -133,22 +125,22 @@ public class TimerRestartGame : MonoBehaviour
 			}
 
 			// Set the image for the winner
-            for(int i = 0; i < winningPlayers.Count; i++)
-            {
-                int thisWinner =  winningPlayers[i].GetComponent<PlayerControllerXbox>().PortraitIndex;
+			for (int i = 0; i < winningPlayers.Count; i++)
+			{
+				int thisWinner = winningPlayers[i].GetComponent<PlayerControllerXbox>().PortraitIndex;
 
-                Losers[thisWinner].gameObject.SetActive(false);
+				Losers[thisWinner].gameObject.SetActive(false);
 
-                Winners[thisWinner].gameObject.SetActive(true);
-            }
+				Winners[thisWinner].gameObject.SetActive(true);
+			}
 
 
-            // Set text to show who won
-            //winscreen.GetComponent<Canvas>().enabled = true;
-            winscreen.gameObject.SetActive(true);
+			// Set text to show who won
+			//winscreen.GetComponent<Canvas>().enabled = true;
+			winscreen.gameObject.SetActive(true);
 			EventSystem.current.SetSelectedGameObject(null);
-            //winnerText.text = winString + " Won!";
-            finnished = true;
+			//winnerText.text = winString + " Won!";
+			finnished = true;
 		}
 	}
 }

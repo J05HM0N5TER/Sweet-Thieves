@@ -49,10 +49,11 @@ public class CollectableController : MonoBehaviour
 		player.objectHit = null;
 		// Set the tongue interaction to none
 		player.tongueHit = HitType.NONE;
-		// Set cooldown to start
+		// Set cool-down to start
 		player.currentCooldown = player.tongueCooldown;
 		// Destroy collectable
 		Destroy(this.gameObject);
+		// Play sound to indicate that the player has picked up a collectable.
         player.PlayPickUpSound();
 	}
 }

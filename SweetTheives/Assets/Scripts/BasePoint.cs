@@ -9,14 +9,17 @@ using UnityEngine;
 
 public class BasePoint : MonoBehaviour
 {
+#pragma warning disable IDE0044 // Add readonly modifier
     [HideInInspector] public bool PancakeStolen = false;
     //what stash is being referenced
     [SerializeField] BaseStash stash = null;
 
     // for playing sound when pancake is stolen
     private AudioSource audiosource;
-    [SerializeField] AudioClip BaseRaid = null;
-    private void Start()
+	[SerializeField] private AudioClip BaseRaid = null;
+#pragma warning restore IDE0044 // Add readonly modifier
+
+	private void Start()
     {
         audiosource = GetComponent<AudioSource>();
     }
