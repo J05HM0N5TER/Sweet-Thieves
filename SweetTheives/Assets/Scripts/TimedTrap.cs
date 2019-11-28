@@ -30,8 +30,8 @@ public class TimedTrap : MonoBehaviour
 
         if (currentCooldown - animationDelay < 0 /* && !animationPlayed*/)
         {
-            anim.SetBool("venusBite", true);
-            StartCoroutine(Resetanimation());
+			// Play animation
+            StartCoroutine(PlayVenusAnimation());
             animationPlayed = true;
         }
         // If countdown is completed
@@ -47,11 +47,8 @@ public class TimedTrap : MonoBehaviour
 				// If the thing is a player
 				if (current.tag == "Player")
 				{
+					// Get the player script
 					PlayerControllerXbox player = current.GetComponent<PlayerControllerXbox>();
-					//// Get the player to drop all collectables
-					//player.DropCollectables();
-					//// And send them back to spawn
-					//player.ResetToSpawn();
 					// Trip the player
 					player.TripPlayer();
 				}
@@ -62,9 +59,10 @@ public class TimedTrap : MonoBehaviour
         
         //anim.ResetTrigger("venusBite");
     }
-    IEnumerator Resetanimation()
+    IEnumerator PlayVenusAnimation()
     {
-        yield return new WaitForSeconds(1);
+		anim.SetBool("venusBite", true);
+		yield return new WaitForSeconds(1);
         anim.SetBool("venusBite", false);
     }
 }
