@@ -211,9 +211,9 @@ public class PlayerControllerXbox : MonoBehaviour
 	/// </summary>
 	void Update()
 	{
-
-		// Get input (put it in x and z because we are moving across those axes)
-		Vector3 moveInput = new Vector3(XCI.GetAxisRaw(XboxAxis.LeftStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.LeftStickY, controller));
+        currentCooldown -= Time.deltaTime;
+        // Get input (put it in x and z because we are moving across those axes)
+        Vector3 moveInput = new Vector3(XCI.GetAxisRaw(XboxAxis.LeftStickX, controller), 0.0f, XCI.GetAxisRaw(XboxAxis.LeftStickY, controller));
 
 		// Set the speed of the animation based on the speed the player is moving
 		anim.SetFloat("runningSpeed", Mathf.Max(Mathf.Abs(moveInput.x), Mathf.Abs(moveInput.z)));
@@ -241,8 +241,9 @@ public class PlayerControllerXbox : MonoBehaviour
 			// If the player pressed down the button to fire the tongue
 			if (XCI.GetAxis(XboxAxis.RightTrigger, controller) > 0 /*Trigger is pressed*/)
 			{
-				// If they are allowed to shoot the tongue
-				if (tongueHit == HitType.NONE /*Tongue is not already connected to something*/ &&
+                
+                // If they are allowed to shoot the tongue
+                if (tongueHit == HitType.NONE /*Tongue is not already connected to something*/ &&
 				heldCollectables < maxHeldCollectables /*The player is holding less then the max amount of collectables*/ &&
 				currentCooldown <= 0 /*Tongue cooldown is finished*/)
 				{
